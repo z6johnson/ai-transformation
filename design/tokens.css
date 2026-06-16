@@ -1,0 +1,102 @@
+/*
+ * Design tokens — single source of truth.
+ * Required by seed-style-guide.md ("Required Project Artifacts").
+ * No raw hex or px values belong in components; reference these names.
+ *
+ * Posture: International Typographic Style. Achromatic foundation,
+ * typography carries hierarchy, color is semantic only. Every grayscale
+ * pairing used for text/UI is verified against WCAG 2.1 AA (4.5:1 text,
+ * 3:1 large text / UI) — see design/accessibility-statement.md.
+ */
+
+:root {
+  /* ---- Grayscale ramp (achromatic foundation, 11 steps) ---- */
+  --gray-0: #ffffff;
+  --gray-50: #f7f7f7;
+  --gray-100: #ededed;
+  --gray-200: #d9d9d9;
+  --gray-300: #bdbdbd;
+  --gray-400: #949494; /* ~3:1 on white — borders / large text / UI only */
+  --gray-500: #707070; /* ~4.6:1 on white — smallest passing body text */
+  --gray-600: #595959; /* ~7:1 on white */
+  --gray-700: #404040;
+  --gray-800: #262626;
+  --gray-900: #111111; /* primary ink */
+
+  /* ---- Semantic surfaces & ink (alias the ramp) ---- */
+  --color-bg: var(--gray-0);
+  --color-bg-subtle: var(--gray-50);
+  --color-bg-sunken: var(--gray-100);
+  --color-ink: var(--gray-900);
+  --color-ink-muted: var(--gray-600);
+  --color-ink-faint: var(--gray-500);
+  --color-border-hairline: var(--gray-200);
+  --color-border-strong: var(--gray-400);
+  --color-ink-inverse: var(--gray-0);
+  --color-surface-inverse: var(--gray-900);
+
+  /* ---- Status accents (the ONLY color; muted; never the sole signal) ---- */
+  --status-attention: #8a5a00; /* amber-brown, ~4.8:1 on white */
+  --status-attention-bg: #fbf3e2;
+  --status-positive: #1f6b3b; /* green, ~5.1:1 on white */
+  --status-negative: #9a1f1f; /* red, ~6.2:1 on white */
+  --status-ai: #3a3a7a; /* indigo, AI-provenance marker, ~8:1 on white */
+  --status-ai-bg: #eeeef6;
+
+  /* ---- Focus ---- */
+  --focus-ring: var(--gray-900);
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+
+  /* ---- Type scale (max five active sizes; rem so user prefs win) ---- */
+  --font-sans: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Liberation Mono", Menlo, monospace;
+
+  --font-size-display: 2rem;     /* primary signal / page title */
+  --font-size-heading: 1.375rem; /* section heads */
+  --font-size-subhead: 1.0625rem;
+  --font-size-body: 1rem;        /* reading register */
+  --font-size-system: 0.75rem;   /* labels / metadata, uppercase, tracked */
+
+  --line-height-tight: 1.2;
+  --line-height-body: 1.6;
+  --tracking-system: 0.08em;
+  --tracking-display: -0.01em;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-bold: 700;
+
+  /* ---- Spacing (8px base; all spacing derives from this) ---- */
+  --space-1: 0.25rem; /* 4 */
+  --space-2: 0.5rem;  /* 8 */
+  --space-3: 0.75rem; /* 12 */
+  --space-4: 1rem;    /* 16 */
+  --space-5: 1.5rem;  /* 24 */
+  --space-6: 2rem;    /* 32 */
+  --space-7: 3rem;    /* 48 */
+  --space-8: 4rem;    /* 64 */
+
+  /* ---- Layout ---- */
+  --layout-max-width: 1120px;
+  --layout-page-padding: var(--space-5);
+  --header-height: 3.5rem;
+  --footer-height: 2.25rem;
+  --border-hairline: 1px;
+  --border-strong: 2px;
+  --radius: 0; /* Swiss posture: minimal/zero radius */
+
+  /* ---- Motion (confirms, does not perform) ---- */
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+  --motion-layout: 300ms;
+  --easing: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0ms;
+    --motion-base: 0ms;
+    --motion-layout: 0ms;
+  }
+}

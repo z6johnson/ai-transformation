@@ -1,0 +1,25 @@
+{
+  "note": "The existing four-dimension impact framework — the starting scaffold for the executive layer. A starting point to test and extend, not the finished answer.",
+  "dimensions": [
+    {
+      "id": "operational-capacity",
+      "label": "Operational capacity",
+      "describes": "Whether the service does more, faster, or with less effort — efficiency and throughput value."
+    },
+    {
+      "id": "institutional-readiness",
+      "label": "Institutional readiness",
+      "describes": "Whether the institution is more prepared to adopt, govern, and sustain AI — capability and conformance value."
+    },
+    {
+      "id": "risk-reduction",
+      "label": "Risk reduction",
+      "describes": "Whether exposure to compliance, privacy, equity, and operational harm is lowered."
+    },
+    {
+      "id": "system-level-influence",
+      "label": "System-level influence",
+      "describes": "Whether a transformation changes options and outcomes beyond the single service — institutional and cross-unit value."
+    }
+  ]
+}

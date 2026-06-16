@@ -1,0 +1,8 @@
+# Responsible-AI §8: every AI-touching surface has a named human owner.
+# "The team" is not an owner.
+
+/lib/tritonai.ts        @z6johnson
+/lib/prompts.ts         @z6johnson
+/lib/pii.ts             @z6johnson
+/lib/ai-log.ts          @z6johnson
+/app/api/ai/            @z6johnson

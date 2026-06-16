@@ -1,0 +1,12 @@
+{
+  "id": "hr-performance-appraisal",
+  "name": "HR Performance Appraisal Pilot",
+  "service": "Annual performance review cycle (goal setting through formal review)",
+  "scopeStart": "Goal setting",
+  "scopeEnd": "Formal review and close",
+  "lead": "Director of AI Strategy",
+  "lifecycleOwner": { "name": "CHRO", "role": "Chief Human Resources Officer" },
+  "stage": "mapping",
+  "owner": "z6johnson@ucsd.edu",
+  "createdAt": "2026-06-16T00:00:00Z"
+}

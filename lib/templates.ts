@@ -15,6 +15,3 @@ export const TEMPLATE_ROUTES: TemplateRoute[] = [
   { id: "05", slug: "friction", blurb: "Evidence-grounded friction register + clusters" },
   { id: "06", slug: "validation", blurb: "Coverage, review, friction summary, sign-off" },
 ];
-
-/** Ids of the reorderable middle templates (02–05). 01 and 06 are fixed bookends. */
-export const REORDERABLE_IDS: ArtifactId[] = ["02", "03", "04", "05"];

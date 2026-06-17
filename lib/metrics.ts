@@ -9,6 +9,10 @@ import { Measures, IMPACT_DIMENSIONS, type ImpactDimension, type BaselineKpi, ty
 
 export type DashboardKpi = BaselineKpi & { engagementId: string; engagementName: string };
 
+// Pure display helpers live in a client-safe module (no server imports); re-exported
+// here so existing server-side importers keep working unchanged.
+export { DIMENSION_LABELS, formatKpi, delta } from "./metrics-format";
+
 export type Dashboard = {
   configured: boolean;
   roiDefinition: string;
@@ -17,13 +21,6 @@ export type Dashboard = {
   adaptive: Array<AdaptiveMeasure & { engagementId: string; engagementName: string }>;
   rebaselinedQuarter: string;
   engagementCount: number;
-};
-
-export const DIMENSION_LABELS: Record<ImpactDimension, string> = {
-  "operational-capacity": "Operational capacity",
-  "institutional-readiness": "Institutional readiness",
-  "risk-reduction": "Risk reduction",
-  "system-level-influence": "System-level influence",
 };
 
 export async function getDashboard(): Promise<Dashboard> {
@@ -84,21 +81,4 @@ export async function getDashboard(): Promise<Dashboard> {
     rebaselinedQuarter,
     engagementCount: ids.length,
   };
-}
-
-/** Format a KPI value for display given its unit. */
-export function formatKpi(value: number | null, unit: BaselineKpi["unit"]): string {
-  if (value === null || Number.isNaN(value)) return "—";
-  switch (unit) {
-    case "ratio":
-      return `${Math.round(value * 100)}%`;
-    case "percent":
-      return `${value}%`;
-    case "hours":
-      return `${value} h`;
-    case "days":
-      return `${value} d`;
-    default:
-      return `${value}`;
-  }
 }

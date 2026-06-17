@@ -4,6 +4,7 @@ import { useState } from "react";
 import { saveArtifact, callAi } from "@/lib/client";
 import type { Provenanced } from "@/lib/schemas";
 import type { AiMeta } from "@/lib/ai-meta";
+import { SortableCards } from "./SortableCards";
 
 type Stage = {
   name: string;
@@ -116,7 +117,7 @@ export function JourneyEditor({
     const res = await saveArtifact({
       engagementId,
       artifactId: "02",
-      payload: { status: "in-review", aiAssisted: hasAiDraft || Boolean(draftMeta), data: { ...initial, header, stages } },
+      payload: { status: "in-review", aiAssisted: hasAiDraft || Boolean(draftMeta), data: { ...initial, header, stages: stages.map((s, i) => ({ ...s, order: i })) } },
       baseSha: sha,
       aiLog: draftMeta
         ? {
@@ -182,47 +183,53 @@ export function JourneyEditor({
         </div>
       )}
 
-      {stages.map((s, i) => (
-        <fieldset key={i} className="card card--accent stack">
-          <legend className="t-system">Stage {i + 1}</legend>
-          <label className="field">
-            <span className="t-system">Stage name</span>
-            <input type="text" value={s.name} onChange={(e) => setStages((prev) => prev.map((x, idx) => (idx === i ? { ...x, name: e.target.value } : x)))} />
-          </label>
-          {FIELDS.map(([key, label]) => {
-            const prov = s[key] as Provenanced;
-            return (
-              <label key={String(key)} className="field">
-                <span className="t-system">
-                  {label} {prov.origin === "ai-draft" && <span className="ai-mark">AI draft</span>}
-                </span>
-                <textarea
-                  rows={2}
-                  value={prov.value}
-                  onChange={(e) => setStageField(i, key, { value: e.target.value, origin: "human" })}
-                />
+      <SortableCards
+        items={stages}
+        getKey={(_, i) => String(i)}
+        onReorder={setStages}
+        onRemove={(i) => setStages((prev) => prev.filter((_, idx) => idx !== i))}
+        cardLabel={(_, i) => `Stage ${i + 1}`}
+        legend={(_, i) => <legend className="t-system">Stage {i + 1}</legend>}
+        columnsStorageKey={`card-cols:journey:${engagementId}`}
+        defaultColumns={2}
+        renderCard={(s, i) => (
+          <>
+            <label className="field">
+              <span className="t-system">Stage name</span>
+              <input type="text" value={s.name} onChange={(e) => setStages((prev) => prev.map((x, idx) => (idx === i ? { ...x, name: e.target.value } : x)))} />
+            </label>
+            {FIELDS.map(([key, label]) => {
+              const prov = s[key] as Provenanced;
+              return (
+                <label key={String(key)} className="field">
+                  <span className="t-system">
+                    {label} {prov.origin === "ai-draft" && <span className="ai-mark">AI draft</span>}
+                  </span>
+                  <textarea
+                    rows={2}
+                    value={prov.value}
+                    onChange={(e) => setStageField(i, key, { value: e.target.value, origin: "human" })}
+                  />
+                </label>
+              );
+            })}
+            <div className="grid grid--2">
+              <label className="field">
+                <span className="t-system">Effort</span>
+                <select value={s.effort} onChange={(e) => setStages((prev) => prev.map((x, idx) => (idx === i ? { ...x, effort: e.target.value as Stage["effort"] } : x)))}>
+                  <option value="low">low</option>
+                  <option value="moderate">moderate</option>
+                  <option value="high">high</option>
+                </select>
               </label>
-            );
-          })}
-          <div className="grid grid--2">
-            <label className="field">
-              <span className="t-system">Effort</span>
-              <select value={s.effort} onChange={(e) => setStages((prev) => prev.map((x, idx) => (idx === i ? { ...x, effort: e.target.value as Stage["effort"] } : x)))}>
-                <option value="low">low</option>
-                <option value="moderate">moderate</option>
-                <option value="high">high</option>
-              </select>
-            </label>
-            <label className="field">
-              <span className="t-system">Typical duration</span>
-              <input type="text" value={s.duration} onChange={(e) => setStages((prev) => prev.map((x, idx) => (idx === i ? { ...x, duration: e.target.value } : x)))} />
-            </label>
-          </div>
-          <button className="btn btn--text" onClick={() => setStages((prev) => prev.filter((_, idx) => idx !== i))}>
-            Remove stage
-          </button>
-        </fieldset>
-      ))}
+              <label className="field">
+                <span className="t-system">Typical duration</span>
+                <input type="text" value={s.duration} onChange={(e) => setStages((prev) => prev.map((x, idx) => (idx === i ? { ...x, duration: e.target.value } : x)))} />
+              </label>
+            </div>
+          </>
+        )}
+      />
 
       {needsReview && (
         <label className="row">

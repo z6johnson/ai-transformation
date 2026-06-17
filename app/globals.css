@@ -390,6 +390,70 @@ th {
   padding: 0 var(--space-1);
 }
 
+/* Compact sortable card grid (journey stages, process steps). */
+.card-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
+}
+@media (max-width: 720px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.card-grid__item {
+  cursor: grab;
+}
+.card-grid__item.is-dragging {
+  opacity: 0.5;
+}
+.card-grid__item.is-over {
+  border-color: var(--color-ink);
+}
+.card-grid__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  justify-content: space-between;
+}
+.card-grid__handle {
+  color: var(--color-ink-faint);
+  user-select: none;
+  cursor: grab;
+}
+.card-grid__controls {
+  display: flex;
+  gap: var(--space-1);
+}
+.card-grid__controls .btn {
+  line-height: 1;
+  padding: 0 var(--space-1);
+}
+.card-cols-toggle {
+  display: inline-flex;
+  gap: var(--space-1);
+}
+.card-cols-toggle .btn {
+  min-width: 2.25rem;
+  justify-content: center;
+}
+
+/* Consistent entry-card styling for non-sortable lists (Friction, Blueprint). */
+.entry-card {
+  border-left: var(--border-strong) solid var(--color-ink);
+}
+
+/* Capped, internally scrolling text fields — scoped to entry cards only,
+   shared by the sortable grid and the plain entry lists. Dedicated prose
+   surfaces (raw notes, honest account) keep the global roomy min-height. */
+.card-grid__item textarea,
+.entry-card textarea {
+  min-height: 0;
+  max-height: 9rem;
+  overflow-y: auto;
+  resize: none;
+}
+
 /* Outcome legend under the "How AI was used" table. */
 .outcome-legend {
   display: grid;

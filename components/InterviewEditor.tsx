@@ -1,10 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { saveArtifact, callAi } from "@/lib/client";
 import type { Interview, InterviewTag } from "@/lib/schemas";
 import { TAGS } from "@/lib/schemas";
 import type { AiMeta } from "@/lib/ai-meta";
+import {
+  ACCEPTED_TRANSCRIPT_ACCEPT,
+  cleanTranscript,
+  isAcceptedTranscript,
+  readTextFile,
+} from "@/lib/transcript";
 
 type Suggestion = { id: string; tag: string; sourceWords: string; span?: { start: number; end: number }; confidence?: number };
 type GuideData = { interviews: Interview[] };
@@ -18,6 +24,16 @@ function newInterview(n: number): Interview {
     rawNotes: "",
     tags: [],
   };
+}
+
+/** A seeded, never-touched interview — safe to replace when the first transcript is imported. */
+function isEmptyInterview(iv: Interview): boolean {
+  return (
+    !iv.rawNotes.trim() &&
+    iv.tags.length === 0 &&
+    !iv.source &&
+    Object.values(iv.header).every((v) => !v.trim())
+  );
 }
 
 export function InterviewEditor({
@@ -37,9 +53,12 @@ export function InterviewEditor({
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [lastMeta, setLastMeta] = useState<AiMeta | null>(null);
   const [decisions, setDecisions] = useState({ confirmed: 0, rejected: 0 });
-  const [busy, setBusy] = useState<"idle" | "suggesting" | "saving">("idle");
+  const [busy, setBusy] = useState<"idle" | "reading" | "suggesting" | "saving">("idle");
   const [message, setMessage] = useState("");
   const [live, setLive] = useState("");
+  const [pasteText, setPasteText] = useState("");
+  // Ids of freshly imported interviews still awaiting their automatic tagging pass.
+  const [pending, setPending] = useState<Set<string>>(new Set());
 
   const current = interviews[sel];
 
@@ -47,8 +66,76 @@ export function InterviewEditor({
     setInterviews((prev) => prev.map((iv, i) => (i === sel ? mut(iv) : iv)));
   }
 
-  async function suggest() {
-    if (!current.rawNotes.trim()) {
+  // Turn one or more cleaned transcripts into new interviews and queue them for tagging.
+  function importTexts(items: { text: string; filename: string }[]) {
+    const ready = items.filter((it) => it.text.trim());
+    if (!ready.length) return;
+    const now = new Date().toISOString();
+    const base = interviews.length === 1 && isEmptyInterview(interviews[0]) ? [] : interviews;
+    const created = ready.map((it, i) => ({
+      ...newInterview(base.length + i + 1),
+      rawNotes: cleanTranscript(it.text, it.filename),
+      source: { filename: it.filename, uploadedAt: now, uploadedBy: ACTOR },
+    }));
+    setInterviews([...base, ...created]);
+    setSel(base.length);
+    setPending(new Set(created.map((c) => c.id)));
+    setSuggestions([]);
+    setLive(`Imported ${created.length} interview${created.length === 1 ? "" : "s"}. Suggesting tags…`);
+  }
+
+  async function handleFiles(fileList: FileList | null) {
+    if (!fileList || !fileList.length) return;
+    setMessage("");
+    const files = Array.from(fileList);
+    const accepted = files.filter(isAcceptedTranscript);
+    const skipped = files.length - accepted.length;
+    if (!accepted.length) {
+      setMessage("Unsupported or oversized file. Use .txt, .md, or .vtt under 2 MB.");
+      return;
+    }
+    setBusy("reading");
+    try {
+      const items = await Promise.all(
+        accepted.map(async (f) => ({ text: await readTextFile(f), filename: f.name })),
+      );
+      setBusy("idle");
+      importTexts(items);
+    } catch (err) {
+      setBusy("idle");
+      setMessage(err instanceof Error ? `Could not read file: ${err.message}` : "Could not read file.");
+      return;
+    }
+    if (skipped > 0) {
+      setMessage(`Skipped ${skipped} unsupported or oversized file(s). Use .txt, .md, or .vtt under 2 MB.`);
+    }
+  }
+
+  function handlePaste() {
+    if (!pasteText.trim()) return;
+    setMessage("");
+    importTexts([{ text: pasteText, filename: "pasted text" }]);
+    setPasteText("");
+  }
+
+  // Run the automatic tagging pass for the selected interview whenever it is one of
+  // the freshly imported ones. Dequeue first so this fires exactly once per import.
+  useEffect(() => {
+    if (busy !== "idle") return;
+    const iv = interviews[sel];
+    if (!iv || !pending.has(iv.id)) return;
+    setPending((prev) => {
+      const next = new Set(prev);
+      next.delete(iv.id);
+      return next;
+    });
+    void suggest(iv.rawNotes);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sel, pending, busy]);
+
+  async function suggest(notes?: string) {
+    const text = notes ?? current.rawNotes;
+    if (!text.trim()) {
       setMessage("Add interview notes before requesting tags.");
       return;
     }
@@ -56,7 +143,7 @@ export function InterviewEditor({
     setMessage("");
     const res = await callAi<{ degraded: boolean; suggestions: Suggestion[]; aiMeta?: AiMeta; message?: string }>(
       "/api/ai/suggest-tags",
-      { notes: current.rawNotes },
+      { notes: text },
     );
     setBusy("idle");
     setLastMeta(res.aiMeta || null);
@@ -158,6 +245,48 @@ export function InterviewEditor({
         {live}
       </div>
 
+      {/* Import a completed transcript — by file or pasted text */}
+      <section className="card stack" aria-label="Import transcript">
+        <div className="stack">
+          <span className="t-system">Import a transcript</span>
+          <p className="t-faint t-system">
+            Upload .txt, .md, or .vtt files, or paste raw text. Each becomes a new interview and AI tagging runs
+            automatically — you still confirm every tag.
+          </p>
+        </div>
+        <div className="row">
+          <label className="btn">
+            Upload transcript file(s)
+            <input
+              type="file"
+              accept={ACCEPTED_TRANSCRIPT_ACCEPT}
+              multiple
+              className="visually-hidden"
+              disabled={busy !== "idle"}
+              onChange={(e) => {
+                handleFiles(e.target.files);
+                e.target.value = "";
+              }}
+            />
+          </label>
+          <span className="t-faint t-system">.txt · .md · .vtt · up to 2 MB each</span>
+        </div>
+        <label className="field stack">
+          <span className="t-system">Or paste transcript text</span>
+          <textarea
+            value={pasteText}
+            rows={4}
+            onChange={(e) => setPasteText(e.target.value)}
+            placeholder="Paste the full interview transcript here."
+          />
+        </label>
+        <div className="row">
+          <button className="btn" onClick={handlePaste} disabled={busy !== "idle" || !pasteText.trim()}>
+            Add as interview
+          </button>
+        </div>
+      </section>
+
       {/* Interview selector */}
       <div className="row" role="group" aria-label="Interviews">
         {interviews.map((iv, i) => (
@@ -202,6 +331,9 @@ export function InterviewEditor({
       {/* Raw notes */}
       <label className="field stack">
         <span className="t-system">Raw notes — the person&apos;s own words</span>
+        {current.source && (
+          <span className="t-faint t-system">From transcript: {current.source.filename}</span>
+        )}
         <textarea
           value={current.rawNotes}
           rows={10}
@@ -211,7 +343,7 @@ export function InterviewEditor({
       </label>
 
       <div className="row">
-        <button className="btn btn--primary" onClick={suggest} disabled={busy !== "idle"}>
+        <button className="btn btn--primary" onClick={() => suggest()} disabled={busy !== "idle"}>
           {busy === "suggesting" ? "Asking AI…" : "Suggest tags"}
           <span className="ai-mark" aria-hidden="true">AI</span>
         </button>

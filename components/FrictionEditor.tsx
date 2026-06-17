@@ -201,7 +201,7 @@ export function FrictionEditor({
           <p className="t-faint">No friction logged yet.</p>
         ) : (
           entries.map((e, i) => (
-            <fieldset key={e.id} className="card stack">
+            <fieldset key={e.id} className="card card--accent stack entry-card">
               <legend className="t-system">
                 {e.id} {e.origin !== "human" && <span className="ai-mark">AI-assisted</span>}
               </legend>

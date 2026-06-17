@@ -84,7 +84,7 @@ export function BlueprintEditor({
           </button>
         </div>
         {handoffs.map((h, i) => (
-          <fieldset key={h.id} className="card grid grid--2">
+          <fieldset key={h.id} className="card card--accent grid grid--2">
             <legend className="t-system">{h.id}</legend>
             {(
               [
@@ -119,7 +119,7 @@ export function BlueprintEditor({
           </button>
         </div>
         {decisions.map((d, i) => (
-          <fieldset key={d.id} className="card grid grid--2">
+          <fieldset key={d.id} className="card card--accent grid grid--2">
             <legend className="t-system">{d.id}</legend>
             {(
               [
@@ -156,7 +156,7 @@ export function BlueprintEditor({
           </button>
         </div>
         {systems.map((s, i) => (
-          <fieldset key={i} className="card grid grid--2">
+          <fieldset key={i} className="card card--accent grid grid--2">
             <legend className="t-system">System {i + 1}</legend>
             {(
               [

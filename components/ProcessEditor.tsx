@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { saveArtifact } from "@/lib/client";
+import { SortableCards } from "./SortableCards";
 
 type Step = {
   id: string;
@@ -85,29 +86,37 @@ export function ProcessEditor({
           + Step
         </button>
       </div>
-      {steps.map((s, i) => (
-        <fieldset key={s.id} className="card grid grid--2">
-          <legend className="t-system">{s.id}</legend>
-          {(
-            [
-              ["step", "What happens"],
-              ["trigger", "What sets it off"],
-              ["who", "Who does it"],
-              ["system", "System"],
-              ["rule", "Rule / standard"],
-              ["handsOnTime", "Hands-on time"],
-              ["waitTime", "Wait time"],
-              ["whatGoesWrong", "What goes wrong"],
-            ] as const
-          ).map(([k, label]) => (
-            <label key={k} className="field">
-              <span className="t-system">{label}</span>
-              <input type="text" value={s[k]} onChange={(e) => setStep(i, k, e.target.value)} />
-            </label>
-          ))}
-          <button className="btn btn--text" onClick={() => setSteps((p) => p.filter((_, idx) => idx !== i))}>Remove step</button>
-        </fieldset>
-      ))}
+      <SortableCards
+        items={steps}
+        getKey={(s) => s.id}
+        onReorder={setSteps}
+        onRemove={(i) => setSteps((p) => p.filter((_, idx) => idx !== i))}
+        cardLabel={(s) => s.id}
+        legend={(s) => <legend className="t-system">{s.id}</legend>}
+        columnsStorageKey={`card-cols:process:${engagementId}`}
+        defaultColumns={2}
+        renderCard={(s, i) => (
+          <div className="grid grid--2">
+            {(
+              [
+                ["step", "What happens"],
+                ["trigger", "What sets it off"],
+                ["who", "Who does it"],
+                ["system", "System"],
+                ["rule", "Rule / standard"],
+                ["handsOnTime", "Hands-on time"],
+                ["waitTime", "Wait time"],
+                ["whatGoesWrong", "What goes wrong"],
+              ] as const
+            ).map(([k, label]) => (
+              <label key={k} className="field">
+                <span className="t-system">{label}</span>
+                <input type="text" value={s[k]} onChange={(e) => setStep(i, k, e.target.value)} />
+              </label>
+            ))}
+          </div>
+        )}
+      />
 
       {message && <p className="notice">{message}</p>}
       <div className="row">

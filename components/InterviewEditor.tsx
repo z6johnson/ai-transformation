@@ -176,7 +176,7 @@ export function InterviewEditor({
       </div>
 
       {/* Header fields */}
-      <fieldset className="card grid grid--2" style={{ border: "1px solid var(--color-border-hairline)" }}>
+      <fieldset className="card grid grid--2">
         <legend className="t-system">Interview header</legend>
         {(
           [

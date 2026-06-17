@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
-import { isStorageConfigured } from "@/lib/github";
+import { isStorageConfigured, getJson } from "@/lib/github";
 import { loadEngagement, loadArtifact } from "@/lib/store";
+import { engagementFile } from "@/lib/paths";
 import { SetupNotice } from "@/components/SetupNotice";
-import { ARTIFACT_LABELS, type ArtifactId } from "@/lib/schemas";
+import { StageStepper } from "@/components/StageStepper";
+import { ARTIFACT_LABELS, STAGE_LABELS, type ArtifactId } from "@/lib/schemas";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +24,8 @@ export default async function EngagementPage({ params }: { params: Promise<{ id:
   const engagement = await loadEngagement(id);
   if (!engagement) notFound();
 
+  const raw = await getJson<unknown>(engagementFile(id));
+
   // Read each artifact's status for the nav (cheap; v1 scale).
   const statuses = await Promise.all(
     ROUTES.map(async (r) => ({ ...r, status: (await loadArtifact(id, r.id)).data.status })),
@@ -36,7 +40,12 @@ export default async function EngagementPage({ params }: { params: Promise<{ id:
       </nav>
 
       <header className="stack">
-        <div className="t-system">Mapping · Layer 1</div>
+        <div className="row" style={{ justifyContent: "space-between", alignItems: "baseline" }}>
+          <div className="t-system">{STAGE_LABELS[engagement.stage]} · Layer 1</div>
+          <a className="btn btn--text" href={`/engagements/${id}/edit`}>
+            Edit details
+          </a>
+        </div>
         <h1 className="t-display">{engagement.name}</h1>
         <p className="t-muted">{engagement.service}</p>
         <p className="t-system t-faint">
@@ -44,6 +53,8 @@ export default async function EngagementPage({ params }: { params: Promise<{ id:
           {engagement.lifecycleOwner?.name || "—"}
         </p>
       </header>
+
+      <StageStepper engagement={engagement} baseSha={raw?.sha ?? null} />
 
       <section className="stack">
         <h2 className="t-heading">Templates</h2>

@@ -36,6 +36,16 @@ export const Envelope = z.object({
 // ---- Engagement -----------------------------------------------------------
 
 export const EngagementStage = z.enum(["selection", "mapping", "design", "implementation"]);
+export type EngagementStage = z.infer<typeof EngagementStage>;
+
+/** Ordered lifecycle stages and their human labels. Shared by the home, detail, form, and stepper. */
+export const STAGES = EngagementStage.options;
+export const STAGE_LABELS: Record<EngagementStage, string> = {
+  selection: "Selection",
+  mapping: "Mapping",
+  design: "Design",
+  implementation: "Implementation & transfer",
+};
 
 export const Engagement = z.object({
   id: z.string(),

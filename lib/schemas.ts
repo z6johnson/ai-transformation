@@ -91,6 +91,11 @@ export const Interview = z.object({
   }),
   rawNotes: z.string().default(""),
   tags: z.array(InterviewTag).default([]),
+  // Provenance for interviews imported from a transcript (file upload or pasted text).
+  // Optional and backward-compatible: hand-entered interviews simply omit it.
+  source: z
+    .object({ filename: z.string(), uploadedAt: z.string(), uploadedBy: z.string() })
+    .optional(),
 });
 export type Interview = z.infer<typeof Interview>;
 

@@ -51,9 +51,7 @@ export default async function EngagementPage({ params }: { params: Promise<{ id:
 
       <section className="stack">
         <h2 className="t-heading">Templates</h2>
-        <p className="t-faint">
-          01 and 06 are fixed. Reorder 02–05 by dragging the handle or using ▲/▼.
-        </p>
+        <p className="t-faint">Open any template to work on it.</p>
         <TemplateGrid engagementId={id} items={statuses} />
       </section>
 

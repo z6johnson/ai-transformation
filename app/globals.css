@@ -379,7 +379,7 @@ th {
   background: var(--color-bg-sunken);
 }
 
-/* Reorderable templates (02–05 drag/sort; 01 and 06 fixed). */
+/* Template list on the engagement overview. */
 .template-grid {
   display: grid;
   gap: var(--space-1);
@@ -400,32 +400,6 @@ th {
 }
 .template-row > a:hover {
   background: var(--color-bg-sunken);
-}
-.template-row--draggable {
-  cursor: grab;
-}
-.template-row.is-dragging {
-  opacity: 0.5;
-}
-.template-row.is-over {
-  border-color: var(--color-ink);
-}
-.template-row__handle {
-  display: flex;
-  align-items: center;
-  padding-left: var(--space-2);
-  color: var(--color-ink-faint);
-  user-select: none;
-}
-.template-row__controls {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-right: var(--space-2);
-}
-.template-row__controls .btn {
-  line-height: 1;
-  padding: 0 var(--space-1);
 }
 
 /* Compact sortable card grid (journey stages, process steps). */

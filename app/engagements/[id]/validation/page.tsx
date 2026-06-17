@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { isStorageConfigured } from "@/lib/github";
 import { loadEngagement, loadArtifact, readAiLog } from "@/lib/store";
 import { SetupNotice } from "@/components/SetupNotice";
+import { TemplateNav } from "@/components/TemplateNav";
 import { ValidationEditor } from "@/components/ValidationEditor";
 
 export const dynamic = "force-dynamic";
@@ -23,6 +24,7 @@ export default async function ValidationPage({ params }: { params: Promise<{ id:
         <span aria-hidden="true">/</span>
         <span>Validation Packet</span>
       </nav>
+      <TemplateNav engagementId={id} activeId="06" />
       <header className="stack">
         <div className="t-system">06 · Validation Packet</div>
         <h1 className="t-display">Closing the mapping stage</h1>
@@ -63,6 +65,28 @@ export default async function ValidationPage({ params }: { params: Promise<{ id:
             </tbody>
           </table>
         )}
+        <dl className="outcome-legend t-faint">
+          <div>
+            <dt className="t-system">ok</dt>
+            <dd>The model call succeeded and returned valid, parseable content.</dd>
+          </div>
+          <div>
+            <dt className="t-system">timeout</dt>
+            <dd>The call ran past the configured time limit; no result was used.</dd>
+          </div>
+          <div>
+            <dt className="t-system">fallback</dt>
+            <dd>The call failed (rate limit, error, malformed, or unconfigured) and a person completed the step by hand.</dd>
+          </div>
+          <div>
+            <dt className="t-system">error</dt>
+            <dd>An unexpected failure.</dd>
+          </div>
+        </dl>
+        <p className="t-faint">
+          Outcome describes whether the AI <em>call</em> ran — not whether its suggestion was accepted. Acceptance is the
+          separate &ldquo;Human decision&rdquo; column.
+        </p>
       </section>
 
       <ValidationEditor engagementId={id} initial={data.data} baseSha={sha} status={data.status} />

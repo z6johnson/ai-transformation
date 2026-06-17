@@ -3,6 +3,7 @@ import { isStorageConfigured } from "@/lib/github";
 import { loadEngagement, loadArtifact } from "@/lib/store";
 import { isAiConfigured } from "@/lib/tritonai";
 import { SetupNotice } from "@/components/SetupNotice";
+import { TemplateNav } from "@/components/TemplateNav";
 import { JourneyEditor } from "@/components/JourneyEditor";
 
 export const dynamic = "force-dynamic";
@@ -23,6 +24,7 @@ export default async function JourneyPage({ params }: { params: Promise<{ id: st
         <span aria-hidden="true">/</span>
         <span>Journey Map</span>
       </nav>
+      <TemplateNav engagementId={id} activeId="02" />
       <header className="stack">
         <div className="t-system">02 · Journey Map</div>
         <h1 className="t-display">The experience view</h1>

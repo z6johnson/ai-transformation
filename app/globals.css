@@ -317,3 +317,94 @@ th {
 .artifact-nav a:hover {
   background: var(--color-bg-sunken);
 }
+
+/* Template sub-menu: jump between the six templates from any template page. */
+.template-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin-bottom: var(--space-4);
+}
+.template-nav a {
+  padding: var(--space-1) var(--space-2);
+  border: var(--border-hairline) solid var(--color-border-hairline);
+  font-size: var(--font-size-system);
+  text-decoration: none;
+  color: var(--color-ink-muted);
+}
+.template-nav a:hover {
+  background: var(--color-bg-sunken);
+}
+.template-nav a.is-active {
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+  background: var(--color-bg-sunken);
+}
+
+/* Reorderable templates (02–05 drag/sort; 01 and 06 fixed). */
+.template-grid {
+  display: grid;
+  gap: var(--space-1);
+}
+.template-row {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-2);
+  border: var(--border-hairline) solid var(--color-border-hairline);
+}
+.template-row > a {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  text-decoration: none;
+}
+.template-row > a:hover {
+  background: var(--color-bg-sunken);
+}
+.template-row--draggable {
+  cursor: grab;
+}
+.template-row.is-dragging {
+  opacity: 0.5;
+}
+.template-row.is-over {
+  border-color: var(--color-ink);
+}
+.template-row__handle {
+  display: flex;
+  align-items: center;
+  padding-left: var(--space-2);
+  color: var(--color-ink-faint);
+  user-select: none;
+}
+.template-row__controls {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: var(--space-2);
+}
+.template-row__controls .btn {
+  line-height: 1;
+  padding: 0 var(--space-1);
+}
+
+/* Outcome legend under the "How AI was used" table. */
+.outcome-legend {
+  display: grid;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+}
+.outcome-legend > div {
+  display: flex;
+  gap: var(--space-2);
+}
+.outcome-legend dt {
+  flex: 0 0 5rem;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-system);
+}
+.outcome-legend dd {
+  margin: 0;
+}

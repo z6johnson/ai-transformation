@@ -3,6 +3,7 @@ import { isStorageConfigured } from "@/lib/github";
 import { loadEngagement, loadArtifact } from "@/lib/store";
 import { isAiConfigured } from "@/lib/tritonai";
 import { SetupNotice } from "@/components/SetupNotice";
+import { TemplateNav } from "@/components/TemplateNav";
 import { FrictionEditor } from "@/components/FrictionEditor";
 
 export const dynamic = "force-dynamic";
@@ -23,6 +24,7 @@ export default async function FrictionPage({ params }: { params: Promise<{ id: s
         <span aria-hidden="true">/</span>
         <span>Friction Register</span>
       </nav>
+      <TemplateNav engagementId={id} activeId="05" />
       <header className="stack">
         <div className="t-system">05 · Friction Register</div>
         <h1 className="t-display">Where the service has friction</h1>

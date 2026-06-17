@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { isStorageConfigured } from "@/lib/github";
 import { loadEngagement, loadArtifact } from "@/lib/store";
 import { SetupNotice } from "@/components/SetupNotice";
+import { TemplateNav } from "@/components/TemplateNav";
 import { BlueprintEditor } from "@/components/BlueprintEditor";
 
 export const dynamic = "force-dynamic";
@@ -22,6 +23,7 @@ export default async function BlueprintPage({ params }: { params: Promise<{ id: 
         <span aria-hidden="true">/</span>
         <span>Service Blueprint</span>
       </nav>
+      <TemplateNav engagementId={id} activeId="03" />
       <header className="stack">
         <div className="t-system">03 · Service Blueprint</div>
         <h1 className="t-display">The operations view</h1>

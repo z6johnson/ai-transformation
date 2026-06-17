@@ -20,6 +20,20 @@ function delta(k: DashboardKpi): { text: string; cls: string } {
   return { text: word, cls: diff === 0 ? "" : improved ? "delta-up" : "delta-down" };
 }
 
+/** Group KPIs by engagement, preserving first-seen order, so units stay separate. */
+function groupByEngagement(kpis: DashboardKpi[]): Array<{ name: string; kpis: DashboardKpi[] }> {
+  const groups: Array<{ name: string; kpis: DashboardKpi[] }> = [];
+  for (const k of kpis) {
+    let g = groups.find((x) => x.name === k.engagementName);
+    if (!g) {
+      g = { name: k.engagementName, kpis: [] };
+      groups.push(g);
+    }
+    g.kpis.push(k);
+  }
+  return groups;
+}
+
 export default async function DashboardPage() {
   if (!isStorageConfigured()) {
     return (
@@ -51,6 +65,16 @@ export default async function DashboardPage() {
         </section>
       )}
 
+      <section className="card card--accent">
+        <p className="t-system">Reconciling measures across engagements</p>
+        <p className="t-muted">
+          Outcomes are not comparable unit to unit — an SPA appraisal metric is not an Athletics, Library, or BFS metric.
+          So we never compare raw values across engagements. Each KPI is tracked only against <em>its own</em> baseline
+          and target. The two layers that <em>are</em> common across units are the four impact dimensions below and each
+          measure&apos;s normalized progress-to-target and trend. KPIs are grouped by engagement so units stay distinct.
+        </p>
+      </section>
+
       <section className="stack">
         <h2 className="t-heading">Four-dimension impact</h2>
         <div className="grid grid--2">
@@ -62,19 +86,23 @@ export default async function DashboardPage() {
                 {kpis.length === 0 ? (
                   <p className="t-faint">No measures yet.</p>
                 ) : (
-                  kpis.map((k) => {
-                    const dl = delta(k);
-                    return (
-                      <div key={`${k.engagementId}-${k.id}`} className="stack" style={{ gap: "var(--space-1)" }}>
-                        <span className="t-display">{formatKpi(k.current, k.unit)}</span>
-                        <span className="t-subhead">{k.label}</span>
-                        <span className={`t-system ${dl.cls}`}>
-                          {dl.text} · baseline {formatKpi(k.baseline, k.unit)} → target {formatKpi(k.target, k.unit)}
-                        </span>
-                        <span className="t-faint t-system">{k.engagementName}</span>
-                      </div>
-                    );
-                  })
+                  groupByEngagement(kpis).map((group) => (
+                    <div key={group.name} className="stack" style={{ gap: "var(--space-2)" }}>
+                      <span className="t-faint t-system">{group.name}</span>
+                      {group.kpis.map((k) => {
+                        const dl = delta(k);
+                        return (
+                          <div key={`${k.engagementId}-${k.id}`} className="stack" style={{ gap: "var(--space-1)" }}>
+                            <span className="t-display">{formatKpi(k.current, k.unit)}</span>
+                            <span className="t-subhead">{k.label}</span>
+                            <span className={`t-system ${dl.cls}`}>
+                              {dl.text} · baseline {formatKpi(k.baseline, k.unit)} → target {formatKpi(k.target, k.unit)}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ))
                 )}
               </div>
             );
@@ -92,6 +120,7 @@ export default async function DashboardPage() {
             <thead>
               <tr>
                 <th scope="col">KPI</th>
+                <th scope="col">Engagement</th>
                 <th scope="col">Dimension</th>
                 <th scope="col">Baseline</th>
                 <th scope="col">Current</th>
@@ -106,6 +135,7 @@ export default async function DashboardPage() {
                 return (
                   <tr key={`${k.engagementId}-${k.id}`}>
                     <td>{k.label}</td>
+                    <td className="t-faint">{k.engagementName}</td>
                     <td className="t-system">{DIMENSION_LABELS[k.dimension]}</td>
                     <td>{formatKpi(k.baseline, k.unit)}</td>
                     <td>{formatKpi(k.current, k.unit)}</td>

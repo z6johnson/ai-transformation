@@ -1,0 +1,84 @@
+{
+  "artifactId": "03",
+  "engagementId": "hr-performance-appraisal",
+  "status": "confirmed",
+  "updatedAt": "2026-06-16T18:00:00Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": true,
+  "data": {
+    "header": {
+      "service": "DEMO — UC San Diego Staff Performance Appraisal (SPA)",
+      "scope": "Setting expectations → Signed appraisal filed in personnel file",
+      "lead": "A. Practice Lead, Director of AI Strategy"
+    },
+    "stageRows": [
+      {
+        "stage": "Setting expectations",
+        "personDoes": { "value": "Reviews their job description and agrees standards and goals with their leader.", "origin": "human" },
+        "frontstage": { "value": "Leader holds the goal-setting meeting and walks through the updated job description.", "origin": "ai-confirmed", "promptId": "draft@blueprint-2026-05-21", "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-21T16:00:00Z" },
+        "backstage": { "value": "Leader pulls the prior job description, checks whether duties changed, consults HR on standards.", "origin": "human" },
+        "systems": { "value": "SPA; job description record; UC Learning Center (supervisor training).", "origin": "human" }
+      },
+      {
+        "stage": "Doing the work and gathering evidence",
+        "personDoes": { "value": "Performs the year's work; informally tracks accomplishments.", "origin": "human" },
+        "frontstage": { "value": "Leader gives ongoing feedback and any mid-year check-ins.", "origin": "human" },
+        "backstage": { "value": "Leader observes performance and keeps notes toward the eventual draft.", "origin": "ai-confirmed", "promptId": "draft@blueprint-2026-05-21", "confidence": 0.79, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-21T16:01:00Z" },
+        "systems": { "value": "Day-to-day operational systems; personal notes.", "origin": "human" }
+      },
+      {
+        "stage": "Writing my self-appraisal",
+        "personDoes": { "value": "Completes and submits the self-appraisal in SPA (optional).", "origin": "human" },
+        "frontstage": { "value": "Leader sets a self-appraisal deadline and sends reminders.", "origin": "human" },
+        "backstage": { "value": "HR sends cycle-open notifications; verifies training-assignment status.", "origin": "human" },
+        "systems": { "value": "SPA self-appraisal form; email reminders.", "origin": "human" }
+      },
+      {
+        "stage": "Getting the draft and talking it through",
+        "personDoes": { "value": "Receives the draft and discusses it in the appraisal meeting.", "origin": "human" },
+        "frontstage": { "value": "Leader drafts the appraisal (Model A or B) and holds the meeting.", "origin": "ai-confirmed", "promptId": "draft@blueprint-2026-05-21", "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-21T16:02:00Z" },
+        "backstage": { "value": "Draft sits in 'Supervisor Draft' status, visible only to the leader, indirect supervisors, HR, and the business officer.", "origin": "ai-confirmed", "promptId": "draft@blueprint-2026-05-21", "confidence": 0.84, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-21T16:02:00Z" },
+        "systems": { "value": "SPA (Model A / Model B); the employee's submitted self-appraisal.", "origin": "human" }
+      },
+      {
+        "stage": "Review, comments, and HR clearance",
+        "personDoes": { "value": "Adds comments, then waits while the appraisal is in 'HR Review' and can no longer edit.", "origin": "human" },
+        "frontstage": { "value": "Leader confirms the employee had their comment window; answers status questions.", "origin": "human" },
+        "backstage": { "value": "Appraisal moves to 'HR Review'; HR, leader, and indirect supervisors can view; HR checks compliance and clears it.", "origin": "ai-confirmed", "promptId": "draft@blueprint-2026-05-21", "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-21T16:03:00Z" },
+        "systems": { "value": "SPA status workflow; spa-support@ucsd.edu queue.", "origin": "human" }
+      },
+      {
+        "stage": "Signing and closing",
+        "personDoes": { "value": "Signs the appraisal and receives a copy.", "origin": "human" },
+        "frontstage": { "value": "Leader collects required signatures and provides the copy to the employee.", "origin": "human" },
+        "backstage": { "value": "Business officer assists signature routing; signed document filed in the personnel file; feeds merit decisions.", "origin": "human" },
+        "systems": { "value": "Signature routing (email); SPA; personnel file.", "origin": "human" }
+      }
+    ],
+    "handoffs": [
+      { "id": "H-01", "stage": "Writing my self-appraisal", "from": "Employee", "to": "People leader", "whatMoves": "Submitted self-appraisal", "how": "SPA submission", "whatBreaks": "If skipped (optional), the leader drafts without it; the year is reconstructed from memory.", "origin": "human" },
+      { "id": "H-02", "stage": "Review, comments, and HR clearance", "from": "People leader", "to": "HR", "whatMoves": "Completed draft moved to 'HR Review' status", "how": "SPA status change", "whatBreaks": "Employee loses visibility and edit access; no status is surfaced back, so it reads as a black box.", "origin": "ai-confirmed" },
+      { "id": "H-03", "stage": "Review, comments, and HR clearance", "from": "HR", "to": "People leader", "whatMoves": "HR clearance / compliance OK", "how": "SPA status change + email", "whatBreaks": "During the late-cycle flood, clearance queues; delay is read as HR being slow.", "origin": "human" },
+      { "id": "H-04", "stage": "Signing and closing", "from": "People leader", "to": "Employee", "whatMoves": "Final signed copy of the appraisal", "how": "Email / in person", "whatBreaks": "Copy delayed when signatures are still outstanding.", "origin": "human" },
+      { "id": "H-05", "stage": "Signing and closing", "from": "People leader (business officer assists)", "to": "Personnel file", "whatMoves": "Signed appraisal document", "how": "Manual signature routing by email, then filing", "whatBreaks": "Signatures chased one by one; filing slips past the deadline.", "origin": "human" }
+    ],
+    "decisions": [
+      { "id": "D-01", "stage": "Getting the draft and talking it through", "decision": "Which appraisal model to use (Model A or Model B)", "whoDecides": "People leader", "decidesOn": "Whether the employee is represented (union); department norm", "basis": "Represented staff may use the union-specific Model B, selected with HR assistance; others use Model A", "failurePath": "Wrong model chosen; HR re-routes, draft redone", "kind": "clear-cut", "origin": "ai-confirmed" },
+      { "id": "D-02", "stage": "Setting expectations", "decision": "Whether the employee is included in this annual cycle", "whoDecides": "HR / SPA administrator", "decidesOn": "Probationary status; hire date relative to April 30", "basis": "Probationary employees get a separate probationary appraisal; staff hired after April 30 are not required to self-appraise this cycle", "failurePath": "Someone is appraised on the wrong basis or missed entirely", "kind": "clear-cut", "origin": "ai-confirmed" },
+      { "id": "D-03", "stage": "Doing the work and gathering evidence", "decision": "Which leader evaluates an employee who changed roles mid-cycle", "whoDecides": "HR with the leaders involved", "decidesOn": "What work was performed in which role and for how long", "basis": "The new leader evaluates only the work performed in the new role for the remainder of the cycle", "failurePath": "Employee evaluated on work they no longer do, or on the wrong scope", "kind": "judgment", "origin": "human" },
+      { "id": "D-04", "stage": "Getting the draft and talking it through", "decision": "The overall performance rating and narrative", "whoDecides": "People leader", "decidesOn": "Evidence of the year's work, the self-appraisal (if any), and the campus performance standards", "basis": "Human judgment against published standards; no AI-generated ratings", "failurePath": "Thin evidence (no self-appraisal, late drafting) produces a rating reconstructed from memory", "kind": "judgment", "origin": "ai-confirmed" },
+      { "id": "D-05", "stage": "Review, comments, and HR clearance", "decision": "Whether the draft is ready to move to 'HR Review'", "whoDecides": "People leader", "decidesOn": "Whether the employee had their comment window and the draft is complete", "basis": "Leader is satisfied the appraisal is final and the employee has commented", "failurePath": "Moved early, before the employee's ≥5 business days, cutting off comment", "kind": "judgment", "origin": "human" }
+    ],
+    "systems": [
+      { "name": "SPA (Staff Performance Appraisal)", "usedFor": "Drafting, status workflow, self-appraisal, storing the appraisal of record", "dataHeld": "Appraisals, ratings, self-appraisals, status history", "owner": "HR / SPA administrators (spa-support@ucsd.edu)", "connectsTo": "Personnel file; UC Learning Center" },
+      { "name": "UC Learning Center", "usedFor": "Supervisor training ('Performance Management') and training-assignment verification", "dataHeld": "Training completion records", "owner": "Learning & Development", "connectsTo": "SPA (training-status check)" },
+      { "name": "Personnel file", "usedFor": "System of record for the signed appraisal", "dataHeld": "Signed appraisal documents", "owner": "HR", "connectsTo": "SPA" }
+    ],
+    "breakingPoints": [
+      { "what": "Optional self-appraisal often skipped, leaving the draft and rating thin", "refs": ["FR-02", "D-04", "H-01"] },
+      { "what": "Draft invisible to the employee during 'HR Review', with no status surfaced back", "refs": ["FR-03", "H-02"] },
+      { "what": "Signature routing by email stalls the close against the deadline", "refs": ["FR-04", "H-05"] },
+      { "what": "Whole cycle bunches into the final two weeks before COB June 15", "refs": ["FR-01", "FR-07", "H-03"] }
+    ]
+  }
+}

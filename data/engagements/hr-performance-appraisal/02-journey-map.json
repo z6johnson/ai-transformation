@@ -1,0 +1,105 @@
+{
+  "artifactId": "02",
+  "engagementId": "hr-performance-appraisal",
+  "status": "confirmed",
+  "updatedAt": "2026-06-16T18:00:00Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": true,
+  "data": {
+    "header": {
+      "service": "DEMO — UC San Diego Staff Performance Appraisal (SPA)",
+      "scope": "Setting expectations → Signed appraisal filed in personnel file",
+      "person": "Career staff member being appraised",
+      "others": "People leader (supervisor); HR / SPA administrators; department business officer",
+      "sources": ["INT-1 (Staff Analyst)", "INT-2 (People Leader)", "INT-3 (HR / SPA Administrator)"]
+    },
+    "stages": [
+      {
+        "name": "Setting expectations",
+        "order": 1,
+        "doing": { "value": "Meets with their leader early in the cycle to review the job description and agree on standards and goals.", "origin": "ai-confirmed", "promptId": "draft@journey-2026-05-20", "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-20T17:00:00Z" },
+        "wants": { "value": "To know what good looks like for the year ahead, in concrete terms.", "origin": "human" },
+        "touchpoints": { "value": "Goal-setting meeting; SPA system; the job description record.", "origin": "human" },
+        "thinkingFeeling": { "value": "\"Tell me what actually matters this year so I'm not guessing in April.\"", "origin": "ai-confirmed", "promptId": "draft@journey-2026-05-20", "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-20T17:00:00Z" },
+        "waitingFor": { "value": "A meeting to be scheduled; an updated job description.", "origin": "human" },
+        "effort": "low",
+        "effortWhy": { "value": "Low when the meeting happens; the burden is on the leader to initiate.", "origin": "human" },
+        "frictionRefs": ["FR-05"],
+        "duration": "1–2 weeks to schedule; ~45-minute meeting"
+      },
+      {
+        "name": "Doing the work and gathering evidence",
+        "order": 2,
+        "doing": { "value": "Does the year's work; informally collects accomplishments and feedback as they go.", "origin": "human" },
+        "wants": { "value": "To not lose track of what they did so it counts at review time.", "origin": "ai-confirmed", "promptId": "draft@journey-2026-05-20", "confidence": 0.8, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-20T17:01:00Z" },
+        "touchpoints": { "value": "Day-to-day systems; personal notes; any mid-year check-ins.", "origin": "human" },
+        "thinkingFeeling": { "value": "\"I'll remember the big stuff\" — but often won't by spring.", "origin": "human" },
+        "waitingFor": { "value": "Nothing formal; the cycle runs in the background.", "origin": "human" },
+        "effort": "low",
+        "effortWhy": { "value": "Low day to day, but the lack of structure shows up later as reconstruction effort.", "origin": "human" },
+        "frictionRefs": ["FR-08"],
+        "duration": "~11 months (May–April)"
+      },
+      {
+        "name": "Writing my self-appraisal",
+        "order": 3,
+        "doing": { "value": "Completes the (optional but encouraged) self-appraisal in SPA and submits it to the leader.", "origin": "ai-confirmed", "promptId": "draft@journey-2026-05-20", "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-20T17:02:00Z" },
+        "wants": { "value": "To make sure their leader remembers the full year, not just recent months.", "origin": "human" },
+        "touchpoints": { "value": "SPA self-appraisal form; reminder email; their own brag-doc workaround.", "origin": "ai-confirmed", "promptId": "draft@journey-2026-05-20", "confidence": 0.83, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-20T17:02:00Z" },
+        "thinkingFeeling": { "value": "\"It's optional, so is it even worth it?\" — many skip it.", "origin": "human" },
+        "waitingFor": { "value": "A clear deadline from the leader.", "origin": "human" },
+        "effort": "moderate",
+        "effortWhy": { "value": "Moderate: reconstructing a year of work from scattered notes takes real time.", "origin": "human" },
+        "frictionRefs": ["FR-02"],
+        "duration": "2–4 hours, 30–60 days before the formal meeting"
+      },
+      {
+        "name": "Getting the draft and talking it through",
+        "order": 4,
+        "doing": { "value": "Receives the leader's draft appraisal and discusses it in the appraisal meeting.", "origin": "human" },
+        "wants": { "value": "A fair reflection of the year and a conversation, not a verdict handed down.", "origin": "ai-confirmed", "promptId": "draft@journey-2026-05-20", "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-20T17:03:00Z" },
+        "touchpoints": { "value": "Appraisal meeting; SPA draft (Model A or B).", "origin": "human" },
+        "thinkingFeeling": { "value": "\"Did they actually see my year, or write this in the last-minute rush?\"", "origin": "ai-confirmed", "promptId": "draft@journey-2026-05-20", "confidence": 0.78, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-20T17:03:00Z" },
+        "waitingFor": { "value": "The leader to finish the draft and book the meeting.", "origin": "human" },
+        "effort": "moderate",
+        "effortWhy": { "value": "Moderate emotional effort; the conversation is high-stakes because it feeds merit.", "origin": "human" },
+        "frictionRefs": ["FR-07"],
+        "duration": "45–60 minute meeting; draft timing varies with leader workload"
+      },
+      {
+        "name": "Review, comments, and HR clearance",
+        "order": 5,
+        "doing": { "value": "Adds employee comments to the appraisal, then waits as it moves to 'HR Review' where they can no longer edit or see it.", "origin": "ai-confirmed", "promptId": "draft@journey-2026-05-20", "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-20T17:04:00Z" },
+        "wants": { "value": "Enough time to respond, and to know where their appraisal stands.", "origin": "human" },
+        "touchpoints": { "value": "SPA comment field; status changes they can't see; email.", "origin": "human" },
+        "thinkingFeeling": { "value": "\"It went into a black box and nobody can tell me when it'll come out.\"", "origin": "human" },
+        "waitingFor": { "value": "At least five business days to comment (sometimes less); HR clearance.", "origin": "human" },
+        "effort": "high",
+        "effortWhy": { "value": "High: opacity and time pressure combine right when the stakes are highest.", "origin": "human" },
+        "frictionRefs": ["FR-03", "FR-06"],
+        "duration": "≥5 business days to comment; HR clearance days to weeks during the crunch"
+      },
+      {
+        "name": "Signing and closing",
+        "order": 6,
+        "doing": { "value": "Signs the final appraisal, receives a copy, and the signed document is filed in their personnel file.", "origin": "human" },
+        "wants": { "value": "To be done, with a copy they can keep and a clear link to merit decisions.", "origin": "human" },
+        "touchpoints": { "value": "Signature routing (email); SPA; personnel file.", "origin": "human" },
+        "thinkingFeeling": { "value": "Relief, usually — though chasing signatures drags the close out.", "origin": "human" },
+        "waitingFor": { "value": "All required signatures to be collected and routed.", "origin": "human" },
+        "effort": "moderate",
+        "effortWhy": { "value": "Moderate: the content is settled, but signature logistics stall the finish near the June 15 deadline.", "origin": "ai-confirmed", "promptId": "draft@journey-2026-05-20", "confidence": 0.76, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-20T17:05:00Z" },
+        "frictionRefs": ["FR-01", "FR-04"],
+        "duration": "Days; concentrated against the COB June 15 deadline"
+      }
+    ],
+    "momentsThatMatter": [
+      { "moment": "The appraisal conversation and the rating (stage 4)", "why": "It is what the employee remembers and what feeds merit-increase decisions." },
+      { "moment": "Submitting (or skipping) the self-appraisal (stage 3)", "why": "It largely determines how complete and fair the draft can be." }
+    ],
+    "dropoutPoints": [
+      { "point": "Self-appraisal (stage 3)", "what": "Because it is optional, many employees skip it; their leader then drafts from memory." },
+      { "point": "HR Review (stage 5)", "what": "The employee loses visibility entirely and routes around it by emailing their leader for status." }
+    ]
+  }
+}

@@ -1,7 +1,8 @@
 import { isStorageConfigured } from "@/lib/github";
-import { getDashboard, DIMENSION_LABELS, formatKpi, type DashboardKpi } from "@/lib/metrics";
-import { IMPACT_DIMENSIONS } from "@/lib/schemas";
+import { getDashboard, type DashboardKpi } from "@/lib/metrics";
+import { DIMENSION_LABELS, formatKpi, delta } from "@/lib/metrics-format";
 import { SetupNotice } from "@/components/SetupNotice";
+import { DimensionGrid } from "@/components/DimensionGrid";
 
 export const dynamic = "force-dynamic";
 
@@ -10,28 +11,6 @@ function pctToTarget(k: DashboardKpi): string {
   const span = k.target - k.baseline;
   if (span === 0) return "—";
   return `${Math.round(((k.current - k.baseline) / span) * 100)}%`;
-}
-
-function delta(k: DashboardKpi): { text: string; cls: string } {
-  if (k.current === null || k.baseline === null) return { text: "—", cls: "" };
-  const diff = k.current - k.baseline;
-  const improved = k.betterDirection === "up" ? diff > 0 : diff < 0;
-  const word = diff === 0 ? "no change" : improved ? "improving" : "worsening";
-  return { text: word, cls: diff === 0 ? "" : improved ? "delta-up" : "delta-down" };
-}
-
-/** Group KPIs by engagement, preserving first-seen order, so units stay separate. */
-function groupByEngagement(kpis: DashboardKpi[]): Array<{ name: string; kpis: DashboardKpi[] }> {
-  const groups: Array<{ name: string; kpis: DashboardKpi[] }> = [];
-  for (const k of kpis) {
-    let g = groups.find((x) => x.name === k.engagementName);
-    if (!g) {
-      g = { name: k.engagementName, kpis: [] };
-      groups.push(g);
-    }
-    g.kpis.push(k);
-  }
-  return groups;
 }
 
 export default async function DashboardPage() {
@@ -75,37 +54,7 @@ export default async function DashboardPage() {
 
       <section className="stack">
         <h2 className="t-heading">Four-dimension impact</h2>
-        <div className="grid grid--2">
-          {IMPACT_DIMENSIONS.map((dim) => {
-            const kpis = dash.dimensions[dim];
-            return (
-              <div key={dim} className="card stack">
-                <p className="t-system">{DIMENSION_LABELS[dim]}</p>
-                {kpis.length === 0 ? (
-                  <p className="t-faint">No measures yet.</p>
-                ) : (
-                  groupByEngagement(kpis).map((group) => (
-                    <div key={group.name} className="stack" style={{ gap: "var(--space-2)" }}>
-                      <span className="t-faint t-system">{group.name}</span>
-                      {group.kpis.map((k) => {
-                        const dl = delta(k);
-                        return (
-                          <div key={`${k.engagementId}-${k.id}`} className="stack" style={{ gap: "var(--space-1)" }}>
-                            <span className="t-display">{formatKpi(k.current, k.unit)}</span>
-                            <span className="t-subhead">{k.label}</span>
-                            <span className={`t-system ${dl.cls}`}>
-                              {dl.text} · baseline {formatKpi(k.baseline, k.unit)} → target {formatKpi(k.target, k.unit)}
-                            </span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ))
-                )}
-              </div>
-            );
-          })}
-        </div>
+        <DimensionGrid dimensions={dash.dimensions} />
       </section>
 
       <section className="stack">

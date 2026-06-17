@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { STAGE_LABELS, type Engagement } from "@/lib/schemas";
+import { useColumnPreference, type ColumnCount } from "@/lib/useColumnPreference";
 
-const COLUMN_CHOICES = [1, 2, 3] as const;
-const COLUMNS_STORAGE_KEY = "card-cols:engagements";
+const COLUMN_CHOICES: ColumnCount[] = [1, 2, 3];
 
 /**
  * Compact card grid for the engagement list, with a 1/2/3-column toggle
@@ -12,26 +11,7 @@ const COLUMNS_STORAGE_KEY = "card-cols:engagements";
  * (SortableCards) but without drag-reorder — engagements have no fixed order.
  */
 export function EngagementGrid({ engagements }: { engagements: Engagement[] }) {
-  const [cols, setCols] = useState<1 | 2 | 3>(2);
-
-  useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem(COLUMNS_STORAGE_KEY);
-      const n = Number(raw);
-      if (n === 1 || n === 2 || n === 3) setCols(n);
-    } catch {
-      /* storage may be unavailable; the in-memory default still works */
-    }
-  }, []);
-
-  function persistCols(n: 1 | 2 | 3) {
-    setCols(n);
-    try {
-      window.localStorage.setItem(COLUMNS_STORAGE_KEY, String(n));
-    } catch {
-      /* ignore unavailable storage */
-    }
-  }
+  const [cols, persistCols] = useColumnPreference("card-cols:engagements", 2);
 
   return (
     <div className="stack">

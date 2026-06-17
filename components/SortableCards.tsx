@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
+import { useColumnPreference } from "@/lib/useColumnPreference";
 
 /**
  * Reusable compact card grid for a list of editor entries (journey stages,
@@ -43,31 +44,9 @@ export function SortableCards<T>({
   columnsStorageKey,
   defaultColumns = 2,
 }: SortableCardsProps<T>) {
-  const [cols, setCols] = useState<1 | 2 | 3>(defaultColumns);
+  const [cols, persistCols] = useColumnPreference(columnsStorageKey, defaultColumns);
   const [dragKey, setDragKey] = useState<string | null>(null);
   const [overKey, setOverKey] = useState<string | null>(null);
-
-  // Apply any stored column preference on mount.
-  useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem(columnsStorageKey);
-      if (!raw) return;
-      const n = Number(raw);
-      if (n === 1 || n === 2 || n === 3) setCols(n);
-    } catch {
-      /* storage may be unavailable; the in-memory default still works */
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  function persistCols(n: 1 | 2 | 3) {
-    setCols(n);
-    try {
-      window.localStorage.setItem(columnsStorageKey, String(n));
-    } catch {
-      /* ignore unavailable storage */
-    }
-  }
 
   function move(index: number, dir: -1 | 1) {
     const to = index + dir;

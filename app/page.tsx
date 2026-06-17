@@ -1,15 +1,9 @@
 import { isStorageConfigured } from "@/lib/github";
 import { listEngagements } from "@/lib/store";
 import { SetupNotice } from "@/components/SetupNotice";
+import { STAGE_LABELS } from "@/lib/schemas";
 
 export const dynamic = "force-dynamic";
-
-const STAGE_LABEL: Record<string, string> = {
-  selection: "Selection",
-  mapping: "Mapping",
-  design: "Design",
-  implementation: "Implementation & transfer",
-};
 
 export default async function HomePage() {
   if (!isStorageConfigured()) {
@@ -29,7 +23,12 @@ export default async function HomePage() {
   return (
     <div className="stack-lg">
       <header className="stack">
-        <h1 className="t-display">Engagements</h1>
+        <div className="row" style={{ justifyContent: "space-between", alignItems: "baseline" }}>
+          <h1 className="t-display">Engagements</h1>
+          <a className="btn btn--primary" href="/engagements/new">
+            New engagement
+          </a>
+        </div>
         <p className="t-muted">
           Each engagement maps one institutional service lifecycle through the six Layer 1 templates. AI helps build the
           map; a person decides what is true.
@@ -37,13 +36,20 @@ export default async function HomePage() {
       </header>
 
       {engagements.length === 0 ? (
-        <p className="t-muted">No engagements yet. Add one by committing <code>data/engagements/&lt;id&gt;/engagement.json</code> to the data branch.</p>
+        <div className="card stack">
+          <p className="t-muted">No engagements yet.</p>
+          <div className="row">
+            <a className="btn btn--primary" href="/engagements/new">
+              Create your first engagement
+            </a>
+          </div>
+        </div>
       ) : (
         <ul className="grid grid--2" style={{ listStyle: "none", padding: 0 }}>
           {engagements.map((e) => (
             <li key={e.id} className="card card--accent">
               <div className="stack">
-                <div className="t-system">{STAGE_LABEL[e.stage] || e.stage}</div>
+                <div className="t-system">{STAGE_LABELS[e.stage] || e.stage}</div>
                 <a href={`/engagements/${e.id}`} className="t-subhead">
                   {e.name}
                 </a>

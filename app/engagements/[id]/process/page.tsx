@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { isStorageConfigured } from "@/lib/github";
 import { loadEngagement, loadArtifact } from "@/lib/store";
 import { SetupNotice } from "@/components/SetupNotice";
+import { TemplateNav } from "@/components/TemplateNav";
 import { ProcessEditor } from "@/components/ProcessEditor";
 
 export const dynamic = "force-dynamic";
@@ -22,6 +23,7 @@ export default async function ProcessPage({ params }: { params: Promise<{ id: st
         <span aria-hidden="true">/</span>
         <span>Process Documentation</span>
       </nav>
+      <TemplateNav engagementId={id} activeId="04" />
       <header className="stack">
         <div className="t-system">04 · Process Documentation</div>
         <h1 className="t-display">Step by step, underneath the blueprint</h1>

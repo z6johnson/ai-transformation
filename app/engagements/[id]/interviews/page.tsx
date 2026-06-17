@@ -3,6 +3,7 @@ import { isStorageConfigured } from "@/lib/github";
 import { loadEngagement, loadArtifact } from "@/lib/store";
 import { isAiConfigured } from "@/lib/tritonai";
 import { SetupNotice } from "@/components/SetupNotice";
+import { TemplateNav } from "@/components/TemplateNav";
 import { InterviewEditor } from "@/components/InterviewEditor";
 
 export const dynamic = "force-dynamic";
@@ -23,6 +24,7 @@ export default async function InterviewsPage({ params }: { params: Promise<{ id:
         <span aria-hidden="true">/</span>
         <span>Interview Guide</span>
       </nav>
+      <TemplateNav engagementId={id} activeId="01" />
       <header className="stack">
         <div className="t-system">01 · Interview Guide</div>
         <h1 className="t-display">Interviews &amp; tagging</h1>

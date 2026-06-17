@@ -4,18 +4,11 @@ import { loadEngagement, loadArtifact } from "@/lib/store";
 import { engagementFile } from "@/lib/paths";
 import { SetupNotice } from "@/components/SetupNotice";
 import { StageStepper } from "@/components/StageStepper";
-import { ARTIFACT_LABELS, STAGE_LABELS, type ArtifactId } from "@/lib/schemas";
+import { TemplateGrid } from "@/components/TemplateGrid";
+import { TEMPLATE_ROUTES } from "@/lib/templates";
+import { STAGE_LABELS } from "@/lib/schemas";
 
 export const dynamic = "force-dynamic";
-
-const ROUTES: Array<{ id: ArtifactId; slug: string; blurb: string }> = [
-  { id: "01", slug: "interviews", blurb: "Raw notes + AI-assisted tagging pass" },
-  { id: "02", slug: "journey", blurb: "The experience view, stage by stage" },
-  { id: "03", slug: "blueprint", blurb: "Operations, handoffs, decisions, systems" },
-  { id: "04", slug: "process", blurb: "Step-by-step record underneath the blueprint" },
-  { id: "05", slug: "friction", blurb: "Evidence-grounded friction register + clusters" },
-  { id: "06", slug: "validation", blurb: "Coverage, review, honest account, sign-off" },
-];
 
 export default async function EngagementPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -28,7 +21,7 @@ export default async function EngagementPage({ params }: { params: Promise<{ id:
 
   // Read each artifact's status for the nav (cheap; v1 scale).
   const statuses = await Promise.all(
-    ROUTES.map(async (r) => ({ ...r, status: (await loadArtifact(id, r.id)).data.status })),
+    TEMPLATE_ROUTES.map(async (r) => ({ ...r, status: (await loadArtifact(id, r.id)).data.status })),
   );
 
   return (
@@ -58,19 +51,10 @@ export default async function EngagementPage({ params }: { params: Promise<{ id:
 
       <section className="stack">
         <h2 className="t-heading">Templates</h2>
-        <div className="artifact-nav">
-          {statuses.map((r) => (
-            <a key={r.id} href={`/engagements/${id}/${r.slug}`}>
-              <span>
-                <span className="t-system">{r.id}</span> {ARTIFACT_LABELS[r.id]}
-                <span className="t-faint" style={{ display: "block" }}>
-                  {r.blurb}
-                </span>
-              </span>
-              <span className="t-system">{r.status}</span>
-            </a>
-          ))}
-        </div>
+        <p className="t-faint">
+          01 and 06 are fixed bookends. Reorder 02–05 to match how you&apos;re working — drag the handle or use ▲/▼.
+        </p>
+        <TemplateGrid engagementId={id} items={statuses} />
       </section>
 
       <section className="card card--accent">

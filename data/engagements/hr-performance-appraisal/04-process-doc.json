@@ -1,0 +1,25 @@
+{
+  "artifactId": "04",
+  "engagementId": "hr-performance-appraisal",
+  "status": "confirmed",
+  "updatedAt": "2026-06-16T18:00:00Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": false,
+  "data": {
+    "header": {
+      "service": "DEMO — UC San Diego Staff Performance Appraisal (SPA)",
+      "scope": "Setting expectations → Signed appraisal filed in personnel file",
+      "stages": "Setting expectations → Doing the work and gathering evidence → Writing my self-appraisal → Getting the draft and talking it through → Review, comments, and HR clearance → Signing and closing"
+    },
+    "steps": [
+      { "id": "P-01", "step": "Setting expectations — Review and update the job description", "trigger": "Cycle opens May 1; leader begins planning", "who": "People leader", "system": "SPA; job description record", "rule": "Job description must reflect current duties before standards are set", "handsOnTime": "30–60 min", "waitTime": "—", "whatGoesWrong": "Job description left stale, so standards are set against duties the employee no longer does (FR-05)", "origin": "human" },
+      { "id": "P-02", "step": "Setting expectations — Set or revise standards and goals with the employee", "trigger": "Job description reviewed", "who": "People leader + employee", "system": "SPA", "rule": "Standards documented at the start of the cycle", "handsOnTime": "~45 min meeting", "waitTime": "1–2 weeks to schedule", "whatGoesWrong": "Meeting skipped or goals left vague, weakening the eventual rating basis", "origin": "human" },
+      { "id": "P-03", "step": "Writing my self-appraisal — Employee completes the self-appraisal", "trigger": "Reminder ~30–60 days before the formal meeting", "who": "Employee", "system": "SPA self-appraisal form", "rule": "Optional but strongly encouraged; deadline set by the leader", "handsOnTime": "2–4 hrs", "waitTime": "—", "whatGoesWrong": "Skipped because it is optional; leader loses the employee's own account (FR-02)", "origin": "human" },
+      { "id": "P-04", "step": "Getting the draft — Leader drafts the appraisal", "trigger": "Self-appraisal submitted, or its deadline passes", "who": "People leader", "system": "SPA (Model A or Model B)", "rule": "Incorporate the self-appraisal when available; no AI-generated ratings", "handsOnTime": "1–3 hrs per appraisal", "waitTime": "—", "whatGoesWrong": "Volume crunch (many reports, one deadline) lowers draft quality (FR-07)", "origin": "human" },
+      { "id": "P-05", "step": "Getting the draft — Hold the appraisal meeting", "trigger": "Draft ready in 'Supervisor Draft'", "who": "People leader + employee", "system": "SPA; in-person / video meeting", "rule": "Discuss before finalizing", "handsOnTime": "45–60 min", "waitTime": "Days to schedule", "whatGoesWrong": "Rushed or merged with sign-off when pressed against the deadline", "origin": "human" },
+      { "id": "P-06", "step": "Review and comments — Employee adds comments", "trigger": "After the appraisal meeting", "who": "Employee", "system": "SPA", "rule": "At least five business days to finalize employee comments", "handsOnTime": "~30 min", "waitTime": "Up to 5 business days", "whatGoesWrong": "Fewer than five days given when up against June 15 (FR-06)", "origin": "human" },
+      { "id": "P-07", "step": "HR clearance — Move the appraisal to 'HR Review'", "trigger": "Leader is satisfied the draft is final (D-05)", "who": "People leader → HR", "system": "SPA status workflow", "rule": "In 'HR Review' the employee can no longer edit; HR, leader, and indirect supervisors can view", "handsOnTime": "~5 min", "waitTime": "Days to weeks during the late-cycle flood", "whatGoesWrong": "Sits with no status surfaced to the employee; reads as a black box (FR-03, H-02)", "origin": "human" },
+      { "id": "P-08", "step": "Signing and closing — Collect signatures, provide copy, and file", "trigger": "HR clearance returned (H-03)", "who": "People leader, employee (business officer assists routing)", "system": "Signature routing (email); SPA; personnel file", "rule": "Provide a copy to the employee and file the signed document in the personnel file", "handsOnTime": "~20 min", "waitTime": "Signature chase, days", "whatGoesWrong": "Signatures chased one by one by email; close slips past COB June 15 (FR-01, FR-04, H-05)", "origin": "human" }
+    ]
+  }
+}

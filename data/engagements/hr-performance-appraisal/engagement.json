@@ -1,11 +1,11 @@
 {
   "id": "hr-performance-appraisal",
-  "name": "HR Performance Appraisal Pilot",
-  "service": "Annual performance review cycle (goal setting through formal review)",
-  "scopeStart": "Goal setting",
-  "scopeEnd": "Formal review and close",
-  "lead": "Director of AI Strategy",
-  "lifecycleOwner": { "name": "CHRO", "role": "Chief Human Resources Officer" },
+  "name": "DEMO — UC San Diego Staff Performance Appraisal (SPA)",
+  "service": "DEMO engagement — illustrative as-is map of the UC San Diego annual Staff Performance Appraisal (SPA) lifecycle, coordinated through the SPA system (spa.ucsd.edu). Cycle May 1 – April 30; campus deadline COB Monday, June 15, 2026.",
+  "scopeStart": "Setting expectations",
+  "scopeEnd": "Signed appraisal filed in personnel file",
+  "lead": "A. Practice Lead, Director of AI Strategy",
+  "lifecycleOwner": { "name": "CHRO (illustrative)", "role": "Chief Human Resources Officer" },
   "stage": "mapping",
   "owner": "z6johnson@ucsd.edu",
   "createdAt": "2026-06-16T00:00:00Z"

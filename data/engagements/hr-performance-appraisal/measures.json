@@ -1,11 +1,11 @@
 {
   "artifactId": "measures",
   "engagementId": "hr-performance-appraisal",
-  "status": "in-review",
+  "status": "confirmed",
   "aiAssisted": false,
   "updatedBy": "z6johnson@ucsd.edu",
   "data": {
-    "roiHypothesis": "Faster, fairer appraisal cycles with no AI-generated ratings: AI drafts goal alignment and review synthesis; managers decide. Value shows as efficiency (manager time), experience (completion), and risk reduction (retention, bias surfacing).",
+    "roiHypothesis": "DEMO — Faster, fairer SPA cycles with no AI-generated ratings: AI drafts goal alignment and review synthesis; people leaders decide. Value shows as efficiency (leader time per cycle), experience (appraisal completion before the June 15 deadline), and risk reduction (retention, surfaced bias).",
     "destination": {
       "baselineKpis": [
         {

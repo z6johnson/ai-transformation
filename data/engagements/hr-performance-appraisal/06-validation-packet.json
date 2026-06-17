@@ -1,0 +1,41 @@
+{
+  "artifactId": "06",
+  "engagementId": "hr-performance-appraisal",
+  "status": "confirmed",
+  "updatedAt": "2026-06-16T18:00:00Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": true,
+  "data": {
+    "header": {
+      "service": "DEMO — UC San Diego Staff Performance Appraisal (SPA)",
+      "scope": "Setting expectations → Signed appraisal filed in personnel file",
+      "lifecycleOwner": { "name": "CHRO (illustrative)", "role": "Chief Human Resources Officer" },
+      "businessOwners": "A. Rivera (People Leader); M. Chen (HR / SPA Administrator); department business officer",
+      "lead": "A. Practice Lead, Director of AI Strategy"
+    },
+    "coverageCheck": {
+      "scopeAligned": true,
+      "stepsTrace": true,
+      "handoffsDecisionsLogged": true,
+      "frictionGrounded": true,
+      "conflictsSettled": true
+    },
+    "reviewSession": {
+      "date": "2026-06-10",
+      "attendees": "CHRO (lifecycle owner); A. Rivera (People Leader); M. Chen (HR/SPA Administrator); A. Practice Lead",
+      "confirmed": "The six shared stages and the journey/blueprint alignment reflect how the cycle really runs; the deadline crunch and the 'HR Review' black box were recognized immediately by everyone in the room.",
+      "corrected": "The map originally placed the Model A/B choice in stage 5; the group moved it to stage 4 (drafting) where it is actually made (D-01). FR-06 severity was raised from low to moderate after the employee example.",
+      "contested": "The 'HR is slow vs. drafts arrive late' contradiction (INT-2 vs INT-3, tags INT2-T6 / INT3-T5) was settled as a single root cause — late-cycle volume — rather than either party being at fault. Recorded against FR-01."
+    },
+    "honestAccount": "DEMO — the SPA process works, but its honesty is bought late and under pressure. The whole cycle stacks into the two weeks before June 15, where drafting, employee comment time, HR clearance, and signature-chasing collide; the highest-stakes step — the rating — too often rests on a skipped self-appraisal and a stale job description rather than a year's record. Once a draft moves to 'HR Review' the employee loses visibility and, in the crunch, sometimes the five days they are owed to respond. The service asks for its most careful judgment exactly when it has the least time and the least information.",
+    "openQuestions": "Whether represented (Model B) staff experience the same back-half opacity was only partially covered — one of two represented employees was interviewed. The mid-cycle job-change path (D-03 / FR-08) is documented from HR's account but was not observed in a live case this cycle.",
+    "signOff": {
+      "ownerName": "CHRO (illustrative)",
+      "ownerSigned": true,
+      "ownerDate": "2026-06-12",
+      "leadName": "A. Practice Lead",
+      "leadSubmitted": true,
+      "leadDate": "2026-06-12"
+    }
+  }
+}

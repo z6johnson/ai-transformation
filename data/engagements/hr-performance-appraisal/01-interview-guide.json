@@ -1,0 +1,72 @@
+{
+  "artifactId": "01",
+  "engagementId": "hr-performance-appraisal",
+  "status": "confirmed",
+  "updatedAt": "2026-06-16T18:00:00Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": true,
+  "data": {
+    "interviews": [
+      {
+        "id": "INT-1",
+        "header": {
+          "person": "J. Okafor (illustrative)",
+          "role": "Staff Analyst",
+          "relationship": "person it serves / frontline",
+          "interviewer": "A. Practice Lead",
+          "date": "2026-05-12",
+          "consent": "notes only — told before speaking how AI would be used"
+        },
+        "rawNotes": "DEMO interview. \"Honestly the appraisal sneaks up on me every spring. I get an email that my self-appraisal is due in SPA, and it's optional so a lot of people just don't do it. I usually do because otherwise my manager won't remember the project I led in October. I keep my own running brag-doc in a Google Doc all year and paste from it. The portal itself is fine, I log into spa.ucsd.edu, but I never know what's happening after I submit — it goes to my manager, then sits in 'HR Review' and I literally can't edit it or even see it, and nobody tells me where it is. Then suddenly there's a meeting, and then I get five days (supposedly) to add comments but one year it was like two days because we were right up against the June deadline. The part that matters most to me is the actual conversation and the rating, because that's what feeds merit.\"",
+        "tags": [
+          { "id": "INT1-T1", "tag": "STAGE", "sourceWords": "my self-appraisal is due in SPA", "origin": "ai-confirmed", "promptId": "suggest-tags@2026-05-12", "confidence": 0.91, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-12T16:20:00Z" },
+          { "id": "INT1-T2", "tag": "TOUCH", "sourceWords": "I log into spa.ucsd.edu", "origin": "ai-confirmed", "promptId": "suggest-tags@2026-05-12", "confidence": 0.88, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-12T16:20:00Z" },
+          { "id": "INT1-T3", "tag": "FRICTION", "sourceWords": "it's optional so a lot of people just don't do it", "origin": "ai-confirmed", "promptId": "suggest-tags@2026-05-12", "confidence": 0.82, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-12T16:21:00Z" },
+          { "id": "INT1-T4", "tag": "WORKAROUND", "sourceWords": "I keep my own running brag-doc in a Google Doc all year and paste from it", "origin": "ai-confirmed", "promptId": "suggest-tags@2026-05-12", "confidence": 0.86, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-12T16:21:00Z" },
+          { "id": "INT1-T5", "tag": "FRICTION", "sourceWords": "sits in 'HR Review' and I literally can't edit it or even see it, and nobody tells me where it is", "origin": "human", "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-12T16:22:00Z" },
+          { "id": "INT1-T6", "tag": "DEC", "sourceWords": "the rating, because that's what feeds merit", "origin": "ai-confirmed", "promptId": "suggest-tags@2026-05-12", "confidence": 0.79, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-12T16:22:00Z" }
+        ]
+      },
+      {
+        "id": "INT-2",
+        "header": {
+          "person": "A. Rivera (illustrative)",
+          "role": "People Leader / Supervisor",
+          "relationship": "runs it day to day",
+          "interviewer": "A. Practice Lead",
+          "date": "2026-05-14",
+          "consent": "recorded with consent — told before speaking how AI would be used"
+        },
+        "rawNotes": "DEMO interview. \"I have eleven direct reports, so when the cycle closes April 30 I'm drafting eleven appraisals in a few weeks, all due by June 15. I'm not going to pretend they all get the same attention in that crunch. For most folks I use Model A; for my two represented staff HR helps me pick Model B. The draft sits in 'Supervisor Draft' where only I and HR and the business officer can see it. When I'm happy with it I push it to 'HR Review' — and then it's a bit of a black box, I wait on HR clearance and I can't always tell my employee why it's taking so long. After clearance I have to chase signatures, which is all email, and then file the signed copy. The genuinely hard part is the rating itself — that's a judgment call and if the person didn't do a self-appraisal I'm reconstructing their year from memory.\"",
+        "tags": [
+          { "id": "INT2-T1", "tag": "FRICTION", "sourceWords": "drafting eleven appraisals in a few weeks, all due by June 15", "origin": "ai-confirmed", "promptId": "suggest-tags@2026-05-14", "confidence": 0.9, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-14T15:05:00Z" },
+          { "id": "INT2-T2", "tag": "DEC", "sourceWords": "for my two represented staff HR helps me pick Model B", "origin": "ai-confirmed", "promptId": "suggest-tags@2026-05-14", "confidence": 0.84, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-14T15:05:00Z" },
+          { "id": "INT2-T3", "tag": "HAND", "sourceWords": "I push it to 'HR Review' — and then it's a bit of a black box", "origin": "ai-confirmed", "promptId": "suggest-tags@2026-05-14", "confidence": 0.87, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-14T15:06:00Z" },
+          { "id": "INT2-T4", "tag": "FRICTION", "sourceWords": "I have to chase signatures, which is all email", "origin": "human", "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-14T15:06:00Z" },
+          { "id": "INT2-T5", "tag": "DEC", "sourceWords": "The genuinely hard part is the rating itself — that's a judgment call", "origin": "ai-confirmed", "promptId": "suggest-tags@2026-05-14", "confidence": 0.83, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-14T15:07:00Z" },
+          { "id": "INT2-T6", "tag": "CONFLICT", "sourceWords": "I wait on HR clearance and I can't always tell my employee why it's taking so long", "origin": "human", "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-14T15:08:00Z" }
+        ]
+      },
+      {
+        "id": "INT-3",
+        "header": {
+          "person": "M. Chen (illustrative)",
+          "role": "HR / SPA Administrator",
+          "relationship": "owner / handoff partner",
+          "interviewer": "A. Practice Lead",
+          "date": "2026-05-16",
+          "consent": "notes only — told before speaking how AI would be used"
+        },
+        "rawNotes": "DEMO interview. \"From the SPA side, my job is to keep the system running, answer questions at spa-support@ucsd.edu, and make sure the timelines hold. The volume is the whole story: almost everything lands in the last two weeks before June 15, so 'HR Review' looks slow but really it's a flood arriving at once. There are real eligibility calls too — probationary employees get a separate probationary appraisal and aren't in the annual cycle; someone hired after April 30 isn't required to self-appraise this cycle; and if a person changed jobs mid-cycle the new leader only evaluates the work in the new role. Leaders say HR is the bottleneck; from where I sit the drafts arrive late. The business officer helps route signatures when a leader is swamped.\"",
+        "tags": [
+          { "id": "INT3-T1", "tag": "TOUCH", "sourceWords": "answer questions at spa-support@ucsd.edu", "origin": "ai-confirmed", "promptId": "suggest-tags@2026-05-16", "confidence": 0.8, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-16T14:40:00Z" },
+          { "id": "INT3-T2", "tag": "FRICTION", "sourceWords": "almost everything lands in the last two weeks before June 15", "origin": "ai-confirmed", "promptId": "suggest-tags@2026-05-16", "confidence": 0.92, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-16T14:40:00Z" },
+          { "id": "INT3-T3", "tag": "DEC", "sourceWords": "probationary employees get a separate probationary appraisal and aren't in the annual cycle", "origin": "ai-confirmed", "promptId": "suggest-tags@2026-05-16", "confidence": 0.85, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-16T14:41:00Z" },
+          { "id": "INT3-T4", "tag": "DEC", "sourceWords": "if a person changed jobs mid-cycle the new leader only evaluates the work in the new role", "origin": "human", "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-16T14:42:00Z" },
+          { "id": "INT3-T5", "tag": "CONFLICT", "sourceWords": "Leaders say HR is the bottleneck; from where I sit the drafts arrive late", "origin": "ai-confirmed", "promptId": "suggest-tags@2026-05-16", "confidence": 0.81, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-16T14:42:00Z" },
+          { "id": "INT3-T6", "tag": "HAND", "sourceWords": "The business officer helps route signatures when a leader is swamped", "origin": "human", "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-05-16T14:43:00Z" }
+        ]
+      }
+    ]
+  }
+}

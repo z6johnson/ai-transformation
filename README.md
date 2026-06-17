@@ -23,13 +23,21 @@ and `responsible-ai-seed-principles.md`.
 
 ## Configure
 
-Copy `.env.example` to `.env.local` and fill in:
+These are the app's environment variables. For **local dev**, copy `.env.example` to
+`.env.local` and fill them in — `.env*.local` is gitignored, so secrets never get committed.
+For **Vercel**, set them as Project environment variables (see Deploy); do not ship a
+`.env.local`. The app reads everything from `process.env`, so the same names work in both places.
 
-- `TRITONAI_API_KEY` — your key from https://tritonai-api.ucsd.edu/ (server-side only).
-- `GITHUB_TOKEN` — fine-grained PAT scoped to this repo, Contents: read/write.
-- `GITHUB_REPO` — e.g. `z6johnson/ai-transformation`.
-- `GITHUB_BRANCH` — the branch that holds engagement data and receives saves (default `data`).
-  Create it from a branch that contains `data/engagements/...` so the seed is visible.
+| Variable | Sensitive? | Notes |
+|---|---|---|
+| `TRITONAI_API_KEY` | **Yes** | Key from https://tritonai-api.ucsd.edu/ . Server-side only; never reaches the client. |
+| `TRITONAI_BASE_URL` | No | Defaults to `https://tritonai-api.ucsd.edu/v1`. |
+| `TRITONAI_MODEL` | No | Defaults to `api-gpt-oss-120b`. |
+| `AI_TIMEOUT_MS` | No | AI call timeout (default `25000`). |
+| `GITHUB_TOKEN` | **Yes** | Fine-grained PAT scoped to this repo, Contents: read/write. |
+| `GITHUB_REPO` | No | e.g. `z6johnson/ai-transformation`. |
+| `GITHUB_BRANCH` | No | Branch that holds engagement data and receives saves (default `data`). Create it from a branch containing `data/engagements/...` so the seed is visible. |
+| `PRACTICE_ACTOR` | No | Identity stamped on saved artifacts and the AI decision log. |
 
 ## Run
 
@@ -58,5 +66,22 @@ A seeded **HR Performance Appraisal Pilot** engagement is included.
 
 ## Deploy (Vercel)
 
-Import the repo, set the env vars above in Project Settings (Production + Preview), deploy.
-AI/storage routes run on the Node runtime (already configured).
+Import the repo, then add the env vars above as **Vercel environment variables** — not a
+committed `.env.local`. Mark `TRITONAI_API_KEY` and `GITHUB_TOKEN` as **Sensitive** so they're
+encrypted and write-only in the dashboard. AI/storage routes run on the Node runtime (already
+configured).
+
+Via the dashboard: Project → Settings → Environment Variables, add each for Production +
+Preview (and Development if you use `vercel dev`).
+
+Via the CLI:
+
+```bash
+vercel env add TRITONAI_API_KEY production   # paste the secret when prompted; repeat for preview
+vercel env add GITHUB_TOKEN production
+vercel env add GITHUB_REPO production
+vercel env add GITHUB_BRANCH production
+vercel env add PRACTICE_ACTOR production
+# TRITONAI_BASE_URL / TRITONAI_MODEL / AI_TIMEOUT_MS only if overriding defaults
+vercel deploy --prod
+```

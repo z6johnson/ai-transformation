@@ -2,7 +2,7 @@
 
 **Layer 1 · Lifecycle Map · Template 06**
 
-This is the last step of the Mapping stage. It pulls the map together, records that the people who run the service checked it, states the honest account of where there's friction, and lists what carries into Layer 2. The stage closes when the lifecycle owner signs this packet.
+This is the last step of the Mapping stage. It pulls the map together, records that the people who run the service checked it, summarizes where there's friction, and lists what carries into Layer 2. The stage closes when the lifecycle owner signs this packet.
 
 A checked map is one the people who run the service have read, argued with, and agreed reflects how the work really happens, not just one the lead is confident in. The review session is where that happens, and the disagreements it brings out are part of the value rather than a delay.
 
@@ -60,11 +60,11 @@ Corrections from this session have to be carried back into the pieces before sig
 
 - [ ] Pieces updated to reflect the review session.
 
-## The honest account of where there's friction
+## Friction summary
 
-State it plainly, in the lead's own voice, drawing from the Friction Register. Three to six sentences. Name the worst of it without softening. This is the paragraph the engagement is held to, and the one Layer 2 reads first.
+State it plainly, drawing from the Friction Register. Three to six sentences. This is the paragraph the engagement is held to, and the one Layer 2 reads first.
 
-[honest account]
+[friction summary]
 
 ## The decisions carried to Layer 2
 
@@ -79,20 +79,20 @@ The full list of decisions from the blueprint, restated here as the handoff to L
 Record how AI helped with the mapping, so the sign-off covers it and nothing is hidden.
 
 - What AI did: [tagged interview notes against the labels, found contradictions across accounts, grouped friction, drafted first cuts of the views].
-- What a person did: confirmed or rejected every tag, rebuilt the drafts, settled the contradictions, and wrote the honest account.
+- What a person did: confirmed or rejected every tag, rebuilt the drafts, settled the contradictions, and wrote the friction summary.
 - [ ] The people interviewed were told, before they spoke, how AI would be used on what they said.
 
-This keeps the AI use part of what the lifecycle owner signs, not a footnote to it.
+This keeps the AI use part of what the lifecycle owner signs.
 
 ## Open questions and known gaps
 
-What the map does not yet settle. Honesty here keeps Layer 2 from building on what isn't settled yet.
+What the map does not yet settle. Recording these keeps Layer 2 from building on unsettled points.
 
 - [open question or gap, and why it is still open]
 
 ## Sign-off
 
-By signing, the lifecycle owner confirms that this map reflects how the service actually works within the stated scope, including the account of where there's friction.
+By signing, the lifecycle owner confirms that this map reflects how the service actually works within the stated scope, including the friction summary.
 
 | Role | Name | Confirmation | Date |
 |---|---|---|---|

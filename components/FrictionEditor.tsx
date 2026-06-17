@@ -176,7 +176,7 @@ export function FrictionEditor({
         <section className="stack" aria-label="AI candidate entries">
           <div className="ai-banner">
             <span className="ai-mark">AI candidates</span>
-            <span>Each carries the words that prompted it. Keep or cut.</span>
+            <span>Each shows the words that prompted it. Keep or cut.</span>
           </div>
           {draftCandidates.map((c) => (
             <div key={c.id} className="card row" style={{ justifyContent: "space-between", flexWrap: "wrap" }}>
@@ -284,9 +284,9 @@ export function FrictionEditor({
       </section>
 
       <section className="stack">
-        <h2 className="t-heading">The honest account</h2>
+        <h2 className="t-heading">Friction summary</h2>
         <p className="t-faint">
-          Three to five sentences, no hedging. This one is yours to write, not the AI&apos;s.
+          Three to five sentences. You write this, not the AI.
         </p>
         <textarea rows={4} value={honest} onChange={(e) => setHonest(e.target.value)} />
       </section>

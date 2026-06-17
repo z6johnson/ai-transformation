@@ -451,7 +451,7 @@ th {
 
 /* Capped, internally scrolling text fields — scoped to entry cards only,
    shared by the sortable grid and the plain entry lists. Dedicated prose
-   surfaces (raw notes, honest account) keep the global roomy min-height. */
+   surfaces (raw notes, friction summary) keep the global roomy min-height. */
 .card-grid__item textarea,
 .entry-card textarea {
   min-height: 0;

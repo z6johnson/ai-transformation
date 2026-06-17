@@ -70,13 +70,13 @@ Get specifics, not summaries. "It takes a while" is not yet data. Ask: how long,
 
 ## Raw capture
 
-Write answers close to the person's own words. Don't polish them into tidy process language; the rough detail is where the friction shows. The tagging pass below works from what you actually wrote, so capture the words raw: a cleaned-up note gives the AI a cleaned-up service to tag.
+Write answers in the person's own words. Don't polish them into process language. The tagging pass below works from what you wrote, so capture the words raw.
 
 [notes]
 
 ## Tagging pass (after the interview)
 
-Once the notes are down, mark them for what they feed later. AI does the first pass: it reads the notes, suggests a tag for each relevant passage, and shows the exact words that prompted each one. You confirm or reject every tag, and anything it is unsure of it flags for you rather than guessing. Nothing gets tagged without the words that justify it sitting right beside it. Keep your eye on the words, not the label.
+Once the notes are down, mark them for what they feed later. AI does the first pass: it reads the notes, suggests a tag for each relevant passage, and shows the words that prompted each one. You confirm or reject every tag, and anything it is unsure of it flags for you rather than guessing. Every tag shows the words behind it. Focus on the words, not the label.
 
 | Tag | What to mark |
 |---|---|

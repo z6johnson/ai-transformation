@@ -29,8 +29,8 @@ export default async function InterviewsPage({ params }: { params: Promise<{ id:
         <div className="t-system">01 · Interview Guide</div>
         <h1 className="t-display">Interviews &amp; tagging</h1>
         <p className="t-muted">
-          Capture notes in the person&apos;s own words. AI does the first tagging pass and shows the exact words behind each
-          suggestion; you confirm or reject every tag. Nothing is tagged without the words that justify it.
+          Capture notes in the person&apos;s own words. AI suggests tags and shows the words behind each one; you confirm or
+          reject every tag.
         </p>
       </header>
       {!isAiConfigured() && <SetupNotice what="ai" />}

@@ -27,10 +27,10 @@ export default async function JourneyPage({ params }: { params: Promise<{ id: st
       <TemplateNav engagementId={id} activeId="02" />
       <header className="stack">
         <div className="t-system">02 · Journey Map</div>
-        <h1 className="t-display">The experience view</h1>
+        <h1 className="t-display">Journey map</h1>
         <p className="t-muted">
-          What the person the service is for does, stage by stage, and how it feels. AI can draft a first cut from the
-          tagged interviews; you rebuild it before it counts.
+          What the person does at each stage, and how it feels. AI can draft from the tagged interviews; you review and
+          edit each stage.
         </p>
       </header>
       {!isAiConfigured() && <SetupNotice what="ai" />}

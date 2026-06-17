@@ -13,7 +13,7 @@ export const TEMPLATE_ROUTES: TemplateRoute[] = [
   { id: "03", slug: "blueprint", blurb: "Operations, handoffs, decisions, systems" },
   { id: "04", slug: "process", blurb: "Step-by-step record underneath the blueprint" },
   { id: "05", slug: "friction", blurb: "Evidence-grounded friction register + clusters" },
-  { id: "06", slug: "validation", blurb: "Coverage, review, honest account, sign-off" },
+  { id: "06", slug: "validation", blurb: "Coverage, review, friction summary, sign-off" },
 ];
 
 /** Ids of the reorderable middle templates (02–05). 01 and 06 are fixed bookends. */

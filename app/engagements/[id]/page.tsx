@@ -52,7 +52,7 @@ export default async function EngagementPage({ params }: { params: Promise<{ id:
       <section className="stack">
         <h2 className="t-heading">Templates</h2>
         <p className="t-faint">
-          01 and 06 are fixed bookends. Reorder 02–05 to match how you&apos;re working — drag the handle or use ▲/▼.
+          01 and 06 are fixed. Reorder 02–05 by dragging the handle or using ▲/▼.
         </p>
         <TemplateGrid engagementId={id} items={statuses} />
       </section>
@@ -60,8 +60,8 @@ export default async function EngagementPage({ params }: { params: Promise<{ id:
       <section className="card card--accent">
         <p className="t-system">Method</p>
         <p className="t-muted">
-          Layer 1 describes the service as it is and proposes no fixes. AI tags notes, flags conflicts, groups friction,
-          and drafts first cuts — a person rebuilds and confirms everything before it counts.
+          Layer 1 describes the service as it is; it proposes no fixes. AI tags notes, flags conflicts, groups friction,
+          and drafts first cuts; a person reviews and confirms each one.
         </p>
       </section>
     </div>

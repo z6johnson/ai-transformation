@@ -26,10 +26,10 @@ export default async function BlueprintPage({ params }: { params: Promise<{ id: 
       <TemplateNav engagementId={id} activeId="03" />
       <header className="stack">
         <div className="t-system">03 · Service Blueprint</div>
-        <h1 className="t-display">The operations view</h1>
+        <h1 className="t-display">Service blueprint</h1>
         <p className="t-muted">
-          Handoffs and decisions get written down on their own — they are where work breaks and where Layer 2 looks for
-          AI opportunities. The clear-cut vs. judgment call on each decision matters for Layer 3 guardrails.
+          Handoffs and decisions, recorded separately. Layer 2 uses these to find AI opportunities; the clear-cut vs.
+          judgment call on each decision feeds Layer 3 guardrails.
         </p>
       </header>
       <BlueprintEditor engagementId={id} initial={data.data} baseSha={sha} status={data.status} />

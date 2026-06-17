@@ -201,12 +201,12 @@ export function InterviewEditor({
 
       {/* Raw notes */}
       <label className="field stack">
-        <span className="t-system">Raw capture — the person&apos;s own words</span>
+        <span className="t-system">Raw notes — the person&apos;s own words</span>
         <textarea
           value={current.rawNotes}
           rows={10}
           onChange={(e) => update((iv) => ({ ...iv, rawNotes: e.target.value }))}
-          placeholder="Write answers close to the person's own words. Rough detail is where the friction shows."
+          placeholder="Write answers in the person's own words."
         />
       </label>
 

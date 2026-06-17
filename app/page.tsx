@@ -1,7 +1,7 @@
 import { isStorageConfigured } from "@/lib/github";
 import { listEngagements } from "@/lib/store";
 import { SetupNotice } from "@/components/SetupNotice";
-import { STAGE_LABELS } from "@/lib/schemas";
+import { EngagementGrid } from "@/components/EngagementGrid";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +11,7 @@ export default async function HomePage() {
       <div className="stack-lg">
         <header className="stack">
           <h1 className="t-display">Engagements</h1>
-          <p className="t-muted">The mapping workspace for the AI Transformation Practice.</p>
+          <p className="t-muted">Mapping workspace for the AI Transformation Practice.</p>
         </header>
         <SetupNotice what="storage" />
       </div>
@@ -30,8 +30,7 @@ export default async function HomePage() {
           </a>
         </div>
         <p className="t-muted">
-          Each engagement maps one institutional service lifecycle through the six Layer 1 templates. AI helps build the
-          map; a person decides what is true.
+          Each engagement maps one service lifecycle through the six Layer 1 templates. AI drafts; a person confirms.
         </p>
       </header>
 
@@ -45,22 +44,7 @@ export default async function HomePage() {
           </div>
         </div>
       ) : (
-        <ul className="grid grid--2" style={{ listStyle: "none", padding: 0 }}>
-          {engagements.map((e) => (
-            <li key={e.id} className="card card--accent">
-              <div className="stack">
-                <div className="t-system">{STAGE_LABELS[e.stage] || e.stage}</div>
-                <a href={`/engagements/${e.id}`} className="t-subhead">
-                  {e.name}
-                </a>
-                <p className="t-muted">{e.service}</p>
-                <p className="t-system t-faint">
-                  Lead {e.lead || "—"} · Owner {e.lifecycleOwner?.name || "—"}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <EngagementGrid engagements={engagements} />
       )}
     </div>
   );

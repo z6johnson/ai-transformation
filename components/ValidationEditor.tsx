@@ -106,8 +106,8 @@ export function ValidationEditor({
       </section>
 
       <section className="card stack">
-        <h2 className="t-heading">The honest account of friction</h2>
-        <p className="t-faint">Three to six sentences in the lead&apos;s voice. Names the worst without softening.</p>
+        <h2 className="t-heading">Friction summary</h2>
+        <p className="t-faint">Three to six sentences. State the main friction points plainly.</p>
         <textarea rows={4} value={d.honestAccount} onChange={(e) => setD({ ...d, honestAccount: e.target.value })} />
         <label className="field">
           <span className="t-system">Open questions &amp; known gaps</span>

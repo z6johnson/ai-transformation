@@ -251,7 +251,7 @@ export const FrictionRegister = Envelope.extend({
         }),
       )
       .default([]),
-    // The honest account is the lead's to write — never AI. No provenance choice offered.
+    // The friction summary is the lead's to write — never AI. No provenance choice offered.
     honestAccount: z.string().default(""),
   }),
 });

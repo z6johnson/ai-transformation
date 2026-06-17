@@ -26,8 +26,8 @@ export default async function ProcessPage({ params }: { params: Promise<{ id: st
       <TemplateNav engagementId={id} activeId="04" />
       <header className="stack">
         <div className="t-system">04 · Process Documentation</div>
-        <h1 className="t-display">Step by step, underneath the blueprint</h1>
-        <p className="t-muted">The fine detail that keeps the bigger views honest: what sets off each step, who does it, under what rule, how long it takes, and what goes wrong.</p>
+        <h1 className="t-display">Process documentation</h1>
+        <p className="t-muted">Each step: what starts it, who does it, the rule, how long it takes, and what goes wrong.</p>
       </header>
       <ProcessEditor engagementId={id} initial={data.data} baseSha={sha} status={data.status} />
     </div>

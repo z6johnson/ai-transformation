@@ -50,11 +50,10 @@ export default async function DashboardPage() {
     <div className="stack-lg">
       <header className="stack">
         <div className="t-system">Executive measurement layer</div>
-        <h1 className="t-display">What transformation is worth</h1>
+        <h1 className="t-display">Executive measurement</h1>
         <p className="t-muted">
-          A working definition of AI ROI and the four-dimension impact framework. Destination measures track what
-          engagements promised; adaptive-capacity measures track whether the institution is becoming more able to evolve.
-          Both re-baseline quarterly.
+          AI ROI definition and the four-dimension impact framework. Destination measures track what engagements
+          promised; adaptive-capacity measures track the institution&apos;s capacity to change. Both re-baseline quarterly.
         </p>
       </header>
 
@@ -68,10 +67,9 @@ export default async function DashboardPage() {
       <section className="card card--accent">
         <p className="t-system">Reconciling measures across engagements</p>
         <p className="t-muted">
-          Outcomes are not comparable unit to unit — an SPA appraisal metric is not an Athletics, Library, or BFS metric.
-          So we never compare raw values across engagements. Each KPI is tracked only against <em>its own</em> baseline
-          and target. The two layers that <em>are</em> common across units are the four impact dimensions below and each
-          measure&apos;s normalized progress-to-target and trend. KPIs are grouped by engagement so units stay distinct.
+          Outcomes are not comparable unit to unit, so raw values are never compared across engagements. Each KPI is
+          tracked against <em>its own</em> baseline and target. What is common across units: the four impact dimensions
+          below, and each measure&apos;s normalized progress-to-target and trend. KPIs are grouped by engagement.
         </p>
       </section>
 
@@ -112,7 +110,7 @@ export default async function DashboardPage() {
 
       <section className="stack">
         <h2 className="t-heading">Destination measures</h2>
-        <p className="t-faint">Progress against what each engagement explicitly promised.</p>
+        <p className="t-faint">Progress against what each engagement promised.</p>
         {dash.destination.length === 0 ? (
           <p className="t-faint">No destination KPIs recorded.</p>
         ) : (
@@ -152,7 +150,7 @@ export default async function DashboardPage() {
 
       <section className="stack">
         <h2 className="t-heading">Adaptive-capacity measures</h2>
-        <p className="t-faint">Whether the institution is becoming more able to evolve — the leading indicators.</p>
+        <p className="t-faint">Leading indicators of the institution&apos;s capacity to change.</p>
         {dash.adaptive.length === 0 ? (
           <p className="t-faint">No adaptive-capacity measures recorded.</p>
         ) : (

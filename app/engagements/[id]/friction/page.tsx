@@ -27,10 +27,10 @@ export default async function FrictionPage({ params }: { params: Promise<{ id: s
       <TemplateNav engagementId={id} activeId="05" />
       <header className="stack">
         <div className="t-system">05 · Friction Register</div>
-        <h1 className="t-display">Where the service has friction</h1>
+        <h1 className="t-display">Friction register</h1>
         <p className="t-muted">
-          Grounded in evidence, not impression. AI drafts candidate entries and groups them by shared root; you keep,
-          merge, or cut. The honest account is yours to write.
+          Each entry is backed by evidence. AI drafts candidate entries and groups them by shared root; you keep, merge,
+          or cut. You write the summary.
         </p>
       </header>
       {!isAiConfigured() && <SetupNotice what="ai" />}

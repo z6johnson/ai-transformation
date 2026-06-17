@@ -69,12 +69,9 @@ export function JourneyEditor({
   const [busy, setBusy] = useState<"idle" | "drafting" | "saving">("idle");
   const [message, setMessage] = useState("");
   const [draftMeta, setDraftMeta] = useState<AiMeta | null>(null);
-  const [needsReview, setNeedsReview] = useState(false);
-  const [reviewed, setReviewed] = useState(false);
 
-  const hasAiDraft = stages.some((s) =>
-    (["doing", "wants", "touchpoints", "thinkingFeeling", "waitingFor", "effortWhy"] as const).some((k) => s[k].origin === "ai-draft"),
-  );
+  const PROV_FIELDS = ["doing", "wants", "touchpoints", "thinkingFeeling", "waitingFor", "effortWhy"] as const;
+  const hasAiContent = stages.some((s) => PROV_FIELDS.some((k) => s[k].origin === "ai-applied"));
 
   function setStageField(i: number, key: keyof Stage, prov: Provenanced) {
     setStages((prev) => prev.map((s, idx) => (idx === i ? { ...s, [key]: prov } : s)));
@@ -98,26 +95,28 @@ export function JourneyEditor({
       name: d.name || "",
       duration: d.duration || "",
       effort: (["low", "moderate", "high"].includes(d.effort) ? d.effort : "moderate") as Stage["effort"],
-      doing: p(d.doing || "", "ai-draft"),
-      wants: p(d.wants || "", "ai-draft"),
-      touchpoints: p(d.touchpoints || "", "ai-draft"),
-      thinkingFeeling: p(d.thinkingFeeling || "", "ai-draft"),
-      waitingFor: p(d.waitingFor || "", "ai-draft"),
-      effortWhy: p("", "ai-draft"),
+      doing: p(d.doing || "", "ai-applied"),
+      wants: p(d.wants || "", "ai-applied"),
+      touchpoints: p(d.touchpoints || "", "ai-applied"),
+      thinkingFeeling: p(d.thinkingFeeling || "", "ai-applied"),
+      waitingFor: p(d.waitingFor || "", "ai-applied"),
+      effortWhy: p("", "ai-applied"),
     }));
     setStages(drafted);
-    setNeedsReview(true);
-    setReviewed(false);
-    setMessage("AI draft loaded. Review each stage, then check the box below to save.");
+    setMessage("AI applied a draft. Edit any field to replace it, or remove stages that don't hold.");
   }
 
   async function save() {
     setBusy("saving");
     setMessage("");
+    // Count how many AI-applied fields the human edited (origin flipped to human).
+    const draftedFields = stages.length * PROV_FIELDS.length;
+    const stillApplied = stages.reduce((n, s) => n + PROV_FIELDS.filter((k) => s[k].origin === "ai-applied").length, 0);
+    const edited = draftMeta ? Math.max(0, draftedFields - stillApplied) : 0;
     const res = await saveArtifact({
       engagementId,
       artifactId: "02",
-      payload: { status: "in-review", aiAssisted: hasAiDraft || Boolean(draftMeta), data: { ...initial, header, stages: stages.map((s, i) => ({ ...s, order: i })) } },
+      payload: { status: "in-review", aiAssisted: hasAiContent || Boolean(draftMeta), data: { ...initial, header, stages: stages.map((s, i) => ({ ...s, order: i })) } },
       baseSha: sha,
       aiLog: draftMeta
         ? {
@@ -129,21 +128,20 @@ export function JourneyEditor({
             latencyMs: draftMeta.latencyMs,
             inputSummary: draftMeta.inputSummary,
             outputSummary: draftMeta.outputSummary,
-            humanDecision: "reviewed and rebuilt AI draft",
+            humanDecision: `kept AI draft, edited ${edited} field(s)`,
           }
         : undefined,
     });
     setBusy("idle");
     if (res.ok) {
       setSha(res.sha);
-      setNeedsReview(false);
       setMessage("Saved. A commit landed on the data branch.");
     } else {
       setMessage(res.conflict ? "This artifact changed elsewhere. Reload and reapply." : `Save failed: ${res.error}`);
     }
   }
 
-  const saveDisabled = busy !== "idle" || (needsReview && !reviewed);
+  const saveDisabled = busy !== "idle";
 
   return (
     <div className="stack-lg">
@@ -176,10 +174,10 @@ export function JourneyEditor({
 
       {message && <p className="notice">{message}</p>}
 
-      {hasAiDraft && (
+      {hasAiContent && (
         <div className="ai-banner">
-          <span className="ai-mark">AI draft</span>
-          <span>Review each field. Editing a field marks it as reviewed.</span>
+          <span className="ai-mark">AI applied</span>
+          <span>AI filled these fields. Edit any field to replace it; your text takes over.</span>
         </div>
       )}
 
@@ -203,7 +201,7 @@ export function JourneyEditor({
               return (
                 <label key={String(key)} className="field">
                   <span className="t-system">
-                    {label} {prov.origin === "ai-draft" && <span className="ai-mark">AI draft</span>}
+                    {label} {prov.origin === "ai-applied" && <span className="ai-mark">AI applied</span>}
                   </span>
                   <textarea
                     rows={2}
@@ -230,13 +228,6 @@ export function JourneyEditor({
           </>
         )}
       />
-
-      {needsReview && (
-        <label className="row">
-          <input type="checkbox" checked={reviewed} onChange={(e) => setReviewed(e.target.checked)} />
-          <span>I have reviewed the AI draft.</span>
-        </label>
-      )}
 
       <div className="row">
         <button className="btn btn--primary" onClick={save} disabled={saveDisabled}>

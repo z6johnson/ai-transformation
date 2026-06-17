@@ -8,7 +8,7 @@
  * decides.
  */
 import { NextRequest, NextResponse } from "next/server";
-import { callModel, parseJsonLoose, isAiConfigured, defaultModel } from "@/lib/tritonai";
+import { callModel, parseJsonLoose, isAiConfigured, modelForFeature } from "@/lib/tritonai";
 import { redactPII } from "@/lib/pii";
 import { SUGGEST_TAGS } from "@/lib/prompts";
 import { metaFromResult } from "@/lib/ai-meta";
@@ -32,10 +32,11 @@ export async function POST(req: NextRequest) {
 
   const { text, redactions } = redactPII(notes);
   const inputSummary = `interview notes, ${notes.length} chars, ${redactions} PII redaction(s)`;
-  const result = await callModel({ messages: SUGGEST_TAGS.build(text), jsonObject: true });
+  const model = modelForFeature("tagging");
+  const result = await callModel({ messages: SUGGEST_TAGS.build(text), jsonObject: true, model });
 
   if (!result.ok) {
-    const meta = metaFromResult({ result, promptId: SUGGEST_TAGS.id, model: defaultModel(), inputSummary, outputSummary: "no output" });
+    const meta = metaFromResult({ result, promptId: SUGGEST_TAGS.id, model, inputSummary, outputSummary: "no output" });
     return NextResponse.json({
       degraded: true,
       suggestions: [],
@@ -63,7 +64,7 @@ export async function POST(req: NextRequest) {
   const meta = metaFromResult({
     result,
     promptId: SUGGEST_TAGS.id,
-    model: defaultModel(),
+    model,
     inputSummary,
     outputSummary: `${suggestions.length} tag suggestion(s)`,
   });

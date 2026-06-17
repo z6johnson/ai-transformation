@@ -1,10 +1,11 @@
 /**
  * Draft a first cut of a journey map or friction-register entries from the tagged
  * interviews. Reads interviews from the repo, redacts PII, calls the model, and returns
- * a DRAFT marked ai-draft. Never auto-saved — the human rebuilds and confirms in the UI.
+ * the draft. Never auto-saved here — the client applies it (marked ai-applied) and the
+ * human edits or removes any of it before saving.
  */
 import { NextRequest, NextResponse } from "next/server";
-import { callModel, parseJsonLoose, isAiConfigured, defaultModel } from "@/lib/tritonai";
+import { callModel, parseJsonLoose, isAiConfigured, modelForFeature } from "@/lib/tritonai";
 import { redactPII } from "@/lib/pii";
 import { DRAFT_JOURNEY, DRAFT_FRICTION } from "@/lib/prompts";
 import { metaFromResult } from "@/lib/ai-meta";
@@ -42,10 +43,11 @@ export async function POST(req: NextRequest) {
   const inputSummary = `${interviews.length} interview(s), ${text.length} chars, ${redactions} PII redaction(s)`;
 
   const prompt = target === "journey" ? DRAFT_JOURNEY : DRAFT_FRICTION;
-  const result = await callModel({ messages: prompt.build(text), jsonObject: true });
+  const model = modelForFeature("draft");
+  const result = await callModel({ messages: prompt.build(text), jsonObject: true, model });
 
   if (!result.ok) {
-    const meta = metaFromResult({ result, promptId: prompt.id, model: defaultModel(), inputSummary, outputSummary: "no output" });
+    const meta = metaFromResult({ result, promptId: prompt.id, model, inputSummary, outputSummary: "no output" });
     return NextResponse.json({ degraded: true, draft: null, aiMeta: meta, message: "AI assist is unavailable. Build by hand." });
   }
 
@@ -54,7 +56,7 @@ export async function POST(req: NextRequest) {
   const meta = metaFromResult({
     result,
     promptId: prompt.id,
-    model: defaultModel(),
+    model,
     inputSummary,
     outputSummary: `${target} draft, ${count || 0} item(s)`,
   });

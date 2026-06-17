@@ -23,12 +23,25 @@ export function defaultModel(): string {
   return process.env.TRITONAI_MODEL || "api-gpt-oss-120b";
 }
 
+/**
+ * Resolve the model for a feature. Tagging is verbatim-grounded classification and stays
+ * on the fast/default model; the reasoning-heavy drafting and clustering tasks can opt into
+ * a more capable model (set TRITONAI_MODEL_REASONING). Both fall back to TRITONAI_MODEL, so
+ * behavior is unchanged until the env vars are set — we reach for the bigger model only when
+ * deliberately configured (responsible-ai §7).
+ */
+export function modelForFeature(feature: "tagging" | "draft" | "cluster"): string {
+  if (feature === "tagging") return process.env.TRITONAI_MODEL_FAST || defaultModel();
+  return process.env.TRITONAI_MODEL_REASONING || defaultModel();
+}
+
 type Msg = { role: "system" | "user" | "assistant"; content: string };
 
 export async function callModel(args: {
   messages: Msg[];
   jsonObject?: boolean;
   temperature?: number;
+  model?: string;
 }): Promise<ModelResult> {
   const started = Date.now();
   if (!isAiConfigured()) return { ok: false, reason: "unconfigured", latencyMs: 0 };
@@ -49,7 +62,7 @@ export async function callModel(args: {
           Authorization: `Bearer ${process.env.TRITONAI_API_KEY}`,
         },
         body: JSON.stringify({
-          model: defaultModel(),
+          model: args.model || defaultModel(),
           messages: args.messages,
           temperature: args.temperature ?? 0.2,
           ...(args.jsonObject ? { response_format: { type: "json_object" } } : {}),
@@ -76,7 +89,7 @@ export async function callModel(args: {
       };
       const content = json.choices?.[0]?.message?.content;
       if (!content) return { ok: false, reason: "malformed", latencyMs: Date.now() - started };
-      return { ok: true, content, modelVersion: json.model || defaultModel(), latencyMs: Date.now() - started };
+      return { ok: true, content, modelVersion: json.model || args.model || defaultModel(), latencyMs: Date.now() - started };
     } catch (err: unknown) {
       clearTimeout(timer);
       const isAbort = err instanceof Error && err.name === "AbortError";

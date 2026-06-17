@@ -10,6 +10,7 @@ type Suggestion = { id: string; tag: string; sourceWords: string; span?: { start
 type GuideData = { interviews: Interview[] };
 
 const ACTOR = "you"; // The save route stamps the real actor server-side from PRACTICE_ACTOR.
+const AUTO_APPLY_MIN = 0.5; // At/above this confidence, AI applies the tag; below, it flags for review.
 
 function newInterview(n: number): Interview {
   return {
@@ -36,7 +37,7 @@ export function InterviewEditor({
   const [sha, setSha] = useState(baseSha);
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [lastMeta, setLastMeta] = useState<AiMeta | null>(null);
-  const [decisions, setDecisions] = useState({ confirmed: 0, rejected: 0 });
+  const [decisions, setDecisions] = useState({ applied: 0, confirmed: 0, rejected: 0, removed: 0 });
   const [busy, setBusy] = useState<"idle" | "suggesting" | "saving">("idle");
   const [message, setMessage] = useState("");
   const [live, setLive] = useState("");
@@ -65,8 +66,32 @@ export function InterviewEditor({
       setMessage(res.message || "No suggestions returned. Add tags by hand.");
       return;
     }
-    setSuggestions(res.suggestions);
-    setLive(`${res.suggestions.length} AI tag suggestions. Confirm or reject each.`);
+
+    // Trusted-assistant flow: apply high-confidence tags straight onto the interview;
+    // surface only the low-confidence ones for a human call. Everything stays editable
+    // and removable in the table below (responsible-ai §6 — override path is first-class).
+    const high = res.suggestions.filter((s) => (s.confidence ?? 1) >= AUTO_APPLY_MIN);
+    const low = res.suggestions.filter((s) => (s.confidence ?? 1) < AUTO_APPLY_MIN);
+    const now = new Date().toISOString();
+    const applied: InterviewTag[] = high.map((s, i) => ({
+      id: `T-${Date.now().toString(36)}-${i}`,
+      tag: s.tag as InterviewTag["tag"],
+      sourceWords: s.sourceWords,
+      span: s.span,
+      origin: "ai-applied",
+      promptId: res.aiMeta?.promptId,
+      confidence: s.confidence,
+      confirmedAt: now, // when AI applied it; confirmedBy is left unset — no human confirmed
+    }));
+    if (applied.length) update((iv) => ({ ...iv, tags: [...iv.tags, ...applied] }));
+    setSuggestions(low);
+    setDecisions((d) => ({ ...d, applied: d.applied + applied.length }));
+    setMessage(
+      low.length
+        ? `AI applied ${applied.length} tag(s). ${low.length} low-confidence tag(s) are below for your review.`
+        : `AI applied ${applied.length} tag(s). Review the table below — edit or remove any.`,
+    );
+    setLive(`AI applied ${applied.length} tags. ${low.length} flagged for review.`);
   }
 
   function confirmSuggestion(s: Suggestion, tag: string) {
@@ -114,13 +139,18 @@ export function InterviewEditor({
   }
 
   function removeTag(tagId: string) {
+    const removed = current.tags.find((t) => t.id === tagId);
     update((iv) => ({ ...iv, tags: iv.tags.filter((t) => t.id !== tagId) }));
+    if (removed && removed.origin !== "human") {
+      setDecisions((d) => ({ ...d, removed: d.removed + 1 }));
+      setLive(`Removed ${removed.tag}.`);
+    }
   }
 
   async function save() {
     setBusy("saving");
     setMessage("");
-    const aiAssisted = interviews.some((iv) => iv.tags.some((t) => t.origin === "ai-confirmed"));
+    const aiAssisted = interviews.some((iv) => iv.tags.some((t) => t.origin === "ai-applied" || t.origin === "ai-confirmed"));
     const res = await saveArtifact({
       engagementId,
       artifactId: "01",
@@ -136,7 +166,7 @@ export function InterviewEditor({
             latencyMs: lastMeta.latencyMs,
             inputSummary: lastMeta.inputSummary,
             outputSummary: lastMeta.outputSummary,
-            humanDecision: `confirmed ${decisions.confirmed}, rejected ${decisions.rejected}`,
+            humanDecision: `applied ${decisions.applied}, confirmed ${decisions.confirmed}, rejected ${decisions.rejected}, removed ${decisions.removed}`,
           }
         : undefined,
     });
@@ -148,9 +178,6 @@ export function InterviewEditor({
       setMessage(res.conflict ? "This artifact changed elsewhere. Reload and reapply." : `Save failed: ${res.error}`);
     }
   }
-
-  const highConf = suggestions.filter((s) => (s.confidence ?? 1) >= 0.5);
-  const flagged = suggestions.filter((s) => (s.confidence ?? 1) < 0.5);
 
   return (
     <div className="stack-lg">
@@ -212,32 +239,25 @@ export function InterviewEditor({
 
       <div className="row">
         <button className="btn btn--primary" onClick={suggest} disabled={busy !== "idle"}>
-          {busy === "suggesting" ? "Asking AI…" : "Suggest tags"}
+          {busy === "suggesting" ? "Asking AI…" : "Tag with AI"}
           <span className="ai-mark" aria-hidden="true">AI</span>
         </button>
-        <span className="t-faint t-system">AI suggests · you decide</span>
+        <span className="t-faint t-system">AI applies confident tags · you review</span>
       </div>
 
       {message && <p className="notice">{message}</p>}
 
-      {/* Suggestions — transient, never persisted until confirmed */}
+      {/* Only low-confidence suggestions surface here — AI flagged them rather than apply.
+          High-confidence tags are already applied to the table below. */}
       {suggestions.length > 0 && (
-        <section className="stack" aria-label="AI tag suggestions">
+        <section className="stack" aria-label="AI tag suggestions flagged for review">
           <div className="ai-banner">
-            <span className="ai-mark">AI suggested</span>
-            <span>Each suggestion shows the exact words behind it. Confirm, change the tag, or reject.</span>
+            <span className="ai-mark">AI flagged for review</span>
+            <span>Low-confidence — AI did not apply these. Confirm, change the tag, or reject.</span>
           </div>
-          {highConf.map((s) => (
+          {suggestions.map((s) => (
             <SuggestionRow key={s.id} s={s} onConfirm={confirmSuggestion} onReject={rejectSuggestion} />
           ))}
-          {flagged.length > 0 && (
-            <>
-              <p className="t-system">AI flagged for your review (low confidence)</p>
-              {flagged.map((s) => (
-                <SuggestionRow key={s.id} s={s} onConfirm={confirmSuggestion} onReject={rejectSuggestion} />
-              ))}
-            </>
-          )}
         </section>
       )}
 
@@ -266,6 +286,8 @@ export function InterviewEditor({
                   <td>
                     {t.origin === "human" ? (
                       <span className="t-system">By hand</span>
+                    ) : t.origin === "ai-applied" ? (
+                      <span className="t-system" title="AI applied this at high confidence; remove it if it doesn't hold">AI-applied</span>
                     ) : (
                       <span className="t-system" title={`confirmed by ${t.confirmedBy}`}>AI-assisted, confirmed</span>
                     )}

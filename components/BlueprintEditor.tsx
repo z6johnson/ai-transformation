@@ -4,7 +4,7 @@ import { useState } from "react";
 import { saveArtifact } from "@/lib/client";
 import { SortableCards } from "./SortableCards";
 
-type Origin = "human" | "ai-draft" | "ai-confirmed";
+type Origin = "human" | "ai-draft" | "ai-applied" | "ai-confirmed";
 type Handoff = { id: string; stage: string; from: string; to: string; whatMoves: string; how: string; whatBreaks: string; origin: Origin };
 type Decision = { id: string; stage: string; decision: string; whoDecides: string; decidesOn: string; basis: string; failurePath: string; kind: "clear-cut" | "judgment"; origin: Origin };
 type System = { name: string; usedFor: string; dataHeld: string; owner: string; connectsTo: string };

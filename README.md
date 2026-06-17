@@ -4,8 +4,10 @@ A free, serverless beta for UC San Diego's AI Transformation Practice (OSI). Two
 
 1. **AI-assisted Layer 1 mapping** — work the six lifecycle-mapping templates with help from
    the TritonAI Developer API (on-prem `api-gpt-oss-120b` by default): tag interview notes,
-   draft journey maps and friction entries, cluster friction. Every AI output is visibly
-   marked and human-confirmed before it counts. AI drafts, flags, synthesizes — humans decide.
+   draft journey maps and friction entries, cluster friction. AI acts as a trusted assistant:
+   it applies confident output by default (marked `AI-applied`), flags only the low-confidence
+   cases for a human call, and every item stays editable and removable. AI involvement is always
+   visibly marked and logged; humans review and override rather than approving item-by-item.
 2. **Executive measurement dashboard** — a working definition of AI ROI, the four-dimension
    impact framework, and destination vs. adaptive-capacity measures, re-baselined quarterly.
 
@@ -32,7 +34,9 @@ For **Vercel**, set them as Project environment variables (see Deploy); do not s
 |---|---|---|
 | `TRITONAI_API_KEY` | **Yes** | Key from https://tritonai-api.ucsd.edu/ . Server-side only; never reaches the client. |
 | `TRITONAI_BASE_URL` | No | Defaults to `https://tritonai-api.ucsd.edu/v1`. |
-| `TRITONAI_MODEL` | No | Defaults to `api-gpt-oss-120b`. |
+| `TRITONAI_MODEL` | No | Defaults to `api-gpt-oss-120b`. The fallback for the two tier vars below. |
+| `TRITONAI_MODEL_FAST` | No | Model for tagging (verbatim-grounded classification). Falls back to `TRITONAI_MODEL`. |
+| `TRITONAI_MODEL_REASONING` | No | Model for journey/friction drafting and friction clustering (synthesis + root-cause reasoning). Set a more capable model here to back auto-applied drafts. Falls back to `TRITONAI_MODEL`. |
 | `AI_TIMEOUT_MS` | No | AI call timeout (default `25000`). |
 | `GITHUB_TOKEN` | **Yes** | Fine-grained PAT scoped to this repo, Contents: read/write. |
 | `GITHUB_REPO` | No | e.g. `z6johnson/ai-transformation`. |

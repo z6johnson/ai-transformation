@@ -54,7 +54,7 @@ export function InterviewEditor({
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [lastMeta, setLastMeta] = useState<AiMeta | null>(null);
   const [decisions, setDecisions] = useState({ applied: 0, confirmed: 0, rejected: 0, removed: 0 });
-  const [busy, setBusy] = useState<"idle" | "suggesting" | "saving">("idle");
+  const [busy, setBusy] = useState<"idle" | "reading" | "suggesting" | "saving">("idle");
   const [message, setMessage] = useState("");
   const [live, setLive] = useState("");
   const [pasteText, setPasteText] = useState("");
@@ -278,7 +278,7 @@ export function InterviewEditor({
           <span className="t-system">Import a transcript</span>
           <p className="t-faint t-system">
             Upload .txt, .md, or .vtt files, or paste raw text. Each becomes a new interview and AI tagging runs
-            automatically — you still confirm every tag.
+            automatically — confident tags are applied for you to review, low-confidence ones are flagged.
           </p>
         </div>
         <div className="row">
@@ -370,7 +370,7 @@ export function InterviewEditor({
       </label>
 
       <div className="row">
-        <button className="btn btn--primary" onClick={suggest} disabled={busy !== "idle"}>
+        <button className="btn btn--primary" onClick={() => suggest()} disabled={busy !== "idle"}>
           {busy === "suggesting" ? "Asking AI…" : "Tag with AI"}
           <span className="ai-mark" aria-hidden="true">AI</span>
         </button>

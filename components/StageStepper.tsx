@@ -3,16 +3,33 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { saveEngagement } from "@/lib/client";
-import { STAGES, STAGE_LABELS, type Engagement } from "@/lib/schemas";
+import { STAGES, STAGE_LABELS, type Engagement, type EngagementStage } from "@/lib/schemas";
+import type { StageProgress } from "@/lib/progress";
 
-/** Compact lifecycle indicator with a one-click "advance" control on the detail page. */
-export function StageStepper({ engagement, baseSha }: { engagement: Engagement; baseSha: string | null }) {
+/**
+ * Lifecycle stepper — the spine of the engagement page. Each chip links to its
+ * stage view (`?stage=…`); the persisted `engagement.stage` is the current pointer,
+ * `activeStage` is what's being viewed, and `progress` drives the done marks and the
+ * hybrid advance suggestion.
+ */
+export function StageStepper({
+  engagement,
+  activeStage,
+  progress,
+  baseSha,
+}: {
+  engagement: Engagement;
+  activeStage: EngagementStage;
+  progress: StageProgress;
+  baseSha: string | null;
+}) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
 
   const currentIndex = STAGES.indexOf(engagement.stage);
   const next = currentIndex >= 0 && currentIndex < STAGES.length - 1 ? STAGES[currentIndex + 1] : null;
+  const readyToAdvance = next != null && progress.byStage[engagement.stage].complete;
 
   async function advance() {
     if (!next) return;
@@ -30,6 +47,8 @@ export function StageStepper({ engagement, baseSha }: { engagement: Engagement; 
       baseSha,
     });
     if (res.ok) {
+      // Move the view to the stage we just entered so the click has a visible effect.
+      router.push(`?stage=${next}`);
       router.refresh();
       setBusy(false);
     } else {
@@ -42,22 +61,30 @@ export function StageStepper({ engagement, baseSha }: { engagement: Engagement; 
 
   return (
     <section className="card stack">
-      <div className="stage-steps">
+      <ol className="stage-steps">
         {STAGES.map((s, i) => {
-          const state = i < currentIndex ? "done" : i === currentIndex ? "current" : "todo";
+          const done = progress.byStage[s].complete;
+          const isCurrent = s === engagement.stage;
+          const isViewing = s === activeStage;
+          const state = done ? "done" : isCurrent ? "current" : i > currentIndex ? "todo" : "current";
           return (
-            <span key={s} className="tag-chip t-system" aria-current={state === "current" ? "step" : undefined}>
-              <span
-                className={`stage-steps__item${
-                  state === "current" ? " stage-steps__item--current" : state === "todo" ? " stage-steps__item--todo" : ""
+            <li key={s} className="stage-steps__step">
+              <a
+                href={`?stage=${s}`}
+                className={`stage-steps__item stage-steps__item--${state}${
+                  isViewing ? " stage-steps__item--viewing" : ""
                 }`}
+                aria-current={isViewing ? "step" : undefined}
               >
-                {i + 1}. {STAGE_LABELS[s]}
-              </span>
-            </span>
+                <span className="stage-steps__marker" aria-hidden="true">
+                  {done ? "✓" : i + 1}
+                </span>
+                <span className="stage-steps__label">{STAGE_LABELS[s]}</span>
+              </a>
+            </li>
           );
         })}
-      </div>
+      </ol>
       <div className="row">
         {next ? (
           <button className="btn btn--primary" onClick={advance} disabled={busy}>
@@ -65,6 +92,11 @@ export function StageStepper({ engagement, baseSha }: { engagement: Engagement; 
           </button>
         ) : (
           <span className="t-faint t-system">Final stage reached.</span>
+        )}
+        {readyToAdvance && !busy && (
+          <span className="t-faint t-system">
+            {STAGE_LABELS[engagement.stage]} looks complete — advance to {STAGE_LABELS[next!]}.
+          </span>
         )}
         {message && <span className="notice">{message}</span>}
       </div>

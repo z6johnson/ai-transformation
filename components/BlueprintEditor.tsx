@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { saveArtifact } from "@/lib/client";
+import { SortableCards } from "./SortableCards";
 
 type Origin = "human" | "ai-draft" | "ai-confirmed";
 type Handoff = { id: string; stage: string; from: string; to: string; whatMoves: string; how: string; whatBreaks: string; origin: Origin };
@@ -83,27 +84,35 @@ export function BlueprintEditor({
             + Handoff
           </button>
         </div>
-        {handoffs.map((h, i) => (
-          <fieldset key={h.id} className="card card--accent grid grid--2">
-            <legend className="t-system">{h.id}</legend>
-            {(
-              [
-                ["stage", "Stage"],
-                ["from", "From"],
-                ["to", "To"],
-                ["whatMoves", "What moves"],
-                ["how", "How it moves"],
-                ["whatBreaks", "What can break"],
-              ] as const
-            ).map(([k, label]) => (
-              <label key={k} className="field">
-                <span className="t-system">{label}</span>
-                <input type="text" value={h[k]} onChange={(e) => setHandoffs((p) => p.map((x, idx) => (idx === i ? { ...x, [k]: e.target.value } : x)))} />
-              </label>
-            ))}
-            <button className="btn btn--text" onClick={() => setHandoffs((p) => p.filter((_, idx) => idx !== i))}>Remove</button>
-          </fieldset>
-        ))}
+        <SortableCards
+          items={handoffs}
+          getKey={(h) => h.id}
+          onReorder={setHandoffs}
+          onRemove={(i) => setHandoffs((p) => p.filter((_, idx) => idx !== i))}
+          cardLabel={(h) => h.id}
+          legend={(h) => <legend className="t-system">{h.id}</legend>}
+          columnsStorageKey={`card-cols:blueprint-handoffs:${engagementId}`}
+          defaultColumns={2}
+          renderCard={(h, i) => (
+            <div className="grid grid--2">
+              {(
+                [
+                  ["stage", "Stage"],
+                  ["from", "From"],
+                  ["to", "To"],
+                  ["whatMoves", "What moves"],
+                  ["how", "How it moves"],
+                  ["whatBreaks", "What can break"],
+                ] as const
+              ).map(([k, label]) => (
+                <label key={k} className="field">
+                  <span className="t-system">{label}</span>
+                  <input type="text" value={h[k]} onChange={(e) => setHandoffs((p) => p.map((x, idx) => (idx === i ? { ...x, [k]: e.target.value } : x)))} />
+                </label>
+              ))}
+            </div>
+          )}
+        />
       </section>
 
       <section className="stack">
@@ -118,34 +127,42 @@ export function BlueprintEditor({
             + Decision
           </button>
         </div>
-        {decisions.map((d, i) => (
-          <fieldset key={d.id} className="card card--accent grid grid--2">
-            <legend className="t-system">{d.id}</legend>
-            {(
-              [
-                ["stage", "Stage"],
-                ["decision", "The decision"],
-                ["whoDecides", "Who decides"],
-                ["decidesOn", "Decides on"],
-                ["basis", "Rule or basis"],
-                ["failurePath", "Failure path"],
-              ] as const
-            ).map(([k, label]) => (
-              <label key={k} className="field">
-                <span className="t-system">{label}</span>
-                <input type="text" value={d[k]} onChange={(e) => setDecisions((p) => p.map((x, idx) => (idx === i ? { ...x, [k]: e.target.value } : x)))} />
+        <SortableCards
+          items={decisions}
+          getKey={(d) => d.id}
+          onReorder={setDecisions}
+          onRemove={(i) => setDecisions((p) => p.filter((_, idx) => idx !== i))}
+          cardLabel={(d) => d.id}
+          legend={(d) => <legend className="t-system">{d.id}</legend>}
+          columnsStorageKey={`card-cols:blueprint-decisions:${engagementId}`}
+          defaultColumns={2}
+          renderCard={(d, i) => (
+            <div className="grid grid--2">
+              {(
+                [
+                  ["stage", "Stage"],
+                  ["decision", "The decision"],
+                  ["whoDecides", "Who decides"],
+                  ["decidesOn", "Decides on"],
+                  ["basis", "Rule or basis"],
+                  ["failurePath", "Failure path"],
+                ] as const
+              ).map(([k, label]) => (
+                <label key={k} className="field">
+                  <span className="t-system">{label}</span>
+                  <input type="text" value={d[k]} onChange={(e) => setDecisions((p) => p.map((x, idx) => (idx === i ? { ...x, [k]: e.target.value } : x)))} />
+                </label>
+              ))}
+              <label className="field">
+                <span className="t-system">Clear-cut or judgment</span>
+                <select value={d.kind} onChange={(e) => setDecisions((p) => p.map((x, idx) => (idx === i ? { ...x, kind: e.target.value as Decision["kind"] } : x)))}>
+                  <option value="clear-cut">clear-cut</option>
+                  <option value="judgment">judgment</option>
+                </select>
               </label>
-            ))}
-            <label className="field">
-              <span className="t-system">Clear-cut or judgment</span>
-              <select value={d.kind} onChange={(e) => setDecisions((p) => p.map((x, idx) => (idx === i ? { ...x, kind: e.target.value as Decision["kind"] } : x)))}>
-                <option value="clear-cut">clear-cut</option>
-                <option value="judgment">judgment</option>
-              </select>
-            </label>
-            <button className="btn btn--text" onClick={() => setDecisions((p) => p.filter((_, idx) => idx !== i))}>Remove</button>
-          </fieldset>
-        ))}
+            </div>
+          )}
+        />
       </section>
 
       <section className="stack">
@@ -155,26 +172,34 @@ export function BlueprintEditor({
             + System
           </button>
         </div>
-        {systems.map((s, i) => (
-          <fieldset key={i} className="card card--accent grid grid--2">
-            <legend className="t-system">System {i + 1}</legend>
-            {(
-              [
-                ["name", "Name"],
-                ["usedFor", "Used for"],
-                ["dataHeld", "Data held"],
-                ["owner", "Owner"],
-                ["connectsTo", "Connects to"],
-              ] as const
-            ).map(([k, label]) => (
-              <label key={k} className="field">
-                <span className="t-system">{label}</span>
-                <input type="text" value={s[k]} onChange={(e) => setSystems((p) => p.map((x, idx) => (idx === i ? { ...x, [k]: e.target.value } : x)))} />
-              </label>
-            ))}
-            <button className="btn btn--text" onClick={() => setSystems((p) => p.filter((_, idx) => idx !== i))}>Remove</button>
-          </fieldset>
-        ))}
+        <SortableCards
+          items={systems}
+          getKey={(_, i) => String(i)}
+          onReorder={setSystems}
+          onRemove={(i) => setSystems((p) => p.filter((_, idx) => idx !== i))}
+          cardLabel={(_, i) => `System ${i + 1}`}
+          legend={(_, i) => <legend className="t-system">System {i + 1}</legend>}
+          columnsStorageKey={`card-cols:blueprint-systems:${engagementId}`}
+          defaultColumns={2}
+          renderCard={(s, i) => (
+            <div className="grid grid--2">
+              {(
+                [
+                  ["name", "Name"],
+                  ["usedFor", "Used for"],
+                  ["dataHeld", "Data held"],
+                  ["owner", "Owner"],
+                  ["connectsTo", "Connects to"],
+                ] as const
+              ).map(([k, label]) => (
+                <label key={k} className="field">
+                  <span className="t-system">{label}</span>
+                  <input type="text" value={s[k]} onChange={(e) => setSystems((p) => p.map((x, idx) => (idx === i ? { ...x, [k]: e.target.value } : x)))} />
+                </label>
+              ))}
+            </div>
+          )}
+        />
       </section>
 
       {message && <p className="notice">{message}</p>}

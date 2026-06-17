@@ -195,6 +195,11 @@ label {
 .field > .t-system {
   display: block;
   margin-bottom: var(--space-1);
+  /* Calmer text-box labels: drop the uppercase/bold/tracking so they recede. */
+  font-size: 0.8125rem;
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: var(--weight-medium);
 }
 input[type="text"],
 input[type="number"],
@@ -205,6 +210,7 @@ select {
   padding: var(--space-2);
   border: var(--border-hairline) solid var(--color-border-strong);
   background: var(--color-bg);
+  font-size: 0.9375rem;
 }
 textarea {
   resize: vertical;

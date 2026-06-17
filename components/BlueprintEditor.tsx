@@ -73,7 +73,7 @@ export function BlueprintEditor({
       </fieldset>
 
       <section className="stack">
-        <div className="row" style={{ justifyContent: "space-between" }}>
+        <div className="row row--between">
           <h2 className="t-heading">Handoffs</h2>
           <button
             className="btn"
@@ -116,7 +116,7 @@ export function BlueprintEditor({
       </section>
 
       <section className="stack">
-        <div className="row" style={{ justifyContent: "space-between" }}>
+        <div className="row row--between">
           <h2 className="t-heading">Decisions</h2>
           <button
             className="btn"
@@ -166,7 +166,7 @@ export function BlueprintEditor({
       </section>
 
       <section className="stack">
-        <div className="row" style={{ justifyContent: "space-between" }}>
+        <div className="row row--between">
           <h2 className="t-heading">Systems &amp; data</h2>
           <button className="btn" onClick={() => setSystems((p) => [...p, { name: "", usedFor: "", dataHeld: "", owner: "", connectsTo: "" }])}>
             + System

@@ -70,7 +70,7 @@ export function TemplateGrid({ engagementId, items }: { engagementId: string; it
       <a href={`/engagements/${engagementId}/${item.slug}`}>
         <span>
           <span className="t-system">{item.id}</span> {ARTIFACT_LABELS[item.id]}
-          <span className="t-faint" style={{ display: "block" }}>
+          <span className="t-faint t-block">
             {item.blurb}
           </span>
         </span>

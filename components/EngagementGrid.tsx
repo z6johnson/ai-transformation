@@ -30,7 +30,7 @@ export function EngagementGrid({ engagements }: { engagements: Engagement[] }) {
         ))}
       </div>
 
-      <ul className="card-grid" style={{ ["--cols" as string]: cols, listStyle: "none", padding: 0 }}>
+      <ul className="card-grid" style={{ ["--cols" as string]: cols }}>
         {engagements.map((e) => (
           <li key={e.id} className="card card--accent">
             <div className="stack">

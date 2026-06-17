@@ -304,8 +304,8 @@ function SuggestionRow({
 }) {
   const [tag, setTag] = useState(s.tag);
   return (
-    <div className="card row" style={{ justifyContent: "space-between", flexWrap: "wrap" }}>
-      <div className="stack" style={{ flex: 1, minWidth: "16rem" }}>
+    <div className="card row row--between row--wrap">
+      <div className="stack grow grow--min">
         <span>&ldquo;{s.sourceWords}&rdquo;</span>
         {typeof s.confidence === "number" && <span className="t-system t-faint">confidence {Math.round(s.confidence * 100)}%</span>}
       </div>
@@ -353,7 +353,7 @@ function ManualTagForm({ onAdd }: { onAdd: (tag: string, words: string) => void 
           ))}
         </select>
       </label>
-      <label style={{ flex: 1 }}>
+      <label className="grow">
         <span className="visually-hidden">Source words</span>
         <input type="text" value={words} onChange={(e) => setWords(e.target.value)} placeholder="Source words by hand" />
       </label>

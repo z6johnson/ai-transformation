@@ -23,7 +23,7 @@ export default async function HomePage() {
   return (
     <div className="stack-lg">
       <header className="stack">
-        <div className="row" style={{ justifyContent: "space-between", alignItems: "baseline" }}>
+        <div className="row row--between row--baseline">
           <h1 className="t-display">Engagements</h1>
           <a className="btn btn--primary" href="/engagements/new">
             New engagement

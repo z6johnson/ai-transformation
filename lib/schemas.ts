@@ -5,8 +5,15 @@
  */
 import { z } from "zod";
 
-/** Provenance stamp on any value that an AI feature can originate. */
-export const Origin = z.enum(["human", "ai-draft", "ai-confirmed"]);
+/**
+ * Provenance stamp on any value that an AI feature can originate.
+ *  - human        — typed or edited by a person.
+ *  - ai-draft     — proposed, not yet in the artifact (e.g. low-confidence, awaiting review).
+ *  - ai-applied   — auto-applied by AI at/above the confidence threshold; in the artifact,
+ *                   not explicitly human-confirmed, but the human can edit or remove it.
+ *  - ai-confirmed — a human explicitly accepted the AI output.
+ */
+export const Origin = z.enum(["human", "ai-draft", "ai-applied", "ai-confirmed"]);
 export type Origin = z.infer<typeof Origin>;
 
 export const Provenanced = z.object({

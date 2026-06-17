@@ -1,10 +1,10 @@
 /**
  * Group friction-register entries into clusters by shared root cause. Reads the register,
  * sends a compact digest (entry id/where/type/what's-wrong) to the model, returns
- * candidate clusters marked ai-draft. The human decides which clusters hold.
+ * clusters the client applies (marked ai-applied). The human edits or removes any of them.
  */
 import { NextRequest, NextResponse } from "next/server";
-import { callModel, parseJsonLoose, isAiConfigured, defaultModel } from "@/lib/tritonai";
+import { callModel, parseJsonLoose, isAiConfigured, modelForFeature } from "@/lib/tritonai";
 import { redactPII } from "@/lib/pii";
 import { CLUSTER_FRICTION } from "@/lib/prompts";
 import { metaFromResult } from "@/lib/ai-meta";
@@ -30,9 +30,10 @@ export async function POST(req: NextRequest) {
   const { text, redactions } = redactPII(digest);
   const inputSummary = `${entries.length} friction entries, ${redactions} PII redaction(s)`;
 
-  const result = await callModel({ messages: CLUSTER_FRICTION.build(text), jsonObject: true });
+  const model = modelForFeature("cluster");
+  const result = await callModel({ messages: CLUSTER_FRICTION.build(text), jsonObject: true, model });
   if (!result.ok) {
-    const meta = metaFromResult({ result, promptId: CLUSTER_FRICTION.id, model: defaultModel(), inputSummary, outputSummary: "no output" });
+    const meta = metaFromResult({ result, promptId: CLUSTER_FRICTION.id, model, inputSummary, outputSummary: "no output" });
     return NextResponse.json({ degraded: true, clusters: [], aiMeta: meta, message: "AI assist is unavailable. Cluster by hand." });
   }
 
@@ -44,7 +45,7 @@ export async function POST(req: NextRequest) {
   const meta = metaFromResult({
     result,
     promptId: CLUSTER_FRICTION.id,
-    model: defaultModel(),
+    model,
     inputSummary,
     outputSummary: `${clusters.length} cluster(s)`,
   });

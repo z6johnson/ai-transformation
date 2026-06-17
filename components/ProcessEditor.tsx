@@ -14,7 +14,7 @@ type Step = {
   handsOnTime: string;
   waitTime: string;
   whatGoesWrong: string;
-  origin: "human" | "ai-draft" | "ai-confirmed";
+  origin: "human" | "ai-draft" | "ai-applied" | "ai-confirmed";
 };
 type ProcessData = { header: { service: string; scope: string; stages: string }; steps: Step[] };
 

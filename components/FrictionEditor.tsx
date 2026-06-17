@@ -6,7 +6,7 @@ import type { FrictionEntry } from "@/lib/schemas";
 import { FRICTION_TYPES } from "@/lib/schemas";
 import type { AiMeta } from "@/lib/ai-meta";
 
-type Cluster = { name: string; frIds: string[]; sharedRoot: string; origin: "human" | "ai-draft" | "ai-confirmed" };
+type Cluster = { name: string; frIds: string[]; sharedRoot: string; origin: "human" | "ai-draft" | "ai-applied" | "ai-confirmed" };
 type FrictionData = {
   header: { service: string; scope: string; lead: string };
   entries: FrictionEntry[];
@@ -45,7 +45,6 @@ export function FrictionEditor({
   const [entries, setEntries] = useState<FrictionEntry[]>(initial.entries);
   const [clusters, setClusters] = useState<Cluster[]>(initial.clusters);
   const [honest, setHonest] = useState(initial.honestAccount);
-  const [draftCandidates, setDraftCandidates] = useState<FrictionEntry[]>([]);
   const [sha, setSha] = useState(baseSha);
   const [busy, setBusy] = useState<"idle" | "drafting" | "clustering" | "saving">("idle");
   const [message, setMessage] = useState("");
@@ -68,29 +67,23 @@ export function FrictionEditor({
       setMessage(res.message || "No candidates returned. Log friction by hand.");
       return;
     }
+    // Trusted-assistant flow: apply the drafted entries straight into the register.
+    // Each entry card below has its own Remove button — the override path stays first-class
+    // (responsible-ai §6).
     const base = entries.length;
-    setDraftCandidates(
-      res.draft.entries.map((d, i) => ({
-        ...emptyEntry(base + i + 1),
-        where: d.where || "",
-        type: (FRICTION_TYPES.includes(d.type as (typeof FRICTION_TYPES)[number]) ? d.type : "Delay") as FrictionEntry["type"],
-        whatsWrong: d.whatsWrong || "",
-        whoFeels: d.whoFeels || "",
-        evidence: d.evidence || "",
-        severity: (["low", "moderate", "high"].includes(d.severity) ? d.severity : "moderate") as FrictionEntry["severity"],
-        frequency: (["rare", "occasional", "frequent", "constant"].includes(d.frequency) ? d.frequency : "occasional") as FrictionEntry["frequency"],
-        origin: "ai-draft",
-      })),
-    );
-    setMessage(`${res.draft.entries.length} AI candidate(s). Keep or cut each.`);
-  }
-
-  function keepCandidate(c: FrictionEntry) {
-    setEntries((prev) => [...prev, { ...c, origin: "ai-confirmed" }]);
-    setDraftCandidates((prev) => prev.filter((x) => x.id !== c.id));
-  }
-  function cutCandidate(c: FrictionEntry) {
-    setDraftCandidates((prev) => prev.filter((x) => x.id !== c.id));
+    const applied: FrictionEntry[] = res.draft.entries.map((d, i) => ({
+      ...emptyEntry(base + i + 1),
+      where: d.where || "",
+      type: (FRICTION_TYPES.includes(d.type as (typeof FRICTION_TYPES)[number]) ? d.type : "Delay") as FrictionEntry["type"],
+      whatsWrong: d.whatsWrong || "",
+      whoFeels: d.whoFeels || "",
+      evidence: d.evidence || "",
+      severity: (["low", "moderate", "high"].includes(d.severity) ? d.severity : "moderate") as FrictionEntry["severity"],
+      frequency: (["rare", "occasional", "frequent", "constant"].includes(d.frequency) ? d.frequency : "occasional") as FrictionEntry["frequency"],
+      origin: "ai-applied",
+    }));
+    setEntries((prev) => [...prev, ...applied]);
+    setMessage(`AI applied ${applied.length} entry(ies) below. Edit or remove any that don't hold.`);
   }
 
   async function cluster() {
@@ -106,8 +99,8 @@ export function FrictionEditor({
       setMessage(res.message || "No clusters returned. Group by hand.");
       return;
     }
-    setClusters((prev) => [...prev, ...res.clusters.map((c) => ({ ...c, origin: "ai-draft" as const }))]);
-    setMessage(`${res.clusters.length} candidate cluster(s) added below as AI drafts. You decide which hold.`);
+    setClusters((prev) => [...prev, ...res.clusters.map((c) => ({ ...c, origin: "ai-applied" as const }))]);
+    setMessage(`AI applied ${res.clusters.length} cluster(s) below. Edit or remove any that don't hold.`);
   }
 
   async function save() {
@@ -172,29 +165,6 @@ export function FrictionEditor({
 
       {message && <p className="notice">{message}</p>}
 
-      {draftCandidates.length > 0 && (
-        <section className="stack" aria-label="AI candidate entries">
-          <div className="ai-banner">
-            <span className="ai-mark">AI candidates</span>
-            <span>Each shows the words that prompted it. Keep or cut.</span>
-          </div>
-          {draftCandidates.map((c) => (
-            <div key={c.id} className="card row row--between row--wrap">
-              <div className="stack grow grow--min">
-                <span>
-                  <span className="tag-chip">{c.type}</span> {c.whatsWrong}
-                </span>
-                <span className="t-faint t-system">where: {c.where || "—"} · evidence: {c.evidence || "—"}</span>
-              </div>
-              <div className="row">
-                <button className="btn btn--primary" onClick={() => keepCandidate(c)}>Keep</button>
-                <button className="btn" onClick={() => cutCandidate(c)}>Cut</button>
-              </div>
-            </div>
-          ))}
-        </section>
-      )}
-
       <section className="stack">
         <h2 className="t-heading">Register</h2>
         {entries.length === 0 ? (
@@ -203,7 +173,12 @@ export function FrictionEditor({
           entries.map((e, i) => (
             <fieldset key={e.id} className="card card--accent stack entry-card">
               <legend className="t-system">
-                {e.id} {e.origin !== "human" && <span className="ai-mark">AI-assisted</span>}
+                {e.id}{" "}
+                {e.origin === "ai-applied" ? (
+                  <span className="ai-mark">AI-applied</span>
+                ) : (
+                  e.origin !== "human" && <span className="ai-mark">AI-assisted</span>
+                )}
               </legend>
               <div className="grid grid--2">
                 <label className="field">
@@ -272,7 +247,11 @@ export function FrictionEditor({
           clusters.map((c, i) => (
             <div key={i} className="card">
               <span className="t-subhead">{c.name}</span>{" "}
-              {c.origin !== "human" && <span className="ai-mark">AI draft</span>}
+              {c.origin === "ai-applied" ? (
+                <span className="ai-mark">AI-applied</span>
+              ) : (
+                c.origin !== "human" && <span className="ai-mark">AI draft</span>
+              )}
               <p className="t-muted">Shared root: {c.sharedRoot || "—"}</p>
               <p className="t-faint t-system">{c.frIds.join(", ")}</p>
               <button className="btn btn--text" onClick={() => setClusters((prev) => prev.filter((_, idx) => idx !== i))}>

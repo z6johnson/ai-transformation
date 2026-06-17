@@ -2,7 +2,7 @@
 
 **Layer 1 · Lifecycle Map · Template 04**
 
-This is the step-by-step record underneath the blueprint. The journey map and blueprint work at the level of stages; this works at the level of single steps: what sets each one off, who acts, on what system, under what rule, how long it takes, and what happens when it goes wrong. It is the fine detail that keeps the bigger views honest, and the thing a unit can hand a new hire.
+This is the step-by-step record underneath the blueprint. The journey map and blueprint work at the level of stages; this works at the level of single steps: what sets each one off, who acts, on what system, under what rule, how long it takes, and what happens when it goes wrong. It is the most detailed view of the service, and the thing a unit can hand a new hire.
 
 Write the process as it actually runs, including the steps nobody wrote down. Where the real process and the official one differ, write down the real one and note the difference. AI can draft the step rows from the tagged interviews as a first cut, each cell tracing back to what someone said. Rebuild it rather than sign it, and keep people's own words rather than smoothing them.
 
@@ -45,7 +45,7 @@ Most real processes are not a single line. Where the path forks (by case type, b
 
 ## Rules and constraints
 
-List the rules the process has to honor, with where each comes from. This matters later: Layer 3 will need to know which constraints are policy, which are law, and which are habit dressed up as policy.
+List the rules the process has to honor, with where each comes from. This matters later: Layer 3 will need to know which constraints are policy, which are law, and which are habit treated as policy.
 
 | Rule / constraint | Where it comes from (policy, law, system limit, local habit) | What it governs |
 |---|---|---|

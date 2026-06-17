@@ -27,16 +27,16 @@ export default async function ValidationPage({ params }: { params: Promise<{ id:
       <TemplateNav engagementId={id} activeId="06" />
       <header className="stack">
         <div className="t-system">06 · Validation Packet</div>
-        <h1 className="t-display">Closing the mapping stage</h1>
+        <h1 className="t-display">Validation packet</h1>
         <p className="t-muted">
-          Coverage check, the review session, the honest account, and sign-off. On the lifecycle owner&apos;s sign-off, the
-          stage closes and the engagement moves to Design.
+          Coverage check, review session, friction summary, and sign-off. The lifecycle owner&apos;s sign-off closes the
+          Mapping stage.
         </p>
       </header>
 
       <section className="card stack">
         <h2 className="t-heading">How AI was used</h2>
-        <p className="t-faint">Read straight from the engagement&apos;s AI decision log, so it cannot drift from what happened.</p>
+        <p className="t-faint">Read directly from the engagement&apos;s AI decision log.</p>
         {aiLog.length === 0 ? (
           <p className="t-faint">No AI assistance recorded for this engagement.</p>
         ) : (
@@ -68,15 +68,15 @@ export default async function ValidationPage({ params }: { params: Promise<{ id:
         <dl className="outcome-legend t-faint">
           <div>
             <dt className="t-system">ok</dt>
-            <dd>The model call succeeded and returned valid, parseable content.</dd>
+            <dd>The call succeeded and returned valid content.</dd>
           </div>
           <div>
             <dt className="t-system">timeout</dt>
-            <dd>The call ran past the configured time limit; no result was used.</dd>
+            <dd>The call exceeded the time limit; no result was used.</dd>
           </div>
           <div>
             <dt className="t-system">fallback</dt>
-            <dd>The call failed (rate limit, error, malformed, or unconfigured) and a person completed the step by hand.</dd>
+            <dd>The call failed; a person completed the step by hand.</dd>
           </div>
           <div>
             <dt className="t-system">error</dt>
@@ -84,8 +84,8 @@ export default async function ValidationPage({ params }: { params: Promise<{ id:
           </div>
         </dl>
         <p className="t-faint">
-          Outcome describes whether the AI <em>call</em> ran — not whether its suggestion was accepted. Acceptance is the
-          separate &ldquo;Human decision&rdquo; column.
+          Outcome is whether the AI <em>call</em> ran, not whether its suggestion was accepted. Acceptance is the
+          &ldquo;Human decision&rdquo; column.
         </p>
       </section>
 

@@ -108,7 +108,7 @@ export function JourneyEditor({
     setStages(drafted);
     setNeedsReview(true);
     setReviewed(false);
-    setMessage("AI draft loaded. Review and rebuild every stage, then take ownership to enable saving.");
+    setMessage("AI draft loaded. Review each stage, then check the box below to save.");
   }
 
   async function save() {
@@ -178,8 +178,8 @@ export function JourneyEditor({
 
       {hasAiDraft && (
         <div className="ai-banner">
-          <span className="ai-mark">AI draft — not yet yours</span>
-          <span>Rebuild each field in your own account of the service. Editing a field marks it as yours.</span>
+          <span className="ai-mark">AI draft</span>
+          <span>Review each field. Editing a field marks it as reviewed.</span>
         </div>
       )}
 
@@ -234,7 +234,7 @@ export function JourneyEditor({
       {needsReview && (
         <label className="row">
           <input type="checkbox" checked={reviewed} onChange={(e) => setReviewed(e.target.checked)} style={{ width: "auto" }} />
-          <span>I have reviewed the AI draft and take ownership of this map.</span>
+          <span>I have reviewed the AI draft.</span>
         </label>
       )}
 

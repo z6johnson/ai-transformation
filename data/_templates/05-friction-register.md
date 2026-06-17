@@ -2,9 +2,9 @@
 
 **Layer 1 · Lifecycle Map · Template 05**
 
-This is the running log of where the service has friction. It is one of the two things Layer 1 hands forward (the other is the list of decisions), and it is the honest account the Mapping stage is judged on. Layer 2 weighs opportunity against friction, so a vague register produces vague opportunities. Keep it grounded in evidence, not impression.
+This is the running log of where the service has friction. It is one of the two things Layer 1 hands forward (the other is the list of decisions), and the Mapping stage is judged on it. Layer 2 weighs opportunity against friction, so a vague register produces vague opportunities. Keep it grounded in evidence, not impression.
 
-Build it as you go. Every interview, every observation, every breaking point in the blueprint, every exception in the process is a possible entry. AI drafts possible entries from the tagged interviews, each carrying the words that prompted it; you keep, merge, or cut them. Log first, refine later.
+Build it as you go. Every interview, every observation, every breaking point in the blueprint, every exception in the process is a possible entry. AI drafts possible entries from the tagged interviews, each showing the words that prompted it; you keep, merge, or cut them. Log first, refine later.
 
 ---
 
@@ -57,12 +57,12 @@ Once the register has some body, group related friction. Clusters often show tha
 
 - **Cluster: [name]**: friction [FR-IDs], shared root: [what connects them]
 
-## The honest account
+## Friction summary
 
-When mapping is nearly done, write the plain-language summary of where this service has the most friction. Three to five sentences, no hedging, owned by the lead. This one is a person's to write, not the AI's: the summary call is yours to make and stand behind. This is what goes into the validation packet and what the lifecycle owner reacts to.
+When mapping is nearly done, write a plain-language summary of where this service has the most friction. Three to five sentences. The lead writes this, not the AI. It goes into the validation packet, and the lifecycle owner reacts to it.
 
 [summary]
 
 ## Where this goes next
 
-Pointed to across the journey map (02), blueprint (03), and process documentation (04). The full register and the honest account carry into Layer 2 through the validation packet (06), where opportunities get named against the friction logged here.
+Pointed to across the journey map (02), blueprint (03), and process documentation (04). The full register and the friction summary carry into Layer 2 through the validation packet (06), where opportunities get named against the friction logged here.

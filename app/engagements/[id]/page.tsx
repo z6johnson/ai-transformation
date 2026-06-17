@@ -33,7 +33,7 @@ export default async function EngagementPage({ params }: { params: Promise<{ id:
       </nav>
 
       <header className="stack">
-        <div className="row" style={{ justifyContent: "space-between", alignItems: "baseline" }}>
+        <div className="row row--between row--baseline">
           <div className="t-system">{STAGE_LABELS[engagement.stage]} · Layer 1</div>
           <a className="btn btn--text" href={`/engagements/${id}/edit`}>
             Edit details

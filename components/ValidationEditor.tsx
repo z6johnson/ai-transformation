@@ -72,7 +72,6 @@ export function ValidationEditor({
               type="checkbox"
               checked={d.coverageCheck[k]}
               onChange={(e) => setD({ ...d, coverageCheck: { ...d.coverageCheck, [k]: e.target.checked } })}
-              style={{ width: "auto" }}
             />
             <span>{label}</span>
           </label>
@@ -122,16 +121,16 @@ export function ValidationEditor({
             <span className="t-system">Lifecycle owner</span>
             <input type="text" value={d.signOff.ownerName} onChange={(e) => setD({ ...d, signOff: { ...d.signOff, ownerName: e.target.value } })} />
           </label>
-          <label className="row" style={{ alignItems: "end" }}>
-            <input type="checkbox" checked={d.signOff.ownerSigned} onChange={(e) => setD({ ...d, signOff: { ...d.signOff, ownerSigned: e.target.checked } })} style={{ width: "auto" }} />
+          <label className="row row--end">
+            <input type="checkbox" checked={d.signOff.ownerSigned} onChange={(e) => setD({ ...d, signOff: { ...d.signOff, ownerSigned: e.target.checked } })} />
             <span>Owner has signed</span>
           </label>
           <label className="field">
             <span className="t-system">Lead</span>
             <input type="text" value={d.signOff.leadName} onChange={(e) => setD({ ...d, signOff: { ...d.signOff, leadName: e.target.value } })} />
           </label>
-          <label className="row" style={{ alignItems: "end" }}>
-            <input type="checkbox" checked={d.signOff.leadSubmitted} onChange={(e) => setD({ ...d, signOff: { ...d.signOff, leadSubmitted: e.target.checked } })} style={{ width: "auto" }} />
+          <label className="row row--end">
+            <input type="checkbox" checked={d.signOff.leadSubmitted} onChange={(e) => setD({ ...d, signOff: { ...d.signOff, leadSubmitted: e.target.checked } })} />
             <span>Lead has submitted</span>
           </label>
         </div>

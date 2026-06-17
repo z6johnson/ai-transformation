@@ -233,7 +233,7 @@ export function JourneyEditor({
 
       {needsReview && (
         <label className="row">
-          <input type="checkbox" checked={reviewed} onChange={(e) => setReviewed(e.target.checked)} style={{ width: "auto" }} />
+          <input type="checkbox" checked={reviewed} onChange={(e) => setReviewed(e.target.checked)} />
           <span>I have reviewed the AI draft.</span>
         </label>
       )}

@@ -42,12 +42,16 @@ export function StageStepper({ engagement, baseSha }: { engagement: Engagement; 
 
   return (
     <section className="card stack">
-      <div className="row" style={{ flexWrap: "wrap", gap: "var(--space-2)" }}>
+      <div className="stage-steps">
         {STAGES.map((s, i) => {
           const state = i < currentIndex ? "done" : i === currentIndex ? "current" : "todo";
           return (
             <span key={s} className="tag-chip t-system" aria-current={state === "current" ? "step" : undefined}>
-              <span style={{ opacity: state === "todo" ? 0.5 : 1, fontWeight: state === "current" ? 600 : 400 }}>
+              <span
+                className={`stage-steps__item${
+                  state === "current" ? " stage-steps__item--current" : state === "todo" ? " stage-steps__item--todo" : ""
+                }`}
+              >
                 {i + 1}. {STAGE_LABELS[s]}
               </span>
             </span>

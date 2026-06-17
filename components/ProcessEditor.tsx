@@ -75,7 +75,7 @@ export function ProcessEditor({
         ))}
       </fieldset>
 
-      <div className="row" style={{ justifyContent: "space-between" }}>
+      <div className="row row--between">
         <h2 className="t-heading">Steps</h2>
         <button
           className="btn"

@@ -27,7 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <span>AI Transformation Practice · UC San Diego</span>
             <span aria-hidden="true">·</span>
             <span>Layer 1 mapping · Beta</span>
-            <span style={{ marginLeft: "auto" }}>AI drafts; a person confirms.</span>
+            <span className="push-end">AI drafts; a person confirms.</span>
           </footer>
         </div>
       </body>

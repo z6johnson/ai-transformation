@@ -179,8 +179,8 @@ export function FrictionEditor({
             <span>Each shows the words that prompted it. Keep or cut.</span>
           </div>
           {draftCandidates.map((c) => (
-            <div key={c.id} className="card row" style={{ justifyContent: "space-between", flexWrap: "wrap" }}>
-              <div className="stack" style={{ flex: 1, minWidth: "18rem" }}>
+            <div key={c.id} className="card row row--between row--wrap">
+              <div className="stack grow grow--min">
                 <span>
                   <span className="tag-chip">{c.type}</span> {c.whatsWrong}
                 </span>
@@ -259,7 +259,7 @@ export function FrictionEditor({
       </section>
 
       <section className="stack">
-        <div className="row" style={{ justifyContent: "space-between" }}>
+        <div className="row row--between">
           <h2 className="t-heading">Clusters</h2>
           <button className="btn" onClick={cluster} disabled={busy !== "idle"}>
             {busy === "clustering" ? "Clustering…" : "Cluster friction"}

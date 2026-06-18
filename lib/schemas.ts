@@ -128,13 +128,15 @@ export const JourneyStage = z.object({
 
 export const JourneyMap = Envelope.extend({
   data: z.object({
-    header: z.object({
-      service: z.string().default(""),
-      scope: z.string().default(""),
-      person: z.string().default(""),
-      others: z.string().default(""),
-      sources: z.array(z.string()).default([]),
-    }),
+    header: z
+      .object({
+        service: z.string().default(""),
+        scope: z.string().default(""),
+        person: z.string().default(""),
+        others: z.string().default(""),
+        sources: z.array(z.string()).default([]),
+      })
+      .default({}),
     stages: z.array(JourneyStage).default([]),
     momentsThatMatter: z.array(z.object({ moment: z.string(), why: z.string() })).default([]),
     dropoutPoints: z.array(z.object({ point: z.string(), what: z.string() })).default([]),
@@ -168,7 +170,7 @@ export const Decision = z.object({
 
 export const Blueprint = Envelope.extend({
   data: z.object({
-    header: z.object({ service: z.string().default(""), scope: z.string().default(""), lead: z.string().default("") }),
+    header: z.object({ service: z.string().default(""), scope: z.string().default(""), lead: z.string().default("") }).default({}),
     stageRows: z
       .array(
         z.object({
@@ -203,7 +205,7 @@ export const Blueprint = Envelope.extend({
 
 export const ProcessDoc = Envelope.extend({
   data: z.object({
-    header: z.object({ service: z.string().default(""), scope: z.string().default(""), stages: z.string().default("") }),
+    header: z.object({ service: z.string().default(""), scope: z.string().default(""), stages: z.string().default("") }).default({}),
     steps: z
       .array(
         z.object({
@@ -253,7 +255,7 @@ export type FrictionEntry = z.infer<typeof FrictionEntry>;
 
 export const FrictionRegister = Envelope.extend({
   data: z.object({
-    header: z.object({ service: z.string().default(""), scope: z.string().default(""), lead: z.string().default("") }),
+    header: z.object({ service: z.string().default(""), scope: z.string().default(""), lead: z.string().default("") }).default({}),
     entries: z.array(FrictionEntry).default([]),
     clusters: z
       .array(
@@ -274,13 +276,15 @@ export const FrictionRegister = Envelope.extend({
 
 export const ValidationPacket = Envelope.extend({
   data: z.object({
-    header: z.object({
-      service: z.string().default(""),
-      scope: z.string().default(""),
-      lifecycleOwner: z.object({ name: z.string().default(""), role: z.string().default("") }),
-      businessOwners: z.string().default(""),
-      lead: z.string().default(""),
-    }),
+    header: z
+      .object({
+        service: z.string().default(""),
+        scope: z.string().default(""),
+        lifecycleOwner: z.object({ name: z.string().default(""), role: z.string().default("") }).default({}),
+        businessOwners: z.string().default(""),
+        lead: z.string().default(""),
+      })
+      .default({}),
     coverageCheck: z
       .object({
         scopeAligned: z.boolean().default(false),
@@ -325,7 +329,7 @@ export const ValidationPacket = Envelope.extend({
  */
 export const Level1Report = Envelope.extend({
   data: z.object({
-    header: z.object({ service: z.string().default(""), scope: z.string().default(""), lead: z.string().default("") }),
+    header: z.object({ service: z.string().default(""), scope: z.string().default(""), lead: z.string().default("") }).default({}),
     synthesis: z
       .object({
         whereItStands: Provenanced,

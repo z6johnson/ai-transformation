@@ -9,6 +9,7 @@ const FILENAMES: Record<ArtifactId, string> = {
   "04": "04-process-doc.json",
   "05": "05-friction-register.json",
   "06": "06-validation-packet.json",
+  "07": "07-level-1-report.json",
   measures: "measures.json",
 };
 

@@ -87,3 +87,75 @@ export const DRAFT_FRICTION = {
     ];
   },
 };
+
+export const DRAFT_BLUEPRINT = {
+  id: "draft-blueprint.v1",
+  build(context: string) {
+    return [
+      { role: "system" as const, content: COMMON_GUARDRAIL },
+      {
+        role: "user" as const,
+        content:
+          `From these tagged interview notes and the confirmed journey stages, draft the operations view of the service blueprint: ` +
+          `the handoffs, the decisions, and the systems and data behind the service. Use the tags as your guide: ` +
+          `HAND-tagged passages are handoffs (work, information, or responsibility moving between people, units, or systems); ` +
+          `DEC-tagged passages are decisions (a judgment, approval, routing, or qualification call); ` +
+          `TOUCH-tagged passages and any system mentioned point to systems and data. Line each item up with the journey stage it belongs to. ` +
+          `For a decision, set "kind" to "clear-cut" when a rule decides it and "judgment" when a person uses discretion. ` +
+          `Do not invent facts not in the notes; leave blanks empty. Describe the service as it is and name no fixes.\n` +
+          `Return JSON: {"handoffs":[{"stage":"","from":"","to":"","whatMoves":"","how":"","whatBreaks":""}],` +
+          `"decisions":[{"stage":"","decision":"","whoDecides":"","decidesOn":"","basis":"","failurePath":"","kind":"judgment"}],` +
+          `"systems":[{"name":"","usedFor":"","dataHeld":"","owner":"","connectsTo":""}]}.\n\n` +
+          `CONTEXT:\n${context}`,
+      },
+    ];
+  },
+};
+
+export const DRAFT_PROCESS = {
+  id: "draft-process.v1",
+  build(context: string) {
+    return [
+      { role: "system" as const, content: COMMON_GUARDRAIL },
+      {
+        role: "user" as const,
+        content:
+          `From these tagged interview notes and the confirmed journey and blueprint, draft the step-by-step process underneath the blueprint: ` +
+          `one row per step, in the order they happen. For each step give what happens, what sets it off (trigger), who does it, the system used, ` +
+          `the rule or standard it runs under, the hands-on time, the wait time, and what goes wrong. Line steps up with the journey stages and ` +
+          `the blueprint's handoffs, decisions, and systems. Keep people's own words. Do not invent facts; leave blanks empty. ` +
+          `State what goes wrong, never a fix.\n` +
+          `Return JSON: {"steps":[{"step":"","trigger":"","who":"","system":"","rule":"","handsOnTime":"","waitTime":"","whatGoesWrong":""}]}.\n\n` +
+          `CONTEXT:\n${context}`,
+      },
+    ];
+  },
+};
+
+export const DRAFT_REPORT = {
+  id: "draft-report.v1",
+  build(mapSummary: string) {
+    return [
+      {
+        role: "system" as const,
+        content:
+          COMMON_GUARDRAIL +
+          " This is a Layer 1 briefing that leads into the Design phase. Synthesize only what the confirmed map already says. " +
+          "Name no opportunities, fixes, or redesigns — naming opportunities is the next phase's job, done by people. " +
+          "Restate the friction and the decisions descriptively so the design phase has a clean lead-in.",
+      },
+      {
+        role: "user" as const,
+        content:
+          `From this confirmed lifecycle map, draft a short briefing for the design phase. Write four plain-language sections, each a few sentences:\n` +
+          `- whereItStands: what the map shows overall — the shape of the service and where it concentrates effort.\n` +
+          `- frictionPatterns: how the friction clusters relate, where it concentrates, and who feels it.\n` +
+          `- decisionsForDesign: restate the decisions (D-) the design phase will weigh, descriptively. Propose nothing.\n` +
+          `- openQuestions: what is still unsettled or unknown from the map.\n` +
+          `Tie everything to the map below; add no new facts and name no fixes.\n` +
+          `Return JSON: {"whereItStands":"","frictionPatterns":"","decisionsForDesign":"","openQuestions":""}.\n\n` +
+          `CONFIRMED MAP:\n${mapSummary}`,
+      },
+    ];
+  },
+};

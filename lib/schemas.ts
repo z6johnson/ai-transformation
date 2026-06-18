@@ -25,7 +25,7 @@ export const Provenanced = z.object({
 });
 export type Provenanced = z.infer<typeof Provenanced>;
 
-export const ARTIFACT_IDS = ["00", "01", "02", "03", "04", "05", "06", "measures"] as const;
+export const ARTIFACT_IDS = ["00", "01", "02", "03", "04", "05", "06", "07", "measures"] as const;
 export type ArtifactId = (typeof ARTIFACT_IDS)[number];
 
 export const ArtifactStatus = z.enum(["draft", "in-review", "confirmed"]);
@@ -190,6 +190,8 @@ export const Blueprint = Envelope.extend({
           dataHeld: z.string().default(""),
           owner: z.string().default(""),
           connectsTo: z.string().default(""),
+          // Provenance so an AI-drafted system carries a visible mark (responsible-AI §2).
+          origin: Origin.default("human"),
         }),
       )
       .default([]),
@@ -312,6 +314,31 @@ export const ValidationPacket = Envelope.extend({
   }),
 });
 
+// ---- 07 Level 1 report (design briefing) ----------------------------------
+
+/**
+ * The lead-in briefing that hands the Mapping stage off to Design (Layer 2). The page
+ * assembles the read-only roll-up from the confirmed artifacts (02/03/05/06) at render
+ * time; this artifact stores only what is authored ON the report — a short synthesis
+ * that a human reviews. Per template 00, the synthesis stays descriptive: it names where
+ * friction concentrates and restates the decisions carried forward, but proposes no fix.
+ */
+export const Level1Report = Envelope.extend({
+  data: z.object({
+    header: z.object({ service: z.string().default(""), scope: z.string().default(""), lead: z.string().default("") }),
+    synthesis: z
+      .object({
+        whereItStands: Provenanced,
+        frictionPatterns: Provenanced,
+        decisionsForDesign: Provenanced,
+        openQuestions: Provenanced,
+      })
+      .default({ whereItStands: {}, frictionPatterns: {}, decisionsForDesign: {}, openQuestions: {} }),
+    generatedAt: z.string().default(""),
+  }),
+});
+export type Level1Report = z.infer<typeof Level1Report>;
+
 // ---- Measures (executive dashboard) ---------------------------------------
 
 export const IMPACT_DIMENSIONS = [
@@ -365,6 +392,7 @@ export const ARTIFACT_SCHEMAS = {
   "04": ProcessDoc,
   "05": FrictionRegister,
   "06": ValidationPacket,
+  "07": Level1Report,
   measures: Measures,
 } as const;
 
@@ -376,5 +404,6 @@ export const ARTIFACT_LABELS: Record<ArtifactId, string> = {
   "04": "Process Documentation",
   "05": "Friction Register",
   "06": "Validation Packet",
+  "07": "Level 1 Report",
   measures: "Measures",
 };

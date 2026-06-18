@@ -554,3 +554,23 @@ ul.card-grid {
   border-color: var(--color-ink);
   background: var(--color-bg-sunken);
 }
+
+/* Level 1 report: print to PDF cleanly. Editing controls and chrome drop out;
+   the assembled briefing and its synthesis remain. */
+@media print {
+  .no-print,
+  .breadcrumb,
+  .template-nav,
+  .stage-steps,
+  nav {
+    display: none !important;
+  }
+  .card {
+    border: var(--border-hairline) solid var(--color-ink);
+    break-inside: avoid;
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+}

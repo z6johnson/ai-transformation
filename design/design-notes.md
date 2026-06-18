@@ -29,3 +29,18 @@ principles and the reasons for them. Keep it short; a long list signals drift.
   AI-provenance) are the only color. Each is paired with text and/or weight so color is
   never the sole carrier of meaning (style guide §0, §2). The AI-provenance accent
   (`--status-ai`) marks AI-originated content and is always accompanied by a text label.
+
+## Form & motion
+
+- **Minimal corner radius.** Bounded surfaces (cards, controls, inputs, chips, banners,
+  nav items) carry a 3px radius via `--radius`. Style guide §89 permits radius "minimal or
+  zero"; this is the minimal end, chosen to soften the interface slightly without reading
+  as a different identity. Circular markers (the stage-stepper number) keep `50%`.
+
+- **Restrained hover micro-interactions.** Interactive surfaces (cards in grids, header
+  nav, template/artifact nav, the stage stepper, buttons) ease on hover/active rather than
+  snapping. Feedback is achromatic — border-color and background shifts only — and routed
+  through the existing `--motion-*` / `--easing` tokens, so `prefers-reduced-motion`
+  zeroes it automatically. No decorative shadows and no layout movement are introduced:
+  per style guide §91, shadows remain reserved for genuine elevation (e.g. a modal), and
+  motion "confirms, does not perform."

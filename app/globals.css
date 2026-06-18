@@ -36,6 +36,7 @@ a {
   color: inherit;
   text-decoration: underline;
   text-underline-offset: 2px;
+  transition: color var(--motion-fast) var(--easing);
 }
 
 /* Focus — always visible, high contrast (style guide §0, §6) */
@@ -95,6 +96,11 @@ a {
 }
 .site-header nav a {
   text-decoration: none;
+  color: var(--color-ink-muted);
+}
+.site-header nav a:hover {
+  color: var(--color-ink);
+  text-decoration: underline;
 }
 .brand {
   display: flex;
@@ -124,8 +130,10 @@ main {
 /* Cards / sections */
 .card {
   border: var(--border-hairline) solid var(--color-border-hairline);
+  border-radius: var(--radius);
   padding: var(--space-4);
   background: var(--color-bg);
+  transition: border-color var(--motion-base) var(--easing);
 }
 .card--accent {
   border-left: var(--border-strong) solid var(--color-ink);
@@ -188,13 +196,18 @@ main {
   min-height: 2.25rem;
   padding: var(--space-2) var(--space-4);
   border: var(--border-hairline) solid var(--color-ink);
+  border-radius: var(--radius);
   background: var(--color-bg);
   color: var(--color-ink);
   cursor: pointer;
-  transition: background var(--motion-fast) var(--easing), color var(--motion-fast) var(--easing);
+  transition: background var(--motion-fast) var(--easing), color var(--motion-fast) var(--easing),
+    border-color var(--motion-fast) var(--easing);
 }
 .btn:hover {
   background: var(--color-bg-sunken);
+}
+.btn:active {
+  background: var(--color-border-hairline);
 }
 .btn--primary {
   background: var(--color-ink);
@@ -202,6 +215,9 @@ main {
 }
 .btn--primary:hover {
   background: var(--color-gray-700, var(--gray-700));
+}
+.btn--primary:active {
+  background: var(--gray-600);
 }
 .btn--text {
   border-color: transparent;
@@ -235,6 +251,7 @@ select {
   width: 100%;
   padding: var(--space-2);
   border: var(--border-hairline) solid var(--color-border-strong);
+  border-radius: var(--radius);
   background: var(--color-bg);
   font-size: 0.9375rem;
 }
@@ -283,9 +300,11 @@ th {
   background: var(--status-ai-bg);
   padding: 0 var(--space-1);
   border: var(--border-hairline) solid var(--status-ai);
+  border-radius: var(--radius);
 }
 .ai-banner {
   border: var(--border-hairline) solid var(--status-ai);
+  border-radius: var(--radius);
   background: var(--status-ai-bg);
   color: var(--status-ai);
   padding: var(--space-2) var(--space-3);
@@ -295,6 +314,7 @@ th {
 }
 .notice {
   border: var(--border-hairline) solid var(--status-attention);
+  border-radius: var(--radius);
   background: var(--status-attention-bg);
   color: var(--status-attention);
   padding: var(--space-2) var(--space-3);
@@ -306,6 +326,7 @@ th {
   letter-spacing: var(--tracking-system);
   font-weight: var(--weight-bold);
   border: var(--border-hairline) solid var(--color-ink);
+  border-radius: var(--radius);
   padding: 0 var(--space-1);
 }
 .delta-up {
@@ -350,10 +371,13 @@ th {
   gap: var(--space-3);
   padding: var(--space-2) var(--space-3);
   border: var(--border-hairline) solid var(--color-border-hairline);
+  border-radius: var(--radius);
   text-decoration: none;
+  transition: background var(--motion-fast) var(--easing), border-color var(--motion-fast) var(--easing);
 }
 .artifact-nav a:hover {
   background: var(--color-bg-sunken);
+  border-color: var(--color-border-strong);
 }
 
 /* Template sub-menu: jump between the six templates from any template page. */
@@ -366,12 +390,16 @@ th {
 .template-nav a {
   padding: var(--space-1) var(--space-2);
   border: var(--border-hairline) solid var(--color-border-hairline);
+  border-radius: var(--radius);
   font-size: var(--font-size-system);
   text-decoration: none;
   color: var(--color-ink-muted);
+  transition: background var(--motion-fast) var(--easing), border-color var(--motion-fast) var(--easing),
+    color var(--motion-fast) var(--easing);
 }
 .template-nav a:hover {
   background: var(--color-bg-sunken);
+  border-color: var(--color-border-strong);
 }
 .template-nav a.is-active {
   border-color: var(--color-ink);
@@ -389,6 +417,11 @@ th {
   align-items: stretch;
   gap: var(--space-2);
   border: var(--border-hairline) solid var(--color-border-hairline);
+  border-radius: var(--radius);
+  transition: border-color var(--motion-fast) var(--easing);
+}
+.template-row:hover {
+  border-color: var(--color-border-strong);
 }
 .template-row > a {
   flex: 1;
@@ -397,6 +430,7 @@ th {
   gap: var(--space-3);
   padding: var(--space-2) var(--space-3);
   text-decoration: none;
+  transition: background var(--motion-fast) var(--easing);
 }
 .template-row > a:hover {
   background: var(--color-bg-sunken);
@@ -421,6 +455,9 @@ ul.card-grid {
 }
 .card-grid__item {
   cursor: grab;
+}
+.card-grid__item:hover {
+  border-color: var(--color-border-strong);
 }
 .card-grid__item.is-dragging {
   opacity: 0.5;
@@ -511,15 +548,19 @@ ul.card-grid {
   gap: var(--space-2);
   padding: var(--space-1) var(--space-3);
   border: var(--border-hairline) solid var(--color-border-hairline);
+  border-radius: var(--radius);
   font-size: var(--font-size-system);
   text-transform: uppercase;
   letter-spacing: var(--tracking-system);
   font-weight: var(--weight-medium);
   text-decoration: none;
   color: var(--color-ink-muted);
+  transition: background var(--motion-fast) var(--easing), border-color var(--motion-fast) var(--easing),
+    color var(--motion-fast) var(--easing);
 }
 .stage-steps__item:hover {
   background: var(--color-bg-sunken);
+  border-color: var(--color-border-strong);
 }
 .stage-steps__marker {
   display: inline-flex;

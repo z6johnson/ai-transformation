@@ -52,7 +52,7 @@
   --font-sans: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", "Liberation Mono", Menlo, monospace;
 
-  --font-size-display: 2rem;     /* primary signal / page title */
+  --font-size-display: 2.25rem;  /* primary signal / page title */
   --font-size-heading: 1.375rem; /* section heads */
   --font-size-subhead: 1.0625rem;
   --font-size-body: 1rem;        /* reading register */
@@ -84,7 +84,7 @@
   --footer-height: 2.25rem;
   --border-hairline: 1px;
   --border-strong: 2px;
-  --radius: 0; /* Swiss posture: minimal/zero radius */
+  --radius: 3px; /* Swiss posture: minimal radius (style guide §89 "minimal or zero") */
 
   /* ---- Motion (confirms, does not perform) ---- */
   --motion-fast: 120ms;

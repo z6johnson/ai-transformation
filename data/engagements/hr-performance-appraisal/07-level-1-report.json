@@ -1,0 +1,34 @@
+{
+  "artifactId": "07",
+  "engagementId": "hr-performance-appraisal",
+  "status": "in-review",
+  "updatedAt": "2026-06-18T17:58:48.813Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": true,
+  "data": {
+    "header": {
+      "service": "",
+      "scope": "",
+      "lead": ""
+    },
+    "synthesis": {
+      "whereItStands": {
+        "value": "The UC San Diego Staff Performance Appraisal runs from setting expectations through a signed appraisal filed in the personnel file, across six stages and three systems (SPA, UC Learning Center, personnel file). The map shows a service whose effort is heavily concentrated at the back end: almost all drafting, employee comment time, HR clearance, and signature-chasing collide in the final two weeks before the COB June 15 deadline. The two moments that matter most — the appraisal conversation and rating in stage 4, and the submission or skipping of the self-appraisal in stage 3 — sit on either side of the cycle's midpoint, yet both are shaped by conditions that build up across the earlier stages. The front half of the cycle (setting expectations, doing the work) generates relatively little concentrated effort in the map; the back half absorbs nearly all of it.",
+        "origin": "ai-applied"
+      },
+      "frictionPatterns": {
+        "value": "Three friction clusters are identified and they are interrelated. The deadline crunch (FR-01, FR-07) means that leaders drafting large batches and employees awaiting comment time are all competing for the same narrow window; leaders feel this as volume pressure and employees feel it as compressed or lost response time (FR-06). The thin evidence base (FR-02, FR-05) concentrates in stages 1 through 3: standards are set against stale job descriptions and the self-appraisal — the employee's primary input — is optional and frequently skipped, so by the time the rating is written the record it rests on is often incomplete; this friction is felt most directly in the quality of the draft the leader must produce. The opaque back half (FR-03, FR-04) begins the moment the draft leaves the employee's hands at stage 5: the employee loses visibility entirely and routes around the system by emailing their leader for status, while signatures are chased one at a time over email with no routing support. A lower-frequency friction (FR-08) concerns employees who change roles mid-cycle; when the leader handoff is missed they may be evaluated against the wrong scope of work, but this was rare in the observed cycle.",
+        "origin": "ai-applied"
+      },
+      "decisionsForDesign": {
+        "value": "The map carries five decisions into the design phase. D-01 (which appraisal model to use, Model A or Model B) and D-02 (whether the employee is included in this annual cycle) are described as clear-cut and are resolved early. D-03 (which leader evaluates an employee who changed roles mid-cycle) is a judgment call whose resolution depends on a handoff that the map shows is sometimes missed (FR-08). D-04 (the overall performance rating and narrative) is the highest-stakes judgment in the cycle and the one the employee most remembers; the map shows it is made under deadline pressure and often without a self-appraisal or current job description to draw on. D-05 (whether the draft is ready to move to HR Review) is a judgment call that, when made close to the deadline, directly compresses the time the employee is owed to comment (FR-06) and initiates the visibility loss documented in FR-03.",
+        "origin": "ai-applied"
+      },
+      "openQuestions": {
+        "value": "Two open questions are carried forward from the map. First, whether represented (Model B) staff experience the same back-half opacity documented for other employees is only partially covered: one of two represented employees was interviewed, so the map's account of stage 5 visibility for that group is incomplete. Second, the mid-cycle job-change path — the scenario behind D-03 and FR-08 — is documented from HR's account but was not observed in a live case this cycle, so how that path actually moves through the stages and systems in practice is not confirmed by direct observation.",
+        "origin": "ai-applied"
+      }
+    },
+    "generatedAt": "2026-06-18T17:58:47.440Z"
+  }
+}

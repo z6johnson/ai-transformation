@@ -104,8 +104,21 @@ export default async function EngagementPage({
       {activeStage === "design" && (
         <section className="stack">
           <h2 className="t-heading">Design</h2>
+          <div className="card stack">
+            <p className="t-system">Level 1 report — the lead-in briefing</p>
+            <p className="t-muted">
+              The Level 1 report pulls the confirmed map together — the journey at a glance, the decisions Design will
+              weigh, the systems behind the service, and where it has friction — with a short synthesis drafted from the
+              map and reviewed by hand. Read it first; it is what Design works against.
+            </p>
+            <div className="row">
+              <a className="btn btn--primary" href={`/engagements/${id}/report`}>
+                Open Level 1 report
+              </a>
+            </div>
+          </div>
           <div className="card card--accent stack">
-            <p className="t-system">Not built yet</p>
+            <p className="t-system">Design workspace — not built yet</p>
             <p className="t-muted">
               Design is where the confirmed Layer 1 map turns into proposed changes — reworked steps, removed handoffs,
               and decisions to redesign — each traced back to the friction it addresses. There is no Design workspace in

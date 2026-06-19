@@ -202,3 +202,29 @@ export const DRAFT_REPORT = {
     ];
   },
 };
+
+export const MODEL_TO_MAP = {
+  id: "model-to-map.v1",
+  build(processDigest: string) {
+    return [
+      { role: "system" as const, content: COMMON_GUARDRAIL },
+      {
+        role: "user" as const,
+        content:
+          `Read this step-by-step process documentation and interpret it as a BPMN flow graph for a process map. ` +
+          `Produce one "task" node per step (a short, plain name taken from what happens). Add a single "startEvent" ` +
+          `at the front (named from the first step's trigger) and an "endEvent" at the close. Where a step describes a ` +
+          `decision, approval, routing, or a failure/exception path (look at the rule and what goes wrong), add an ` +
+          `"exclusiveGateway" node and label its outgoing flows (e.g. "yes"/"no", "approved"/"returned"). Group nodes ` +
+          `into lanes by who does the work (one lane per distinct role). Connect the nodes with flows in the order the ` +
+          `steps happen. Use ONLY these node types: startEvent, task, exclusiveGateway, endEvent. Give every node a ` +
+          `stable id. Do not invent steps, roles, or branches that the documentation does not support; describe the ` +
+          `process as it is and name no fixes.\n` +
+          `Return JSON: {"lanes":[{"id":"L1","name":""}],` +
+          `"nodes":[{"id":"N1","type":"task","name":"","lane":"L1"}],` +
+          `"flows":[{"source":"N1","target":"N2","name":""}]}.\n\n` +
+          `PROCESS:\n${processDigest}`,
+      },
+    ];
+  },
+};

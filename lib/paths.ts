@@ -19,3 +19,11 @@ export const artifactFile = (id: string, artifact: ArtifactId) => `${engagementD
 export const aiLogFile = (id: string) => `${engagementDir(id)}/_ai-log.jsonl`;
 export const ENGAGEMENTS_ROOT = "data/engagements";
 export const FRAMEWORK_ROOT = "data/framework";
+
+// Reference Library — baseline policy/procedure/historical documents for the unit.
+// The documents file is human-browsable; the index is machine-generated (kept separate
+// so browsing never loads vectors); gap-analysis holds the human-confirmed findings.
+export const libraryDir = (id: string) => `${engagementDir(id)}/_library`;
+export const libraryDocsFile = (id: string) => `${libraryDir(id)}/documents.json`;
+export const libraryIndexFile = (id: string) => `${libraryDir(id)}/index.json`;
+export const gapAnalysisFile = (id: string) => `${libraryDir(id)}/gap-analysis.json`;

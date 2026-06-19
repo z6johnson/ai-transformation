@@ -145,7 +145,7 @@ export function JourneyEditor({
 
   return (
     <div className="stack-lg">
-      <fieldset className="card grid grid--2">
+      <fieldset className="card grid grid--3">
         <legend className="t-system">Map header</legend>
         {(
           [
@@ -233,7 +233,7 @@ export function JourneyEditor({
         <button className="btn btn--primary" onClick={save} disabled={saveDisabled}>
           {busy === "saving" ? "Saving…" : "Save journey map"}
         </button>
-        <span className="t-faint t-system">Status: {status}</span>
+        <span className="t-faint t-system">Status: <span className="t-mono">{status}</span></span>
       </div>
     </div>
   );

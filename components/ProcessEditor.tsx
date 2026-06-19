@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { saveArtifact, callAi } from "@/lib/client";
 import type { AiMeta } from "@/lib/ai-meta";
+import { graphToBpmnXml, processToBpmnFilename, type BpmnGraph } from "@/lib/bpmn";
+import { downloadTextFile } from "@/lib/download";
 import { SortableCards } from "./SortableCards";
 
 type Origin = "human" | "ai-draft" | "ai-applied" | "ai-confirmed";
@@ -36,7 +38,7 @@ export function ProcessEditor({
   const [header, setHeader] = useState(initial.header);
   const [steps, setSteps] = useState<Step[]>(initial.steps as Step[]);
   const [sha, setSha] = useState(baseSha);
-  const [busy, setBusy] = useState<"idle" | "drafting" | "saving">("idle");
+  const [busy, setBusy] = useState<"idle" | "drafting" | "saving" | "mapping">("idle");
   const [message, setMessage] = useState("");
   const [draftMeta, setDraftMeta] = useState<AiMeta | null>(null);
 
@@ -75,6 +77,23 @@ export function ProcessEditor({
       })),
     ]);
     setMessage("AI applied a draft from the interviews, journey, and blueprint. Edit any field to replace it, or remove steps that don't hold.");
+  }
+
+  async function modelToMap() {
+    setBusy("mapping");
+    setMessage("");
+    const res = await callAi<{ degraded: boolean; graph: BpmnGraph | null; message?: string }>(
+      "/api/ai/model-to-map",
+      { engagementId, header, steps },
+    );
+    setBusy("idle");
+    if (res.degraded || !res.graph) {
+      setMessage(res.message || "No map returned. Build the map by hand.");
+      return;
+    }
+    const xml = graphToBpmnXml(res.graph);
+    downloadTextFile(processToBpmnFilename(engagementId), xml);
+    setMessage("BPMN map downloaded — import it into ProMap or any BPMN tool.");
   }
 
   async function save() {
@@ -138,6 +157,10 @@ export function ProcessEditor({
           }
         >
           + Add step by hand
+        </button>
+        <button className="btn" onClick={modelToMap} disabled={busy !== "idle" || steps.length === 0}>
+          {busy === "mapping" ? "Mapping…" : "Model to Map"}
+          <span className="ai-mark" aria-hidden="true">AI</span>
         </button>
       </div>
 

@@ -74,6 +74,12 @@ a {
 .t-faint {
   color: var(--color-ink-faint);
 }
+/* Monospace register for identifiers and metadata (FR-01, INT-02, status) — leans
+   into the field-notebook feel using the existing mono token, no new family. */
+.t-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum" 1;
+}
 
 /* Layout shell */
 .shell {
@@ -113,7 +119,11 @@ main {
   width: 100%;
   max-width: var(--layout-max-width);
   margin: 0 auto;
-  padding: var(--space-6) var(--layout-page-padding) var(--space-8);
+  padding: var(--space-5) var(--layout-page-padding) var(--space-6);
+  /* Field-notebook surface: a faint dot lattice in the page gutters. Cards keep a
+     solid white fill, so dots never sit behind text or form fields. */
+  background-image: var(--dot-bg);
+  background-size: var(--dot-gap) var(--dot-gap);
 }
 .site-footer {
   min-height: var(--footer-height);
@@ -131,7 +141,7 @@ main {
 .card {
   border: var(--border-hairline) solid var(--color-border-hairline);
   border-radius: var(--radius);
-  padding: var(--space-4);
+  padding: var(--card-pad);
   background: var(--color-bg);
   transition: border-color var(--motion-base) var(--easing);
 }
@@ -142,7 +152,7 @@ main {
   margin-top: var(--space-3);
 }
 .stack-lg > * + * {
-  margin-top: var(--space-6);
+  margin-top: var(--space-5);
 }
 .row {
   display: flex;
@@ -183,6 +193,9 @@ main {
   .grid--2 {
     grid-template-columns: 1fr 1fr;
   }
+  .grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
   .grid--4 {
     grid-template-columns: repeat(4, 1fr);
   }
@@ -193,7 +206,7 @@ main {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  min-height: 2.25rem;
+  min-height: 2rem;
   padding: var(--space-2) var(--space-4);
   border: var(--border-hairline) solid var(--color-ink);
   border-radius: var(--radius);
@@ -234,9 +247,15 @@ main {
 label {
   display: block;
 }
+/* Field-notebook field: label sits tight over its control on a small fixed gap,
+   so a column of fields reads as a dense ledger rather than a sparse form. */
+.field {
+  display: grid;
+  gap: var(--field-gap);
+}
 .field > .t-system {
   display: block;
-  margin-bottom: var(--space-1);
+  margin-bottom: 0;
   /* Calmer text-box labels: drop the uppercase/bold/tracking so they recede. */
   font-size: 0.8125rem;
   text-transform: none;
@@ -253,12 +272,38 @@ select {
   border: var(--border-hairline) solid var(--color-border-strong);
   border-radius: var(--radius);
   background: var(--color-bg);
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
+}
+/* Cap free-standing controls to a readable measure so they don't stretch toward
+   the 1120px page width. Inside grids and entry cards they fill their cell again
+   (the resets below). */
+.field input[type="text"],
+.field input[type="number"],
+.field input[type="date"],
+.field select {
+  max-width: var(--measure-input);
 }
 textarea {
   resize: vertical;
   min-height: 6rem;
+  max-width: var(--measure-prose);
   font-family: var(--font-sans);
+}
+/* In a multi-column grid or an entry card, controls fill the cell — the cell width
+   already provides the measure. */
+.grid .field input[type="text"],
+.grid .field input[type="number"],
+.grid .field input[type="date"],
+.grid .field select,
+.card-grid__item .field input[type="text"],
+.card-grid__item .field input[type="number"],
+.card-grid__item .field input[type="date"],
+.card-grid__item .field select,
+.entry-card .field input[type="text"],
+.entry-card .field input[type="number"],
+.entry-card .field input[type="date"],
+.entry-card .field select {
+  max-width: none;
 }
 /* Checkboxes/radios are excluded from the width:100% rule above; keep them at
    their natural size inside .row labels without a per-instance inline style. */
@@ -439,7 +484,7 @@ th {
 /* Compact sortable card grid (journey stages, process steps). */
 .card-grid {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--card-grid-gap);
   grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
 }
 /* When the grid is a list (e.g. the engagement list), reset list chrome. */
@@ -483,6 +528,11 @@ ul.card-grid {
 .card-grid__controls .btn {
   line-height: 1;
   padding: 0 var(--space-1);
+  /* Keep the reorder controls at the WCAG 2.2 minimum touch target (24×24 CSS px)
+     even as the surrounding grid tightens. */
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  justify-content: center;
 }
 .card-cols-toggle {
   display: inline-flex;
@@ -505,8 +555,17 @@ ul.card-grid {
 .entry-card textarea {
   min-height: 0;
   max-height: 9rem;
+  max-width: none; /* fill the card; the cell provides the measure */
   overflow-y: auto;
   resize: none;
+}
+
+/* Ruled ledger separators between stacked fields inside entry cards — the
+   field-notebook register where one rule divides each line of capture. */
+.card-grid__item .field + .field,
+.entry-card .field + .field {
+  border-top: var(--border-hairline) solid var(--field-rule);
+  padding-top: var(--field-gap);
 }
 
 /* Outcome legend under the "How AI was used" table. */
@@ -605,6 +664,9 @@ ul.card-grid {
   .stage-steps,
   nav {
     display: none !important;
+  }
+  main {
+    background-image: none; /* drop the dot lattice for clean printed reports */
   }
   .card {
     border: var(--border-hairline) solid var(--color-ink);

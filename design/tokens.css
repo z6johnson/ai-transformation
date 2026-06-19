@@ -52,14 +52,14 @@
   --font-sans: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", "Liberation Mono", Menlo, monospace;
 
-  --font-size-display: 2.25rem;  /* primary signal / page title */
-  --font-size-heading: 1.375rem; /* section heads */
-  --font-size-subhead: 1.0625rem;
-  --font-size-body: 1rem;        /* reading register */
+  --font-size-display: 1.75rem;  /* primary signal / page title */
+  --font-size-heading: 1.125rem; /* section heads */
+  --font-size-subhead: 0.9375rem;
+  --font-size-body: 0.875rem;    /* reading register (dense-tool: 14px) */
   --font-size-system: 0.75rem;   /* labels / metadata, uppercase, tracked */
 
   --line-height-tight: 1.2;
-  --line-height-body: 1.6;
+  --line-height-body: 1.5;
   --tracking-system: 0.08em;
   --tracking-display: -0.01em;
 
@@ -80,11 +80,29 @@
   /* ---- Layout ---- */
   --layout-max-width: 1120px;
   --layout-page-padding: var(--space-5);
-  --header-height: 3.5rem;
+  --header-height: 3rem;
   --footer-height: 2.25rem;
   --border-hairline: 1px;
   --border-strong: 2px;
   --radius: 3px; /* Swiss posture: minimal radius (style guide §89 "minimal or zero") */
+
+  /* ---- Field-tool density (field-notebook calibration; see design-notes.md) ---- */
+  /* Measure caps stop free-standing inputs from stretching to --layout-max-width;
+     a field tool reads as a dense ledger, not a sparse form. */
+  --measure-input: 22rem;  /* identity inputs (names, dates, short fields) */
+  --measure-prose: 36rem;  /* roomy prose textareas (raw notes, summaries) */
+  --field-gap: var(--space-2);        /* label → input, and between ruled fields */
+  --card-pad: var(--space-3);         /* tighter than --space-4 cards */
+  --card-grid-gap: var(--space-3);    /* tighter gutters between entry cards */
+  --field-rule: var(--color-border-hairline); /* ledger separator between fields */
+
+  /* ---- Dot-matrix field-notebook texture (achromatic; never behind text) ---- */
+  /* --gray-200 on white is ~1.1:1 — purely textural, cannot reduce contrast. The
+     pattern sits on the page gutters only; cards stay solid white over it. */
+  --dot-color: var(--gray-200);
+  --dot-size: 1px;
+  --dot-gap: var(--space-5); /* 24px lattice */
+  --dot-bg: radial-gradient(circle at 1px 1px, var(--dot-color) var(--dot-size), transparent 0);
 
   /* ---- Motion (confirms, does not perform) ---- */
   --motion-fast: 120ms;

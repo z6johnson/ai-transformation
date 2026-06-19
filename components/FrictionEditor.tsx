@@ -137,7 +137,7 @@ export function FrictionEditor({
 
   return (
     <div className="stack-lg">
-      <fieldset className="card grid grid--2">
+      <fieldset className="card grid grid--3">
         <legend className="t-system">Register header</legend>
         {(
           [
@@ -173,7 +173,7 @@ export function FrictionEditor({
           entries.map((e, i) => (
             <fieldset key={e.id} className="card card--accent stack entry-card">
               <legend className="t-system">
-                {e.id}{" "}
+                <span className="t-mono">{e.id}</span>{" "}
                 {e.origin === "ai-applied" ? (
                   <span className="ai-mark">AI-applied</span>
                 ) : (
@@ -253,7 +253,7 @@ export function FrictionEditor({
                 c.origin !== "human" && <span className="ai-mark">AI draft</span>
               )}
               <p className="t-muted">Shared root: {c.sharedRoot || "—"}</p>
-              <p className="t-faint t-system">{c.frIds.join(", ")}</p>
+              <p className="t-faint t-system t-mono">{c.frIds.join(", ")}</p>
               <button className="btn btn--text" onClick={() => setClusters((prev) => prev.filter((_, idx) => idx !== i))}>
                 Remove
               </button>
@@ -274,7 +274,7 @@ export function FrictionEditor({
         <button className="btn btn--primary" onClick={save} disabled={busy !== "idle"}>
           {busy === "saving" ? "Saving…" : "Save register"}
         </button>
-        <span className="t-faint t-system">Status: {status}</span>
+        <span className="t-faint t-system">Status: <span className="t-mono">{status}</span></span>
       </div>
     </div>
   );

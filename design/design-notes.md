@@ -7,7 +7,15 @@ principles and the reasons for them. Keep it short; a long list signals drift.
 
 - **Dense-tool calibration.** This is a working tool, not a reading-first product,
   so a single sans-serif family is used throughout (style guide §1 permits this for
-  "dense tools and dashboards"). Spacing runs tight on an 8px base.
+  "dense tools and dashboards"). Spacing runs tight on an 8px base. The type scale is
+  tightened one step from the seed defaults — 14px body (`--font-size-body: 0.875rem`)
+  at a 1.5 line-height, with the display/heading/subhead sizes scaled to match —
+  benchmarked against dense working UIs so more capture fits on screen. This is the same
+  Swiss posture at a denser calibration: still exactly five active type sizes, body
+  line-height stays within the style guide's 1.5–1.7 range, all sizes remain in `rem` so
+  user zoom and font-size preferences still win, and vertical chrome (page padding,
+  inter-section rhythm, header and button heights) is compressed in step while button
+  touch targets stay at/above the WCAG 2.2 24px floor.
 
 - **Field-notebook density.** The template editors are field-capture surfaces a
   consultant fills in alongside live interviews, so they are calibrated denser than a

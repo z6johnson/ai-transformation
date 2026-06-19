@@ -119,7 +119,7 @@ main {
   width: 100%;
   max-width: var(--layout-max-width);
   margin: 0 auto;
-  padding: var(--space-6) var(--layout-page-padding) var(--space-8);
+  padding: var(--space-5) var(--layout-page-padding) var(--space-6);
   /* Field-notebook surface: a faint dot lattice in the page gutters. Cards keep a
      solid white fill, so dots never sit behind text or form fields. */
   background-image: var(--dot-bg);
@@ -152,7 +152,7 @@ main {
   margin-top: var(--space-3);
 }
 .stack-lg > * + * {
-  margin-top: var(--space-6);
+  margin-top: var(--space-5);
 }
 .row {
   display: flex;
@@ -206,7 +206,7 @@ main {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  min-height: 2.25rem;
+  min-height: 2rem;
   padding: var(--space-2) var(--space-4);
   border: var(--border-hairline) solid var(--color-ink);
   border-radius: var(--radius);
@@ -272,7 +272,7 @@ select {
   border: var(--border-hairline) solid var(--color-border-strong);
   border-radius: var(--radius);
   background: var(--color-bg);
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
 }
 /* Cap free-standing controls to a readable measure so they don't stretch toward
    the 1120px page width. Inside grids and entry cards they fill their cell again

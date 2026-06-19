@@ -9,6 +9,30 @@ principles and the reasons for them. Keep it short; a long list signals drift.
   so a single sans-serif family is used throughout (style guide §1 permits this for
   "dense tools and dashboards"). Spacing runs tight on an 8px base.
 
+- **Field-notebook density.** The template editors are field-capture surfaces a
+  consultant fills in alongside live interviews, so they are calibrated denser than a
+  generic form (same Swiss posture, tighter calibration — style guide §4). Entry-card
+  padding and the card-grid gutter drop from 16px to 12px (`--card-pad`,
+  `--card-grid-gap`); `.field` becomes a tight label-over-control grid on `--field-gap`
+  (8px); and stacked fields inside entry cards carry a hairline ledger rule between them
+  (`--field-rule`). Free-standing inputs are capped to a readable measure
+  (`--measure-input` 22rem; `--measure-prose` 36rem for prose textareas) so they no
+  longer stretch to the 1120px page width — inside grids and entry cards they fill their
+  cell as before. Identifiers and short metadata (FR-/INT- ids, status) use a `.t-mono`
+  register on the existing `--font-mono` token (no new family or color). All values are
+  named tokens on the 8px base; touch targets stay at the WCAG 2.2 floor (the reorder
+  controls are pinned to 24×24 CSS px) and the type scale is unchanged.
+
+- **Dot-matrix page texture.** The page surface (`main`) carries a faint achromatic
+  dot lattice (`--dot-bg`: a 1px `--gray-200` dot on a 24px grid) to evoke a field
+  notebook. This is a deliberate, documented exception to "earn every visual element"
+  (§3): it communicates the field-capture register of the tool. It is kept safe by
+  construction — `--gray-200` on white is ~1.1:1, purely textural, and it sits only in
+  the page gutters because cards keep a solid white fill, so dots never fall behind text
+  or form fields and cannot affect contrast. The pattern is static (no motion, so
+  `prefers-reduced-motion` has nothing to disable) and is dropped entirely in print so
+  reports stay clean.
+
 ## Accepted architectural trade-offs
 
 - **Storage is the GitHub Contents API, not a database.** The repo is the system of

@@ -86,6 +86,24 @@
   --border-strong: 2px;
   --radius: 3px; /* Swiss posture: minimal radius (style guide §89 "minimal or zero") */
 
+  /* ---- Field-tool density (field-notebook calibration; see design-notes.md) ---- */
+  /* Measure caps stop free-standing inputs from stretching to --layout-max-width;
+     a field tool reads as a dense ledger, not a sparse form. */
+  --measure-input: 22rem;  /* identity inputs (names, dates, short fields) */
+  --measure-prose: 36rem;  /* roomy prose textareas (raw notes, summaries) */
+  --field-gap: var(--space-2);        /* label → input, and between ruled fields */
+  --card-pad: var(--space-3);         /* tighter than --space-4 cards */
+  --card-grid-gap: var(--space-3);    /* tighter gutters between entry cards */
+  --field-rule: var(--color-border-hairline); /* ledger separator between fields */
+
+  /* ---- Dot-matrix field-notebook texture (achromatic; never behind text) ---- */
+  /* --gray-200 on white is ~1.1:1 — purely textural, cannot reduce contrast. The
+     pattern sits on the page gutters only; cards stay solid white over it. */
+  --dot-color: var(--gray-200);
+  --dot-size: 1px;
+  --dot-gap: var(--space-5); /* 24px lattice */
+  --dot-bg: radial-gradient(circle at 1px 1px, var(--dot-color) var(--dot-size), transparent 0);
+
   /* ---- Motion (confirms, does not perform) ---- */
   --motion-fast: 120ms;
   --motion-base: 200ms;

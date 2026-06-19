@@ -62,3 +62,49 @@ export async function callAi<T>(path: string, body: unknown): Promise<T> {
   });
   return (await res.json()) as T;
 }
+
+/** Generic JSON save to a non-artifact store (reference library, gap analysis). */
+async function saveJson(path: string, body: unknown): Promise<SaveResult> {
+  try {
+    const res = await fetch(path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const json = await res.json();
+    if (!res.ok) return { ok: false, error: json.error || "Save failed", conflict: json.code === "conflict" };
+    return { ok: true, sha: json.sha };
+  } catch (err) {
+    return { ok: false, error: err instanceof Error ? err.message : "Network error" };
+  }
+}
+
+export function saveLibrary(args: { engagementId: string; payload: unknown; baseSha: string | null }): Promise<SaveResult> {
+  return saveJson("/api/library/save", args);
+}
+
+export function saveGapAnalysis(args: { engagementId: string; payload: unknown; baseSha: string | null }): Promise<SaveResult> {
+  return saveJson("/api/library/gap", args);
+}
+
+export type ParsedUpload = {
+  filename: string;
+  text: string;
+  source: {
+    format: string;
+    bytes: number;
+    parser: string;
+    pages?: number;
+    parseWarnings: string[];
+    piiRedactions: number;
+  };
+  error?: string;
+};
+
+/** Upload a document file for server-side parsing (PDF/DOCX/txt/md). */
+export async function parseDocumentFile(file: File): Promise<ParsedUpload> {
+  const form = new FormData();
+  form.append("file", file);
+  const res = await fetch("/api/library/parse", { method: "POST", body: form });
+  return (await res.json()) as ParsedUpload;
+}

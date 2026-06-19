@@ -85,6 +85,20 @@ export default async function EngagementPage({
 
       {activeStage === "mapping" && (
         <>
+          <section className="card stack">
+            <div className="row row--between row--baseline">
+              <p className="t-system">Reference Library — baseline input</p>
+              <a className="btn btn--text" href={`/engagements/${id}/library`}>
+                Open Reference Library
+              </a>
+            </div>
+            <p className="t-muted">
+              The unit&apos;s existing policies, procedures, and historical context — the documented baseline. Load them
+              here so the lead has them on hand and the model can ground tagging, drafting, and a documented-vs-actual gap
+              analysis. The map remains the ground truth for how the service actually runs.
+            </p>
+          </section>
+
           <section className="stack">
             <h2 className="t-heading">Templates</h2>
             <p className="t-faint">01 and 06 are fixed. Reorder 02–05 by dragging the handle or using ▲/▼.</p>

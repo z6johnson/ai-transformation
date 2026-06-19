@@ -132,6 +132,49 @@ export const DRAFT_PROCESS = {
   },
 };
 
+/**
+ * Format retrieved reference passages as a clearly-labeled baseline block. The label is
+ * load-bearing: it tells the model these passages describe what is SUPPOSED to happen
+ * (per written policy/procedure, possibly outdated), never what does — the interviews and
+ * confirmed map remain the ground truth. Each passage keeps its [chunkId] ref for tracing.
+ */
+export function baselineBlock(passages: { ref: string; text: string }[]): string {
+  if (!passages.length) return "";
+  const body = passages.map((p) => `[${p.ref}] ${p.text}`).join("\n\n");
+  return (
+    "=== DOCUMENTED BASELINE (reference only — what the written policy/procedure SAYS should happen; " +
+    `may be outdated; NOT ground truth) ===\n${body}`
+  );
+}
+
+export const GAP_ANALYSIS = {
+  id: "gap-analysis.v1",
+  build(mapSummary: string, baseline: string) {
+    return [
+      {
+        role: "system" as const,
+        content:
+          COMMON_GUARDRAIL +
+          " The DOCUMENTED BASELINE describes what is SUPPOSED to happen per policy/procedure and may be outdated; " +
+          "it is NOT ground truth. The interviews and confirmed map are the primary account of what ACTUALLY happens. " +
+          "Contrast the two descriptively and name where they diverge. Name no fixes, assign no blame, and do not " +
+          "declare either side 'right'.",
+      },
+      {
+        role: "user" as const,
+        content:
+          `Compare the DOCUMENTED BASELINE against the AS-IS MAP and list where they diverge. For each divergence give: ` +
+          `the area (a journey stage or part of the service); what the baseline says should happen (documentedBaseline); ` +
+          `what actually happens per the map (actualPractice); a short descriptive contrast (divergence); the baseline ` +
+          `passage refs it draws on (baselineRefs, e.g. "DOC-01#3"); and the map refs (mapRefs). Only include divergences ` +
+          `grounded in BOTH sources. If the baseline is silent on something, do not invent it; if the two agree, omit it.\n` +
+          `Return JSON: {"findings":[{"area":"","documentedBaseline":"","actualPractice":"","divergence":"","baselineRefs":[],"mapRefs":[]}]}.\n\n` +
+          `=== AS-IS MAP (ground truth — what actually happens) ===\n${mapSummary}\n\n${baseline}`,
+      },
+    ];
+  },
+};
+
 export const DRAFT_REPORT = {
   id: "draft-report.v1",
   build(mapSummary: string) {

@@ -35,6 +35,16 @@ export function modelForFeature(feature: "tagging" | "draft" | "cluster"): strin
   return process.env.TRITONAI_MODEL_REASONING || defaultModel();
 }
 
+/** The embeddings model, if one is provisioned. "" means none → callers fall back to lexical. */
+export function embeddingModel(): string {
+  return process.env.TRITONAI_MODEL_EMBED || "";
+}
+
+/** Embeddings are usable only when the AI is configured AND an embeddings model is set. */
+export function isEmbeddingsConfigured(): boolean {
+  return isAiConfigured() && Boolean(embeddingModel());
+}
+
 type Msg = { role: "system" | "user" | "assistant"; content: string };
 
 export async function callModel(args: {
@@ -107,6 +117,73 @@ export async function callModel(args: {
 function backoff(attempt: number): Promise<void> {
   const ms = attempt === 1 ? 250 : 1000;
   return new Promise((r) => setTimeout(r, ms));
+}
+
+export type EmbeddingsResult =
+  | { ok: true; vectors: number[][]; modelVersion: string; latencyMs: number }
+  | { ok: false; reason: "timeout" | "rate" | "malformed" | "error" | "unconfigured"; latencyMs: number };
+
+/**
+ * Embeddings sibling of callModel — same OpenAI-compatible endpoint, same timeout/retry/
+ * fallback discipline. Hits `/embeddings` with TRITONAI_MODEL_EMBED. Returns ok:false when
+ * no embeddings model is configured (or on failure) so the index build degrades to lexical
+ * retrieval rather than blocking: embeddings never block retrieval.
+ */
+export async function callEmbeddings(args: { input: string[]; model?: string }): Promise<EmbeddingsResult> {
+  const started = Date.now();
+  const model = args.model || embeddingModel();
+  if (!isAiConfigured() || !model) return { ok: false, reason: "unconfigured", latencyMs: 0 };
+  if (!args.input.length) return { ok: true, vectors: [], modelVersion: model, latencyMs: 0 };
+
+  const base = process.env.TRITONAI_BASE_URL!.replace(/\/$/, "");
+  const timeoutMs = Number(process.env.AI_TIMEOUT_MS || 25000);
+  const maxAttempts = 3;
+  let lastReason: "error" | "rate" | "timeout" = "error";
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const res = await fetch(`${base}/embeddings`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.TRITONAI_API_KEY}`,
+        },
+        body: JSON.stringify({ model, input: args.input }),
+        signal: controller.signal,
+      });
+      clearTimeout(timer);
+
+      if (res.status === 429 || res.status >= 500) {
+        lastReason = res.status === 429 ? "rate" : "error";
+        if (attempt < maxAttempts) {
+          await backoff(attempt);
+          continue;
+        }
+        return { ok: false, reason: lastReason, latencyMs: Date.now() - started };
+      }
+      if (!res.ok) return { ok: false, reason: "error", latencyMs: Date.now() - started };
+
+      const json = (await res.json()) as { data?: Array<{ embedding?: number[]; index?: number }>; model?: string };
+      const rows = json.data;
+      if (!rows || rows.length !== args.input.length) return { ok: false, reason: "malformed", latencyMs: Date.now() - started };
+      const sorted = [...rows].sort((a, b) => (a.index ?? 0) - (b.index ?? 0));
+      const vectors = sorted.map((r) => r.embedding || []);
+      if (vectors.some((v) => !v.length)) return { ok: false, reason: "malformed", latencyMs: Date.now() - started };
+      return { ok: true, vectors, modelVersion: json.model || model, latencyMs: Date.now() - started };
+    } catch (err: unknown) {
+      clearTimeout(timer);
+      const isAbort = err instanceof Error && err.name === "AbortError";
+      lastReason = isAbort ? "timeout" : "error";
+      if (attempt < maxAttempts && isAbort) {
+        await backoff(attempt);
+        continue;
+      }
+      return { ok: false, reason: lastReason, latencyMs: Date.now() - started };
+    }
+  }
+  return { ok: false, reason: lastReason, latencyMs: Date.now() - started };
 }
 
 /** Extract a JSON object from model content, tolerating code fences. Null on failure. */

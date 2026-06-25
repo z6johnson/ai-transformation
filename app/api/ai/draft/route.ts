@@ -1,20 +1,28 @@
 /**
- * Draft a first cut of a downstream artifact from the tagged interviews and the
- * confirmed upstream artifacts. Reads from the repo, redacts PII, calls the model, and
- * returns the draft. Never auto-saved here — the client applies it (marked ai-applied)
+ * Draft a first cut of a downstream artifact from the tagged interviews, the confirmed
+ * upstream artifacts, and — optionally — the confirmed reference-library synthesis as a
+ * clearly-labeled documented baseline. Reads from the repo, redacts PII, calls the model,
+ * and returns the draft. Never auto-saved here — the client applies it (marked ai-applied)
  * and the human edits or removes any of it before saving.
  *
  *   journey   ← interviews (01)
- *   friction  ← interviews (01)
  *   blueprint ← interviews (01) + journey (02)
  *   process   ← interviews (01) + journey (02) + blueprint (03)
+ *   friction  ← interviews (01) + journey (02) + blueprint (03)
+ *
+ * When `useBaseline` is set and a confirmed library synthesis exists, its sections are
+ * appended LAST as a "documented baseline (reference only — NOT ground truth)" block. The
+ * baseline never fills a drafted field; it only lets the model surface coverage gaps into a
+ * separate `coverageNotes` array. Ordering (interviews → confirmed upstream → baseline) and
+ * the baseline label keep the interviews the sole source of asserted facts.
  */
 import { NextRequest, NextResponse } from "next/server";
 import { callModel, parseJsonLoose, isAiConfigured, modelForFeature } from "@/lib/tritonai";
 import { redactPII } from "@/lib/pii";
-import { DRAFT_JOURNEY, DRAFT_FRICTION, DRAFT_BLUEPRINT, DRAFT_PROCESS } from "@/lib/prompts";
+import { DRAFT_JOURNEY, DRAFT_FRICTION, DRAFT_BLUEPRINT, DRAFT_PROCESS, baselineBlock } from "@/lib/prompts";
 import { metaFromResult } from "@/lib/ai-meta";
 import { loadArtifact } from "@/lib/store";
+import { loadSynthesis } from "@/lib/library-store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -50,9 +58,10 @@ function blueprintDigest(bp: {
 }
 
 export async function POST(req: NextRequest) {
-  const { engagementId, target } = (await req.json().catch(() => ({}))) as {
+  const { engagementId, target, useBaseline } = (await req.json().catch(() => ({}))) as {
     engagementId?: string;
     target?: Target;
+    useBaseline?: boolean;
   };
   if (!engagementId || !target || !TARGETS.includes(target)) {
     return NextResponse.json({ error: `engagementId and target (${TARGETS.join("|")}) are required` }, { status: 400 });
@@ -75,37 +84,53 @@ export async function POST(req: NextRequest) {
     })
     .join("\n\n");
 
-  // Downstream targets are also informed by the confirmed upstream artifacts.
+  // Tier 2 — confirmed upstream artifacts. Journey informs every downstream target; the
+  // blueprint additionally informs process and friction. Load what's needed in parallel.
+  const needJourney = target !== "journey";
+  const needBlueprint = target === "process" || target === "friction";
+  const [journey, blueprint, synthesis] = await Promise.all([
+    needJourney ? loadArtifact(engagementId, "02") : Promise.resolve(null),
+    needBlueprint ? loadArtifact(engagementId, "03") : Promise.resolve(null),
+    useBaseline ? loadSynthesis(engagementId).then((r) => r.data) : Promise.resolve(null),
+  ]);
+
   let context = taggedNotes;
-  if (target === "blueprint" || target === "process") {
-    const journey = await loadArtifact(engagementId, "02");
-    context += `\n\n=== CONFIRMED JOURNEY STAGES ===\n${journeyDigest(journey.data.data.stages)}`;
-  }
-  if (target === "process") {
-    const blueprint = await loadArtifact(engagementId, "03");
-    context += `\n\n=== CONFIRMED BLUEPRINT ===\n${blueprintDigest(blueprint.data.data)}`;
+  if (journey) context += `\n\n=== CONFIRMED JOURNEY STAGES ===\n${journeyDigest(journey.data.data.stages)}`;
+  if (blueprint) context += `\n\n=== CONFIRMED BLUEPRINT ===\n${blueprintDigest(blueprint.data.data)}`;
+
+  // Tier 3 — documented baseline, appended LAST and clearly labeled. Reference only; it can
+  // only seed coverageNotes, never a drafted field (enforced in the prompt's system message).
+  const baselineSections = (synthesis?.data.sections || []).filter((s) => s.heading || s.body);
+  const withBaseline = baselineSections.length > 0;
+  if (withBaseline) {
+    const passages = baselineSections.map((s) => ({ ref: s.id, text: `${s.heading}: ${s.body}`.trim() }));
+    context += `\n\n${baselineBlock(passages)}`;
   }
 
   const { text, redactions } = redactPII(context);
-  const inputSummary = `${interviews.length} interview(s), ${text.length} chars, ${redactions} PII redaction(s)`;
+  const inputSummary =
+    `${interviews.length} interview(s), ${text.length} chars, ${redactions} PII redaction(s)` +
+    (withBaseline ? `, +${baselineSections.length} baseline section(s)` : "");
 
   const prompt = PROMPTS[target];
+  const promptId = withBaseline ? `${prompt.id}+baseline` : prompt.id;
   const model = modelForFeature("draft");
-  const result = await callModel({ messages: prompt.build(text), jsonObject: true, model });
+  const result = await callModel({ messages: prompt.build(text, withBaseline), jsonObject: true, model });
 
   if (!result.ok) {
-    const meta = metaFromResult({ result, promptId: prompt.id, model, inputSummary, outputSummary: "no output" });
+    const meta = metaFromResult({ result, promptId, model, inputSummary, outputSummary: "no output" });
     return NextResponse.json({ degraded: true, draft: null, aiMeta: meta, message: "AI assist is unavailable. Build by hand." });
   }
 
   const draft = parseJsonLoose<Record<string, unknown>>(result.content);
   const count = countItems(target, draft);
+  const coverage = Array.isArray(draft?.coverageNotes) ? (draft!.coverageNotes as unknown[]).length : 0;
   const meta = metaFromResult({
     result,
-    promptId: prompt.id,
+    promptId,
     model,
     inputSummary,
-    outputSummary: `${target} draft, ${count} item(s)`,
+    outputSummary: `${target} draft, ${count} item(s)${withBaseline ? `, ${coverage} coverage note(s)` : ""}`,
   });
 
   return NextResponse.json({ degraded: false, draft, aiMeta: meta });

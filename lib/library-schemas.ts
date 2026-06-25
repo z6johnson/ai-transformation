@@ -103,3 +103,38 @@ export const GapAnalysis = Envelope.omit({ artifactId: true }).extend({
     .default({ findings: [], generatedAt: "", retrievalMode: "none" }),
 });
 export type GapAnalysis = z.infer<typeof GapAnalysis>;
+
+/**
+ * One section of the documented-baseline synthesis: a faithful, descriptive summary of what
+ * the reference documents SAY should happen. It is baseline only — never a statement of what
+ * actually happens (that is the as-is map). `baselineRefs` are the chunkIds it draws on, so
+ * every claim traces back to a passage, exactly like a GapFinding.
+ */
+export const SynthesisSection = z.object({
+  id: z.string(), // "SEC-01"
+  heading: z.string().default(""),
+  body: z.string().default(""),
+  baselineRefs: z.array(z.string()).default([]), // chunkIds, e.g. "DOC-01#3"
+  origin: Origin.default("ai-draft"),
+  promptId: z.string().optional(),
+  confirmedBy: z.string().optional(),
+  confirmedAt: z.string().optional(),
+});
+export type SynthesisSection = z.infer<typeof SynthesisSection>;
+
+/**
+ * The human-confirmed synthesis of the reference library. A reusable, audited summary of the
+ * documented baseline that the mapping drafts can read as clearly-labeled, lower-weight
+ * context (reference only — never ground truth). Envelope-shaped for audit consistency.
+ */
+export const LibrarySynthesis = Envelope.omit({ artifactId: true }).extend({
+  data: z
+    .object({
+      sections: z.array(SynthesisSection).default([]),
+      summary: z.string().default(""),
+      generatedAt: z.string().default(""),
+      retrievalMode: z.enum(["embeddings", "lexical", "none"]).default("none"),
+    })
+    .default({ sections: [], summary: "", generatedAt: "", retrievalMode: "none" }),
+});
+export type LibrarySynthesis = z.infer<typeof LibrarySynthesis>;

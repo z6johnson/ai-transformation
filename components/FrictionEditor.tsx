@@ -5,6 +5,7 @@ import { saveArtifact, callAi } from "@/lib/client";
 import type { FrictionEntry } from "@/lib/schemas";
 import { FRICTION_TYPES } from "@/lib/schemas";
 import type { AiMeta } from "@/lib/ai-meta";
+import { BaselineToggle, CoverageNotesPanel, toCoverageNotes, type CoverageNote } from "./CoverageNotes";
 
 type Cluster = { name: string; frIds: string[]; sharedRoot: string; origin: "human" | "ai-draft" | "ai-applied" | "ai-confirmed" };
 type FrictionData = {
@@ -35,11 +36,13 @@ export function FrictionEditor({
   initial,
   baseSha,
   status,
+  hasSynthesis = false,
 }: {
   engagementId: string;
   initial: FrictionData;
   baseSha: string | null;
   status: string;
+  hasSynthesis?: boolean;
 }) {
   const [header, setHeader] = useState(initial.header);
   const [entries, setEntries] = useState<FrictionEntry[]>(initial.entries);
@@ -49,6 +52,8 @@ export function FrictionEditor({
   const [busy, setBusy] = useState<"idle" | "drafting" | "clustering" | "saving">("idle");
   const [message, setMessage] = useState("");
   const [lastMeta, setLastMeta] = useState<AiMeta | null>(null);
+  const [useBaseline, setUseBaseline] = useState(hasSynthesis);
+  const [coverage, setCoverage] = useState<CoverageNote[]>([]);
 
   function setEntry(i: number, patch: Partial<FrictionEntry>) {
     setEntries((prev) => prev.map((e, idx) => (idx === i ? { ...e, ...patch } : e)));
@@ -57,12 +62,13 @@ export function FrictionEditor({
   async function draftEntries() {
     setBusy("drafting");
     setMessage("");
-    const res = await callAi<{ degraded: boolean; draft: { entries?: Array<Record<string, string>> } | null; aiMeta?: AiMeta; message?: string }>(
+    const res = await callAi<{ degraded: boolean; draft: { entries?: Array<Record<string, string>>; coverageNotes?: unknown } | null; aiMeta?: AiMeta; message?: string }>(
       "/api/ai/draft",
-      { engagementId, target: "friction" },
+      { engagementId, target: "friction", useBaseline },
     );
     setBusy("idle");
     setLastMeta(res.aiMeta || null);
+    setCoverage(toCoverageNotes(res.draft?.coverageNotes));
     if (res.degraded || !res.draft?.entries?.length) {
       setMessage(res.message || "No candidates returned. Log friction by hand.");
       return;
@@ -161,9 +167,12 @@ export function FrictionEditor({
         <button className="btn" onClick={() => setEntries((prev) => [...prev, emptyEntry(prev.length + 1)])}>
           + Add entry by hand
         </button>
+        <BaselineToggle show={hasSynthesis} checked={useBaseline} disabled={busy !== "idle"} onChange={setUseBaseline} />
       </div>
 
       {message && <p className="notice">{message}</p>}
+
+      <CoverageNotesPanel notes={coverage} />
 
       <section className="stack">
         <h2 className="t-heading">Register</h2>

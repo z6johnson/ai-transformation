@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { isStorageConfigured } from "@/lib/github";
 import { loadEngagement, loadArtifact } from "@/lib/store";
+import { loadSynthesis } from "@/lib/library-store";
 import { SetupNotice } from "@/components/SetupNotice";
 import { TemplateNav } from "@/components/TemplateNav";
 import { BlueprintEditor } from "@/components/BlueprintEditor";
@@ -12,7 +13,8 @@ export default async function BlueprintPage({ params }: { params: Promise<{ id: 
   if (!isStorageConfigured()) return <SetupNotice what="storage" />;
   const engagement = await loadEngagement(id);
   if (!engagement) notFound();
-  const { data, sha } = await loadArtifact(id, "03");
+  const [{ data, sha }, synthesis] = await Promise.all([loadArtifact(id, "03"), loadSynthesis(id)]);
+  const hasSynthesis = synthesis.data.data.sections.length > 0;
 
   return (
     <div className="stack-lg">
@@ -32,7 +34,7 @@ export default async function BlueprintPage({ params }: { params: Promise<{ id: 
           judgment call on each decision feeds Layer 3 guardrails.
         </p>
       </header>
-      <BlueprintEditor engagementId={id} initial={data.data} baseSha={sha} status={data.status} />
+      <BlueprintEditor engagementId={id} initial={data.data} baseSha={sha} status={data.status} hasSynthesis={hasSynthesis} />
     </div>
   );
 }

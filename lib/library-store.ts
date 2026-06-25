@@ -4,8 +4,8 @@
  * for the optimistic-concurrency round-trip on save. Server-only.
  */
 import { getJson } from "./github";
-import { libraryDocsFile, libraryIndexFile, gapAnalysisFile } from "./paths";
-import { ReferenceLibrary, LibraryIndex, GapAnalysis } from "./library-schemas";
+import { libraryDocsFile, libraryIndexFile, gapAnalysisFile, librarySynthesisFile } from "./paths";
+import { ReferenceLibrary, LibraryIndex, GapAnalysis, LibrarySynthesis } from "./library-schemas";
 import type { z } from "zod";
 
 export type Loaded<T> = { data: T; sha: string | null };
@@ -31,5 +31,13 @@ export async function loadGapAnalysis(id: string): Promise<Loaded<z.infer<typeof
   const raw = await getJson<unknown>(gapAnalysisFile(id));
   if (!raw) return { data: empty(), sha: null };
   const parsed = GapAnalysis.safeParse(raw.data);
+  return { data: parsed.success ? parsed.data : empty(), sha: raw.sha };
+}
+
+export async function loadSynthesis(id: string): Promise<Loaded<z.infer<typeof LibrarySynthesis>>> {
+  const empty = () => LibrarySynthesis.parse({ engagementId: id, data: {} });
+  const raw = await getJson<unknown>(librarySynthesisFile(id));
+  if (!raw) return { data: empty(), sha: null };
+  const parsed = LibrarySynthesis.safeParse(raw.data);
   return { data: parsed.success ? parsed.data : empty(), sha: raw.sha };
 }

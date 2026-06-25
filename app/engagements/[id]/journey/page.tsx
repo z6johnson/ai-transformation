@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { isStorageConfigured } from "@/lib/github";
 import { loadEngagement, loadArtifact } from "@/lib/store";
+import { loadSynthesis } from "@/lib/library-store";
 import { isAiConfigured } from "@/lib/tritonai";
 import { SetupNotice } from "@/components/SetupNotice";
 import { TemplateNav } from "@/components/TemplateNav";
@@ -13,7 +14,8 @@ export default async function JourneyPage({ params }: { params: Promise<{ id: st
   if (!isStorageConfigured()) return <SetupNotice what="storage" />;
   const engagement = await loadEngagement(id);
   if (!engagement) notFound();
-  const { data, sha } = await loadArtifact(id, "02");
+  const [{ data, sha }, synthesis] = await Promise.all([loadArtifact(id, "02"), loadSynthesis(id)]);
+  const hasSynthesis = synthesis.data.data.sections.length > 0;
 
   return (
     <div className="stack-lg">
@@ -34,7 +36,7 @@ export default async function JourneyPage({ params }: { params: Promise<{ id: st
         </p>
       </header>
       {!isAiConfigured() && <SetupNotice what="ai" />}
-      <JourneyEditor engagementId={id} initial={data.data} baseSha={sha} status={data.status} />
+      <JourneyEditor engagementId={id} initial={data.data} baseSha={sha} status={data.status} hasSynthesis={hasSynthesis} />
     </div>
   );
 }

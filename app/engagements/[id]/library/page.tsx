@@ -1,11 +1,12 @@
 import { notFound } from "next/navigation";
 import { isStorageConfigured } from "@/lib/github";
 import { loadEngagement, loadArtifact } from "@/lib/store";
-import { loadLibrary, loadIndex, loadGapAnalysis } from "@/lib/library-store";
+import { loadLibrary, loadIndex, loadGapAnalysis, loadSynthesis } from "@/lib/library-store";
 import { isAiConfigured } from "@/lib/tritonai";
 import { SetupNotice } from "@/components/SetupNotice";
 import { LibraryEditor } from "@/components/LibraryEditor";
 import { GapAnalysisPanel } from "@/components/GapAnalysisPanel";
+import { LibrarySynthesisPanel } from "@/components/LibrarySynthesisPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -15,10 +16,11 @@ export default async function LibraryPage({ params }: { params: Promise<{ id: st
   const engagement = await loadEngagement(id);
   if (!engagement) notFound();
 
-  const [library, index, gap, friction] = await Promise.all([
+  const [library, index, gap, synthesis, friction] = await Promise.all([
     loadLibrary(id),
     loadIndex(id),
     loadGapAnalysis(id),
+    loadSynthesis(id),
     loadArtifact(id, "05"),
   ]);
 
@@ -54,6 +56,15 @@ export default async function LibraryPage({ params }: { params: Promise<{ id: st
         baseSha={library.sha}
         indexMode={indexMode}
         indexChunks={index.data.chunkCount}
+      />
+
+      <LibrarySynthesisPanel
+        engagementId={id}
+        indexed={index.data.chunkCount > 0}
+        retrievalMode={synthesis.data.data.retrievalMode}
+        initialSections={synthesis.data.data.sections}
+        initialSummary={synthesis.data.data.summary}
+        synBaseSha={synthesis.sha}
       />
 
       <GapAnalysisPanel

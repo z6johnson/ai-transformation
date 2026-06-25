@@ -4,6 +4,7 @@ import { useState } from "react";
 import { saveArtifact, callAi } from "@/lib/client";
 import type { AiMeta } from "@/lib/ai-meta";
 import { SortableCards } from "./SortableCards";
+import { BaselineToggle, CoverageNotesPanel, toCoverageNotes, type CoverageNote } from "./CoverageNotes";
 
 type Origin = "human" | "ai-draft" | "ai-applied" | "ai-confirmed";
 type Handoff = { id: string; stage: string; from: string; to: string; whatMoves: string; how: string; whatBreaks: string; origin: Origin };
@@ -25,11 +26,13 @@ export function BlueprintEditor({
   initial,
   baseSha,
   status,
+  hasSynthesis = false,
 }: {
   engagementId: string;
   initial: BlueprintData;
   baseSha: string | null;
   status: string;
+  hasSynthesis?: boolean;
 }) {
   const [header, setHeader] = useState(initial.header);
   const [handoffs, setHandoffs] = useState<Handoff[]>(initial.handoffs as Handoff[]);
@@ -39,6 +42,8 @@ export function BlueprintEditor({
   const [busy, setBusy] = useState<"idle" | "drafting" | "saving">("idle");
   const [message, setMessage] = useState("");
   const [draftMeta, setDraftMeta] = useState<AiMeta | null>(null);
+  const [useBaseline, setUseBaseline] = useState(hasSynthesis);
+  const [coverage, setCoverage] = useState<CoverageNote[]>([]);
 
   const hasAiContent =
     handoffs.some((h) => h.origin === "ai-applied") ||
@@ -50,12 +55,13 @@ export function BlueprintEditor({
     setMessage("");
     const res = await callAi<{
       degraded: boolean;
-      draft: { handoffs?: Array<Record<string, string>>; decisions?: Array<Record<string, string>>; systems?: Array<Record<string, string>> } | null;
+      draft: { handoffs?: Array<Record<string, string>>; decisions?: Array<Record<string, string>>; systems?: Array<Record<string, string>>; coverageNotes?: unknown } | null;
       aiMeta?: AiMeta;
       message?: string;
-    }>("/api/ai/draft", { engagementId, target: "blueprint" });
+    }>("/api/ai/draft", { engagementId, target: "blueprint", useBaseline });
     setBusy("idle");
     setDraftMeta(res.aiMeta || null);
+    setCoverage(toCoverageNotes(res.draft?.coverageNotes));
     const d = res.draft;
     if (res.degraded || !d || !(d.handoffs?.length || d.decisions?.length || d.systems?.length)) {
       setMessage(res.message || "No draft returned. Build the blueprint by hand.");
@@ -156,9 +162,12 @@ export function BlueprintEditor({
           {busy === "drafting" ? "Drafting…" : "Draft from interviews"}
           <span className="ai-mark" aria-hidden="true">AI</span>
         </button>
+        <BaselineToggle show={hasSynthesis} checked={useBaseline} disabled={busy !== "idle"} onChange={setUseBaseline} />
       </div>
 
       {message && <p className="notice">{message}</p>}
+
+      <CoverageNotesPanel notes={coverage} />
 
       {hasAiContent && (
         <div className="ai-banner">

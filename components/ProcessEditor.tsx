@@ -6,6 +6,7 @@ import type { AiMeta } from "@/lib/ai-meta";
 import { graphToBpmnXml, processToBpmnFilename, type BpmnGraph } from "@/lib/bpmn";
 import { downloadTextFile } from "@/lib/download";
 import { SortableCards } from "./SortableCards";
+import { BaselineToggle, CoverageNotesPanel, toCoverageNotes, type CoverageNote } from "./CoverageNotes";
 
 type Origin = "human" | "ai-draft" | "ai-applied" | "ai-confirmed";
 type Step = {
@@ -29,11 +30,13 @@ export function ProcessEditor({
   initial,
   baseSha,
   status,
+  hasSynthesis = false,
 }: {
   engagementId: string;
   initial: ProcessData;
   baseSha: string | null;
   status: string;
+  hasSynthesis?: boolean;
 }) {
   const [header, setHeader] = useState(initial.header);
   const [steps, setSteps] = useState<Step[]>(initial.steps as Step[]);
@@ -41,6 +44,8 @@ export function ProcessEditor({
   const [busy, setBusy] = useState<"idle" | "drafting" | "saving" | "mapping">("idle");
   const [message, setMessage] = useState("");
   const [draftMeta, setDraftMeta] = useState<AiMeta | null>(null);
+  const [useBaseline, setUseBaseline] = useState(hasSynthesis);
+  const [coverage, setCoverage] = useState<CoverageNote[]>([]);
 
   const hasAiContent = steps.some((s) => s.origin === "ai-applied");
 
@@ -51,12 +56,13 @@ export function ProcessEditor({
   async function draft() {
     setBusy("drafting");
     setMessage("");
-    const res = await callAi<{ degraded: boolean; draft: { steps?: Array<Record<string, string>> } | null; aiMeta?: AiMeta; message?: string }>(
+    const res = await callAi<{ degraded: boolean; draft: { steps?: Array<Record<string, string>>; coverageNotes?: unknown } | null; aiMeta?: AiMeta; message?: string }>(
       "/api/ai/draft",
-      { engagementId, target: "process" },
+      { engagementId, target: "process", useBaseline },
     );
     setBusy("idle");
     setDraftMeta(res.aiMeta || null);
+    setCoverage(toCoverageNotes(res.draft?.coverageNotes));
     if (res.degraded || !res.draft?.steps?.length) {
       setMessage(res.message || "No draft returned. Build the process by hand.");
       return;
@@ -162,9 +168,12 @@ export function ProcessEditor({
           {busy === "mapping" ? "Mapping…" : "Model to Map"}
           <span className="ai-mark" aria-hidden="true">AI</span>
         </button>
+        <BaselineToggle show={hasSynthesis} checked={useBaseline} disabled={busy !== "idle"} onChange={setUseBaseline} />
       </div>
 
       {message && <p className="notice">{message}</p>}
+
+      <CoverageNotesPanel notes={coverage} />
 
       {hasAiContent && (
         <div className="ai-banner">

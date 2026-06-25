@@ -87,6 +87,10 @@ export function saveGapAnalysis(args: { engagementId: string; payload: unknown; 
   return saveJson("/api/library/gap", args);
 }
 
+export function saveSynthesis(args: { engagementId: string; payload: unknown; baseSha: string | null }): Promise<SaveResult> {
+  return saveJson("/api/library/synthesis", args);
+}
+
 export type ParsedUpload = {
   filename: string;
   text: string;

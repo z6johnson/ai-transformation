@@ -5,6 +5,7 @@ import { saveArtifact, callAi } from "@/lib/client";
 import type { Provenanced } from "@/lib/schemas";
 import type { AiMeta } from "@/lib/ai-meta";
 import { SortableCards } from "./SortableCards";
+import { BaselineToggle, CoverageNotesPanel, toCoverageNotes, type CoverageNote } from "./CoverageNotes";
 
 type Stage = {
   name: string;
@@ -57,11 +58,13 @@ export function JourneyEditor({
   initial,
   baseSha,
   status,
+  hasSynthesis = false,
 }: {
   engagementId: string;
   initial: JourneyData;
   baseSha: string | null;
   status: string;
+  hasSynthesis?: boolean;
 }) {
   const [header, setHeader] = useState(initial.header);
   const [stages, setStages] = useState<Stage[]>(initial.stages);
@@ -69,6 +72,8 @@ export function JourneyEditor({
   const [busy, setBusy] = useState<"idle" | "drafting" | "saving">("idle");
   const [message, setMessage] = useState("");
   const [draftMeta, setDraftMeta] = useState<AiMeta | null>(null);
+  const [useBaseline, setUseBaseline] = useState(hasSynthesis);
+  const [coverage, setCoverage] = useState<CoverageNote[]>([]);
 
   const PROV_FIELDS = ["doing", "wants", "touchpoints", "thinkingFeeling", "waitingFor", "effortWhy"] as const;
   const hasAiContent = stages.some((s) => PROV_FIELDS.some((k) => s[k].origin === "ai-applied"));
@@ -80,12 +85,13 @@ export function JourneyEditor({
   async function draft() {
     setBusy("drafting");
     setMessage("");
-    const res = await callAi<{ degraded: boolean; draft: { stages?: Array<Record<string, string>> } | null; aiMeta?: AiMeta; message?: string }>(
+    const res = await callAi<{ degraded: boolean; draft: { stages?: Array<Record<string, string>>; coverageNotes?: unknown } | null; aiMeta?: AiMeta; message?: string }>(
       "/api/ai/draft",
-      { engagementId, target: "journey" },
+      { engagementId, target: "journey", useBaseline },
     );
     setBusy("idle");
     setDraftMeta(res.aiMeta || null);
+    setCoverage(toCoverageNotes(res.draft?.coverageNotes));
     if (res.degraded || !res.draft?.stages?.length) {
       setMessage(res.message || "No draft returned. Build the map by hand.");
       return;
@@ -170,9 +176,12 @@ export function JourneyEditor({
         <button className="btn" onClick={() => setStages((p2) => [...p2, emptyStage(p2.length + 1)])}>
           + Add stage by hand
         </button>
+        <BaselineToggle show={hasSynthesis} checked={useBaseline} disabled={busy !== "idle"} onChange={setUseBaseline} />
       </div>
 
       {message && <p className="notice">{message}</p>}
+
+      <CoverageNotesPanel notes={coverage} />
 
       {hasAiContent && (
         <div className="ai-banner">

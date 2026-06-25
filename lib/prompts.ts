@@ -15,6 +15,26 @@ const COMMON_GUARDRAIL =
   "When unsure, flag rather than guess. A human confirms everything you produce. " +
   "Respond with a single valid JSON object and nothing else.";
 
+/**
+ * Appended to a draft prompt's system message when a DOCUMENTED BASELINE block is present.
+ * Holds the line on weighting: interviews (and confirmed upstream artifacts) are the only
+ * source of asserted facts; the baseline (the library synthesis) is reference only and may
+ * NOT fill any field — it can only surface coverage gaps into a separate `coverageNotes`
+ * array. This keeps the as-is map interview-grounded while still letting the documents flag
+ * what the conversations may have missed.
+ */
+const BASELINE_COVERAGE_RULE =
+  " A DOCUMENTED BASELINE block may appear last in the input. It describes what written " +
+  "policy/procedure SAYS should happen, may be outdated, and is NOT ground truth. Draft every " +
+  "field ONLY from the interview notes and any confirmed upstream artifacts; never copy a " +
+  'baseline statement into a field as if it were observed. Use the baseline solely to fill the ' +
+  'separate "coverageNotes" array: where the notes are silent on something the documents ' +
+  'describe, record it there as an open question with its baselineRefs (e.g. "SEC-01"). If no ' +
+  "baseline block is present, return an empty coverageNotes array.";
+
+/** The coverageNotes field appended to a draft's return JSON when the baseline is in play. */
+const COVERAGE_JSON = '"coverageNotes":[{"note":"","baselineRefs":[]}]';
+
 export const SUGGEST_TAGS = {
   id: "suggest-tags.v1",
   build(notes: string) {
@@ -37,16 +57,18 @@ export const SUGGEST_TAGS = {
 
 export const DRAFT_JOURNEY = {
   id: "draft-journey.v1",
-  build(taggedNotes: string) {
+  build(taggedNotes: string, withBaseline = false) {
+    const fields = `"stages":[{"name":"","doing":"","wants":"","touchpoints":"","thinkingFeeling":"","waitingFor":"","effort":"moderate","duration":""}]`;
+    const json = withBaseline ? `{${fields},${COVERAGE_JSON}}` : `{${fields}}`;
     return [
-      { role: "system" as const, content: COMMON_GUARDRAIL },
+      { role: "system" as const, content: COMMON_GUARDRAIL + (withBaseline ? BASELINE_COVERAGE_RULE : "") },
       {
         role: "user" as const,
         content:
           `From these tagged interview notes, draft a first cut of a journey map: the stages the person goes through, in order. ` +
           `For each stage give: name, what the person is doing, what they want here, points of contact (touchpoints), what they are thinking and feeling, ` +
           `what they wait for, an effort level (low|moderate|high) and a typical duration if stated. Do not invent facts not in the notes; leave blanks empty.\n` +
-          `Return JSON: {"stages":[{"name":"","doing":"","wants":"","touchpoints":"","thinkingFeeling":"","waitingFor":"","effort":"moderate","duration":""}]}.\n\n` +
+          `Return JSON: ${json}.\n\n` +
           `TAGGED NOTES:\n${taggedNotes}`,
       },
     ];
@@ -71,18 +93,22 @@ export const CLUSTER_FRICTION = {
 };
 
 export const DRAFT_FRICTION = {
-  id: "draft-friction.v1",
-  build(taggedNotes: string) {
+  id: "draft-friction.v2",
+  build(context: string, withBaseline = false) {
+    const fields = `"entries":[{"where":"","type":"Delay","whatsWrong":"","whoFeels":"","evidence":"","severity":"moderate","frequency":"occasional"}]`;
+    const json = withBaseline ? `{${fields},${COVERAGE_JSON}}` : `{${fields}}`;
     return [
-      { role: "system" as const, content: COMMON_GUARDRAIL },
+      { role: "system" as const, content: COMMON_GUARDRAIL + (withBaseline ? BASELINE_COVERAGE_RULE : "") },
       {
         role: "user" as const,
         content:
-          `From these tagged interview notes, draft candidate friction-register entries from the FRICTION-tagged passages. ` +
-          `For each: where on the map, a type from [${FRICTION_TYPES.join(", ")}], what's concretely wrong, who feels it, the evidence (quote the words), ` +
+          `From these tagged interview notes — and the confirmed journey stages and blueprint when present — draft candidate ` +
+          `friction-register entries from the FRICTION-tagged passages. Use the confirmed stages, handoffs, and decisions to ` +
+          `place each entry precisely in "where" (a stage name, H- handoff, or D- decision). For each: where on the map, a type ` +
+          `from [${FRICTION_TYPES.join(", ")}], what's concretely wrong, who feels it, the evidence (quote the words from the notes), ` +
           `a severity (low|moderate|high) and how often (rare|occasional|frequent|constant). State what is wrong, never a fix.\n` +
-          `Return JSON: {"entries":[{"where":"","type":"Delay","whatsWrong":"","whoFeels":"","evidence":"","severity":"moderate","frequency":"occasional"}]}.\n\n` +
-          `TAGGED NOTES:\n${taggedNotes}`,
+          `Return JSON: ${json}.\n\n` +
+          `CONTEXT:\n${context}`,
       },
     ];
   },
@@ -90,9 +116,14 @@ export const DRAFT_FRICTION = {
 
 export const DRAFT_BLUEPRINT = {
   id: "draft-blueprint.v1",
-  build(context: string) {
+  build(context: string, withBaseline = false) {
+    const fields =
+      `"handoffs":[{"stage":"","from":"","to":"","whatMoves":"","how":"","whatBreaks":""}],` +
+      `"decisions":[{"stage":"","decision":"","whoDecides":"","decidesOn":"","basis":"","failurePath":"","kind":"judgment"}],` +
+      `"systems":[{"name":"","usedFor":"","dataHeld":"","owner":"","connectsTo":""}]`;
+    const json = withBaseline ? `{${fields},${COVERAGE_JSON}}` : `{${fields}}`;
     return [
-      { role: "system" as const, content: COMMON_GUARDRAIL },
+      { role: "system" as const, content: COMMON_GUARDRAIL + (withBaseline ? BASELINE_COVERAGE_RULE : "") },
       {
         role: "user" as const,
         content:
@@ -103,9 +134,7 @@ export const DRAFT_BLUEPRINT = {
           `TOUCH-tagged passages and any system mentioned point to systems and data. Line each item up with the journey stage it belongs to. ` +
           `For a decision, set "kind" to "clear-cut" when a rule decides it and "judgment" when a person uses discretion. ` +
           `Do not invent facts not in the notes; leave blanks empty. Describe the service as it is and name no fixes.\n` +
-          `Return JSON: {"handoffs":[{"stage":"","from":"","to":"","whatMoves":"","how":"","whatBreaks":""}],` +
-          `"decisions":[{"stage":"","decision":"","whoDecides":"","decidesOn":"","basis":"","failurePath":"","kind":"judgment"}],` +
-          `"systems":[{"name":"","usedFor":"","dataHeld":"","owner":"","connectsTo":""}]}.\n\n` +
+          `Return JSON: ${json}.\n\n` +
           `CONTEXT:\n${context}`,
       },
     ];
@@ -114,9 +143,11 @@ export const DRAFT_BLUEPRINT = {
 
 export const DRAFT_PROCESS = {
   id: "draft-process.v1",
-  build(context: string) {
+  build(context: string, withBaseline = false) {
+    const fields = `"steps":[{"step":"","trigger":"","who":"","system":"","rule":"","handsOnTime":"","waitTime":"","whatGoesWrong":""}]`;
+    const json = withBaseline ? `{${fields},${COVERAGE_JSON}}` : `{${fields}}`;
     return [
-      { role: "system" as const, content: COMMON_GUARDRAIL },
+      { role: "system" as const, content: COMMON_GUARDRAIL + (withBaseline ? BASELINE_COVERAGE_RULE : "") },
       {
         role: "user" as const,
         content:
@@ -125,7 +156,7 @@ export const DRAFT_PROCESS = {
           `the rule or standard it runs under, the hands-on time, the wait time, and what goes wrong. Line steps up with the journey stages and ` +
           `the blueprint's handoffs, decisions, and systems. Keep people's own words. Do not invent facts; leave blanks empty. ` +
           `State what goes wrong, never a fix.\n` +
-          `Return JSON: {"steps":[{"step":"","trigger":"","who":"","system":"","rule":"","handsOnTime":"","waitTime":"","whatGoesWrong":""}]}.\n\n` +
+          `Return JSON: ${json}.\n\n` +
           `CONTEXT:\n${context}`,
       },
     ];
@@ -170,6 +201,33 @@ export const GAP_ANALYSIS = {
           `grounded in BOTH sources. If the baseline is silent on something, do not invent it; if the two agree, omit it.\n` +
           `Return JSON: {"findings":[{"area":"","documentedBaseline":"","actualPractice":"","divergence":"","baselineRefs":[],"mapRefs":[]}]}.\n\n` +
           `=== AS-IS MAP (ground truth — what actually happens) ===\n${mapSummary}\n\n${baseline}`,
+      },
+    ];
+  },
+};
+
+export const LIBRARY_SYNTHESIS = {
+  id: "library-synthesis.v1",
+  build(baseline: string) {
+    return [
+      {
+        role: "system" as const,
+        content:
+          COMMON_GUARDRAIL +
+          " This is a faithful, descriptive summary of what the reference DOCUMENTS say SHOULD happen — the documented " +
+          "baseline. It is NOT a statement of what actually happens (that is the as-is map), and it is NOT ground truth. " +
+          "Summarize only what the passages state, quote-anchor each section to the passage refs it draws on, and name no " +
+          "fixes. If the documents are silent on something, leave it out.",
+      },
+      {
+        role: "user" as const,
+        content:
+          `From these reference-library passages, write a structured synthesis of the documented baseline: the policies, ` +
+          `procedures, roles, systems, and steps the documents say should govern this service. For each section give a short ` +
+          `heading, a plain-language body, and the passage refs it draws on (baselineRefs, e.g. "DOC-01#3"). Add a ` +
+          `one-paragraph overall summary. Include only what the passages support; invent nothing.\n` +
+          `Return JSON: {"summary":"","sections":[{"heading":"","body":"","baselineRefs":[]}]}.\n\n` +
+          `${baseline}`,
       },
     ];
   },

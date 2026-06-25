@@ -27,3 +27,6 @@ export const libraryDir = (id: string) => `${engagementDir(id)}/_library`;
 export const libraryDocsFile = (id: string) => `${libraryDir(id)}/documents.json`;
 export const libraryIndexFile = (id: string) => `${libraryDir(id)}/index.json`;
 export const gapAnalysisFile = (id: string) => `${libraryDir(id)}/gap-analysis.json`;
+// Human-confirmed synthesis of the documented baseline — reused as reference context by the
+// mapping drafts. Lives beside the other _library files for the same reasons noted above.
+export const librarySynthesisFile = (id: string) => `${libraryDir(id)}/synthesis.json`;

@@ -2,7 +2,7 @@
  * Heuristic PII redaction applied to any text before it leaves the server for a
  * model call. Responsible-AI §5: minimize data, strip identifiers before external
  * calls. This is a safety net, not a guarantee — the default model is on-premises
- * (api-gpt-oss-120b), which is why interview/HR notes can be processed at all.
+  * (api-gemma-4-31b), which is why interview/HR notes can be processed at all.
  *
  * Returns the redacted text and a count, so the AI log can record "PII-redacted".
  */

@@ -20,7 +20,7 @@ export function isAiConfigured(): boolean {
 }
 
 export function defaultModel(): string {
-  return process.env.TRITONAI_MODEL || "api-gpt-oss-120b";
+  return process.env.TRITONAI_MODEL || "api-gemma-4-31b";
 }
 
 /**

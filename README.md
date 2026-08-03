@@ -3,7 +3,7 @@
 A free, serverless beta for UC San Diego's AI Transformation Practice (OSI). Two surfaces:
 
 1. **AI-assisted Layer 1 mapping** — work the six lifecycle-mapping templates with help from
-   the TritonAI Developer API (on-prem `api-gpt-oss-120b` by default): tag interview notes,
+   the TritonAI Developer API (on-prem `api-gemma-4-31b` by default): tag interview notes,
    draft journey maps and friction entries, cluster friction. AI acts as a trusted assistant:
    it applies confident output by default (marked `AI-applied`), flags only the low-confidence
    cases for a human call, and every item stays editable and removable. AI involvement is always
@@ -34,7 +34,7 @@ For **Vercel**, set them as Project environment variables (see Deploy); do not s
 |---|---|---|
 | `TRITONAI_API_KEY` | **Yes** | Key from https://tritonai-api.ucsd.edu/ . Server-side only; never reaches the client. |
 | `TRITONAI_BASE_URL` | No | Defaults to `https://tritonai-api.ucsd.edu/v1`. |
-| `TRITONAI_MODEL` | No | Defaults to `api-gpt-oss-120b`. The fallback for the two tier vars below. |
+| `TRITONAI_MODEL` | No | Defaults to `api-gemma-4-31b`. The fallback for the two tier vars below. |
 | `TRITONAI_MODEL_FAST` | No | Model for tagging (verbatim-grounded classification). Falls back to `TRITONAI_MODEL`. |
 | `TRITONAI_MODEL_REASONING` | No | Model for journey/friction drafting and friction clustering (synthesis + root-cause reasoning). Set a more capable model here to back auto-applied drafts. Falls back to `TRITONAI_MODEL`. |
 | `AI_TIMEOUT_MS` | No | AI call timeout (default `25000`). |

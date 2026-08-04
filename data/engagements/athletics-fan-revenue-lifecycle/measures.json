@@ -1,0 +1,134 @@
+{
+  "artifactId": "measures",
+  "engagementId": "athletics-fan-revenue-lifecycle",
+  "status": "in-review",
+  "updatedAt": "2026-08-03T17:00:00Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": false,
+  "data": {
+    "roiHypothesis": "DEMO — A fan the institution can actually remember: one relationship reassembled across ticketing, marketing, and giving, with no AI scoring of people substituting for a human decision about who is asked to buy or to give. This engagement commits from the outset to report two kinds of measure together, and the framework is set up that way before the first result arrives. Dollar measures — renewal rate, ticket revenue per home game, ticket buyers converting to a first Triton Athletic Fund gift — sit alongside experience, risk, and capability measures that never appear as a line item: how much attendance is known to a person rather than counted, how often a donor is solicited without clearance, how often one household receives two asks in a week, and whether the guardrail on AI scoring of people gets written and published. If the first report an executive reads shows only the revenue half, the framework hardens around the narrow version and every later engagement is asked where the revenue is. Baselines are drawn from the season just completed; no current values yet, because the season this map informs has not been played.",
+    "destination": {
+      "baselineKpis": [
+        {
+          "id": "renewal-rate",
+          "label": "Season-ticket renewal rate",
+          "dimension": "operational-capacity",
+          "baseline": 0.68,
+          "baselineDate": "2026-Q3",
+          "current": null,
+          "currentDate": "",
+          "target": 0.78,
+          "unit": "ratio",
+          "betterDirection": "up"
+        },
+        {
+          "id": "ticket-revenue-per-game",
+          "label": "Ticket revenue per home basketball game ($K)",
+          "dimension": "operational-capacity",
+          "baseline": 41.2,
+          "baselineDate": "2026-Q3",
+          "current": null,
+          "currentDate": "",
+          "target": 52,
+          "unit": "count",
+          "betterDirection": "up"
+        },
+        {
+          "id": "buyer-to-donor-conversion",
+          "label": "Ticket buyers making a first Triton Athletic Fund gift (per season)",
+          "dimension": "operational-capacity",
+          "baseline": 37,
+          "baselineDate": "2026-Q3",
+          "current": null,
+          "currentDate": "",
+          "target": 60,
+          "unit": "count",
+          "betterDirection": "up"
+        },
+        {
+          "id": "identified-attendance",
+          "label": "Home attendance identified to a person, not just counted",
+          "dimension": "operational-capacity",
+          "baseline": 0.54,
+          "baselineDate": "2026-Q3",
+          "current": null,
+          "currentDate": "",
+          "target": 0.85,
+          "unit": "ratio",
+          "betterDirection": "up"
+        },
+        {
+          "id": "uncleared-solicitations",
+          "label": "Fund solicitations sent to an assigned prospect without clearance",
+          "dimension": "risk-reduction",
+          "baseline": 22,
+          "baselineDate": "2026-Q3",
+          "current": null,
+          "currentDate": "",
+          "target": 0,
+          "unit": "count",
+          "betterDirection": "down"
+        },
+        {
+          "id": "duplicate-asks",
+          "label": "Households receiving a renewal invoice and a giving ask in the same week",
+          "dimension": "risk-reduction",
+          "baseline": 310,
+          "baselineDate": "2026-Q3",
+          "current": null,
+          "currentDate": "",
+          "target": 0,
+          "unit": "count",
+          "betterDirection": "down"
+        },
+        {
+          "id": "scoring-decisions-human-owned",
+          "label": "Decisions about who is asked to buy or give, owned by a named human",
+          "dimension": "institutional-readiness",
+          "baseline": 1,
+          "baselineDate": "2026-Q3",
+          "current": null,
+          "currentDate": "",
+          "target": 1,
+          "unit": "ratio",
+          "betterDirection": "up"
+        }
+      ]
+    },
+    "adaptiveCapacity": [
+      {
+        "id": "scoring-guardrail-published",
+        "label": "Published guardrail on AI scoring of people",
+        "value": 0,
+        "baseline": 0,
+        "quarter": "2026-Q3",
+        "note": "The founding Layer 3 deliverable of this engagement and the reason it was chosen. Nothing published yet; the map records that every decision about who is asked to buy or to give runs on human judgment today (D-02, D-03, D-04)."
+      },
+      {
+        "id": "cross-unit-boundaries-agreed",
+        "label": "Cross-unit boundaries mapped and agreed",
+        "value": 0,
+        "baseline": 0,
+        "quarter": "2026-Q3",
+        "note": "One boundary mapped — Athletics to central Advancement at the Triton Athletic Fund — but not yet agreed. Ownership of a donor who gives to both (D-05) is contested, and the validation packet is unsigned because of it."
+      },
+      {
+        "id": "lifecycle-absorption",
+        "label": "Units able to run their next engagement unaided",
+        "value": 0,
+        "baseline": 0,
+        "quarter": "2026-Q3",
+        "note": "Mapping in progress; the practice team is still leading the method."
+      },
+      {
+        "id": "method-transfer",
+        "label": "Adjacent services this method is ready to carry into",
+        "value": 0,
+        "baseline": 0,
+        "quarter": "2026-Q3",
+        "note": "Alumni relations, advancement, and corporate engagement travel the same journey — discover, engage, deepen, give or renew, drift away, come back — and share the same friction: relationship data scattered across systems while the person experiences one relationship. What transfers is the process and the method; the platforms differ unit to unit. Nothing claimed until this map is signed off."
+      }
+    ],
+    "rebaselinedQuarter": "2026-Q3"
+  }
+}

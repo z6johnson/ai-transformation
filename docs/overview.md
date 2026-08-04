@@ -43,8 +43,11 @@ A separate audience — **university executives and leadership** — uses the
 measurement dashboard to see what transformation is returning across engagements.
 
 Examples of a "service" or "lifecycle": employee onboarding, admissions, financial
-aid, procurement, or a single slice of one such as performance review. A seeded
-**HR Performance Appraisal pilot** ships with the app as a worked example.
+aid, procurement, or a single slice of one such as performance review. Two seeded
+engagements ship with the app as worked examples, at deliberately different points
+in their own lifecycle: the **HR Performance Appraisal pilot**, a finished map of a
+single-unit process, and the **Athletics Fan & Revenue Lifecycle**, a cross-unit map
+still in mapping with its validation packet unsigned.
 
 ## The problem it solves
 

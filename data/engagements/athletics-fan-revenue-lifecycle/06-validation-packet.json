@@ -1,0 +1,41 @@
+{
+  "artifactId": "06",
+  "engagementId": "athletics-fan-revenue-lifecycle",
+  "status": "in-review",
+  "updatedAt": "2026-08-03T17:00:00Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": true,
+  "data": {
+    "header": {
+      "service": "DEMO — UC San Diego Athletics Fan & Revenue Lifecycle",
+      "scope": "First contact with Triton athletics → Renewal, lapse, or a first Triton Athletic Fund gift",
+      "lifecycleOwner": { "name": "Andy (illustrative)", "role": "Senior Associate Athletics Director, Revenue & Fan Engagement" },
+      "businessOwners": "K. Bhatt (Marketing & Fan Engagement); M. Okonjo (Ticket & Event Operations); S. Whitfield (Triton Athletic Fund); L. Nakamura (Director of Development, central Advancement)",
+      "lead": "A. Practice Lead, Director of AI Strategy"
+    },
+    "coverageCheck": {
+      "scopeAligned": true,
+      "stepsTrace": true,
+      "handoffsDecisionsLogged": true,
+      "frictionGrounded": true,
+      "conflictsSettled": false
+    },
+    "reviewSession": {
+      "date": "2026-07-31",
+      "attendees": "Andy (lifecycle owner); K. Bhatt (Marketing); M. Okonjo (Ticket & Event Operations); S. Whitfield (Triton Athletic Fund); L. Nakamura (central Advancement); A. Practice Lead",
+      "confirmed": "The six shared stages and the journey/blueprint alignment reflect how a season actually runs. Everyone in the room recognised the identity fragmentation (FR-01) and the gate-count problem (FR-03) immediately, and nobody disputed that the buyer-to-donor handoff is where the map is heaviest. Marketing and the Fund confirmed independently that they do not share a solicitation calendar.",
+      "corrected": "The draft blueprint originally placed the price-tier decision (D-01) in the Awareness stage; ticket operations moved it to First purchase, where the tier is actually committed before tickets go on sale. FR-06 severity was raised from moderate to high after the two-officer example was described in the room. The comp-list exclusion was added as a distinct decision (D-06) rather than being folded into targeting.",
+      "contested": "Who owns the relationship with a donor who gives to both Athletics and a campus unit (D-05) is not settled. Central Advancement holds that assignment is decided centrally and a unit should request clearance before soliciting an assigned prospect (INT5-T1); the Fund holds that its own season-ticket relationships are Athletics relationships and that clearance in practice arrives after the mailing has gone (INT4-T5). Both accounts are accurate descriptions of what happens. The group agreed the map should record the conflict rather than resolve it, and that resolution is an owner-level decision, not a mapping one. This is why the packet is not signed off."
+    },
+    "honestAccount": "DEMO — the fan experience in this lifecycle is good right up until the institution has to remember who someone is. Buying works, game day works, and the fan's own account of the evening is the strongest thing in the map. What breaks is continuity: the same person exists as a ticket account, an email contact, a barcode, and two donor records, and the only moment that proves genuine interest — walking through the gate — is captured as a count and thrown away. Everything downstream is an attempt to reconstruct by hand what was never linked. The heaviest friction sits at the handoff from ticket buyer to donor, because that is the one point where the systems and the units change at the same time.",
+    "openQuestions": "Four, and the first is the reason this pilot was chosen. (1) The practice has no published answer on what AI scoring of people may and may not do. This service is full of candidate scoring — propensity to buy, propensity to give, segment-and-target — and the Fund's own director asked for care before a model is introduced (INT4-T3). The guardrail is not written yet; writing it is a founding deliverable of this engagement, and until it exists the map deliberately records that D-02, D-03, and D-04 run on human judgment today. (2) D-05 is contested and unresolved; see the review session. (3) The experience side of stages 4 and 6 rests on one fan's account rather than several, so the transferred-ticket leak (FR-04) and the silence of lapse (FR-09) are documented from a single voice. (4) Corporate partners and student attendance travel adjacent versions of this journey and were held out of scope; whether the same map holds for them is untested.",
+    "signOff": {
+      "ownerName": "Andy (illustrative)",
+      "ownerSigned": false,
+      "ownerDate": "",
+      "leadName": "A. Practice Lead",
+      "leadSubmitted": false,
+      "leadDate": ""
+    }
+  }
+}

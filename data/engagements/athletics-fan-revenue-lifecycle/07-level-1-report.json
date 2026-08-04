@@ -1,0 +1,34 @@
+{
+  "artifactId": "07",
+  "engagementId": "athletics-fan-revenue-lifecycle",
+  "status": "draft",
+  "updatedAt": "2026-08-03T18:12:04.006Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": true,
+  "data": {
+    "header": {
+      "service": "",
+      "scope": "",
+      "lead": ""
+    },
+    "synthesis": {
+      "whereItStands": {
+        "value": "The UC San Diego Athletics fan and revenue lifecycle runs from first contact with Triton athletics through renewal, lapse, or a first gift to the Triton Athletic Fund, across six stages and seven systems. The map shows a service whose effort is concentrated at one end: awareness, purchase, and game day are low-effort for the fan and largely work, while the renewal-and-giving stage carries the only high-effort rating in the journey. The two moments that matter most sit at opposite ends of that split — game day, which is the strongest thing in the map and the least well recorded, and the arrival of a renewal invoice and a Fund letter within days of each other, which is where the institution's internal structure becomes visible to the person it serves. Three of the seven systems hold a version of the same person, and none of them share a key with another. This map is not yet closed: the validation packet is in review, one decision is contested, and neither the lifecycle owner nor the practice lead has signed off.",
+        "origin": "ai-applied"
+      },
+      "frictionPatterns": {
+        "value": "Four clusters are identified and they descend from a single condition. One relationship, many records (FR-01, FR-03) is the root: there is no shared identifier across the ticketing platform, the email platform, the Athletics donor records, and the central Advancement CRM, and the one moment that proves interest — walking through the gate — is captured against a barcode rather than an account. Hand-worked lists (FR-02, FR-09) is what the units do about that: targeting runs off an export roughly a week old, and win-back runs off a post-season spreadsheet worked as far as staff time allows, so both track file age and capacity rather than judgment. The buyer-to-donor boundary (FR-05, FR-06, FR-07) is where the same condition crosses a unit line, and it is the heaviest concentration in the map: a monthly file, a clearance request that often follows the mailing, and a central batch receipt cycle that leaves a first-time donor waiting about six weeks. Two asks, one institution (FR-04, FR-08) is the fan-facing face of it — follow-up addressed to the buyer of record rather than the person who attended, and a renewal invoice and a giving ask arriving in the same window from two teams who cannot see each other's calendars.",
+        "origin": "ai-applied"
+      },
+      "decisionsForDesign": {
+        "value": "The map carries six decisions forward, and all of them are commercial rather than regulatory. D-06 (whether a complimentary-ticket recipient enters the marketing audience) is the only clear-cut one; it fails through a hand-built spreadsheet rather than through the rule itself. D-01 (which price tier a game is set at) is a judgment made before tickets go on sale, on a slate that changes with the conference transition. D-02 (which audience segment receives which offer, and when) and D-03 (whether a lapsed buyer is worked in win-back) are judgments made today on stale exports and available staff time respectively. D-04 (which season-ticket holders are approached for a first Fund gift, and at what amount) is the highest-stakes judgment in the service: it decides who is asked for money, it runs off a file weeks out of date, and the Fund director stated plainly that no model sits behind it and that care is wanted before one does. D-05 (who owns the relationship with a donor who gives to both Athletics and a campus unit) is the one decision the map could not settle; two accurate accounts of the same practice conflict, and the group recorded the conflict rather than resolving it.",
+        "origin": "ai-applied"
+      },
+      "openQuestions": {
+        "value": "Four questions carry forward. First and largest: the practice has no published position on what AI scoring of people may and may not do, and this service is dense with candidate scoring — propensity to buy, propensity to give, sorting people into groups for targeted outreach. D-02, D-03, and D-04 are all places where a model could take over a judgment about a person, and the map records deliberately that each runs on human judgment today. Writing that guardrail is a founding deliverable here rather than a downstream one. Second, D-05 is contested and unresolved, and the validation packet is unsigned because of it. Third, the experience side of stages 4 and 6 rests on a single fan's account, so the transferred-ticket leak and the silence of lapse are documented from one voice. Fourth, corporate partners and student attendance travel adjacent versions of this journey and were held out of scope; whether the same map holds for them is untested.",
+        "origin": "ai-applied"
+      }
+    },
+    "generatedAt": "2026-08-03T18:12:02.884Z"
+  }
+}

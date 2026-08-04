@@ -66,7 +66,14 @@ data/
     impact-dimensions.json         the four-dimension scaffold
 ```
 
-A seeded **HR Performance Appraisal Pilot** engagement is included.
+Two seeded DEMO engagements are included, sitting at different stages so the stepper and
+dashboard show more than one state:
+
+- **HR Performance Appraisal (SPA)** — `hr-performance-appraisal`, a finished single-unit map
+  at the `implementation` stage, validation packet signed off.
+- **Athletics Fan & Revenue Lifecycle** — `athletics-fan-revenue-lifecycle`, a cross-unit map
+  at the `mapping` stage; artifacts 01–05 confirmed, validation packet in review with one
+  decision still contested, so nothing is signed off.
 
 ## Deploy (Vercel)
 

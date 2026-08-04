@@ -1,0 +1,111 @@
+{
+  "artifactId": "02",
+  "engagementId": "athletics-fan-revenue-lifecycle",
+  "status": "confirmed",
+  "updatedAt": "2026-07-30T16:00:00Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": true,
+  "data": {
+    "header": {
+      "service": "DEMO — UC San Diego Athletics Fan & Revenue Lifecycle",
+      "scope": "First contact with Triton athletics → Renewal, lapse, or a first Triton Athletic Fund gift",
+      "person": "A local fan attending their first Triton basketball game, who becomes a season-ticket holder and then a first-time Triton Athletic Fund donor",
+      "others": "Marketing & fan engagement; ticket operations; game-day operations; the Triton Athletic Fund; a central Advancement development officer",
+      "sources": [
+        "INT-1 (Season-ticket holder and first-time donor)",
+        "INT-2 (Marketing & Fan Engagement)",
+        "INT-3 (Ticket & Event Operations)",
+        "INT-4 (Triton Athletic Fund)",
+        "INT-5 (Central Advancement)"
+      ]
+    },
+    "stages": [
+      {
+        "name": "Awareness",
+        "order": 1,
+        "doing": { "value": "Hears about a game through a friend, a social post, or a schedule they stumble across; is not on any list yet.", "origin": "ai-confirmed", "promptId": "draft@journey-2026-07-22", "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-07-22T16:00:00Z" },
+        "wants": { "value": "A reason to go, on a night that works, without much research.", "origin": "human" },
+        "touchpoints": { "value": "Social feeds; the schedule page; word of mouth; a campus or community email if they happen to be on one.", "origin": "human" },
+        "thinkingFeeling": { "value": "\"I didn't know we had a game — is it any good?\"", "origin": "ai-confirmed", "promptId": "draft@journey-2026-07-22", "confidence": 0.81, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-07-22T16:00:00Z" },
+        "waitingFor": { "value": "Nothing. Nobody is waiting on the institution here, which is why this stage is invisible in the data.", "origin": "human" },
+        "effort": "low",
+        "effortWhy": { "value": "Low, and almost entirely self-directed; the institution has no record that this person exists yet.", "origin": "human" },
+        "frictionRefs": ["FR-02"],
+        "duration": "Weeks to years before a first purchase; unmeasured"
+      },
+      {
+        "name": "First purchase",
+        "order": 2,
+        "doing": { "value": "Buys a single-game ticket on their phone; the ticket lands in their wallet app and an account is created for them.", "origin": "human" },
+        "wants": { "value": "To buy in under two minutes and know the seat is fine.", "origin": "ai-confirmed", "promptId": "draft@journey-2026-07-22", "confidence": 0.85, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-07-22T16:01:00Z" },
+        "touchpoints": { "value": "Ticketing platform on mobile; confirmation email; digital wallet.", "origin": "human" },
+        "thinkingFeeling": { "value": "\"That was easy\" — the purchase is the smoothest step in the whole map.", "origin": "human" },
+        "waitingFor": { "value": "Nothing; the transaction completes immediately.", "origin": "human" },
+        "effort": "low",
+        "effortWhy": { "value": "Low. Purchase is the one step that works end to end; its cost is that the record it creates never leaves the ticketing platform.", "origin": "ai-confirmed", "promptId": "draft@journey-2026-07-22", "confidence": 0.79, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-07-22T16:02:00Z" },
+        "frictionRefs": ["FR-01"],
+        "duration": "Minutes; typically days to a week before the game"
+      },
+      {
+        "name": "Game day",
+        "order": 3,
+        "doing": { "value": "Transfers one of their two tickets to whoever is coming with them, arrives, scans in, buys something at the concession stand.", "origin": "ai-confirmed", "promptId": "draft@journey-2026-07-22", "confidence": 0.88, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-07-22T16:03:00Z" },
+        "wants": { "value": "To get in quickly and have a good night.", "origin": "human" },
+        "touchpoints": { "value": "Digital wallet; gate scanners; concessions; the venue itself.", "origin": "human" },
+        "thinkingFeeling": { "value": "\"This was fun — I'd come back.\" The experience is the strongest asset in the lifecycle.", "origin": "human" },
+        "waitingFor": { "value": "The gate line.", "origin": "human" },
+        "effort": "low",
+        "effortWhy": { "value": "Low for the fan. The cost sits on the institution's side: the scan records a barcode, not a person, so the best evidence of interest anywhere in the lifecycle is discarded at the door.", "origin": "ai-confirmed", "promptId": "draft@journey-2026-07-22", "confidence": 0.86, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-07-22T16:03:00Z" },
+        "frictionRefs": ["FR-03"],
+        "duration": "One evening; roughly three hours in the building"
+      },
+      {
+        "name": "After the game",
+        "order": 4,
+        "doing": { "value": "Receives a thank-you and a next-game offer at the account that bought the tickets; the person who attended on the transferred ticket receives nothing.", "origin": "ai-confirmed", "promptId": "draft@journey-2026-07-22", "confidence": 0.9, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-07-22T16:04:00Z" },
+        "wants": { "value": "To be recognised as someone who came, and told about the next one worth going to.", "origin": "human" },
+        "touchpoints": { "value": "Post-event email; retargeted offers; social.", "origin": "human" },
+        "thinkingFeeling": { "value": "\"Why am I being asked to buy a ticket I already bought?\"", "origin": "ai-confirmed", "promptId": "draft@journey-2026-07-22", "confidence": 0.83, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-07-22T16:04:00Z" },
+        "waitingFor": { "value": "Nothing they are aware of.", "origin": "human" },
+        "effort": "low",
+        "effortWhy": { "value": "Low effort, but this is where the relationship is quietly lost: the follow-up is aimed at the buyer of record rather than at the people who were actually there.", "origin": "human" },
+        "frictionRefs": ["FR-04"],
+        "duration": "24–72 hours after the game, then a campaign cadence of every one to two weeks"
+      },
+      {
+        "name": "Renewal or a first gift",
+        "order": 5,
+        "doing": { "value": "Renews as a season-ticket holder in the spring, then receives a Triton Athletic Fund letter days later and makes a first small gift.", "origin": "human" },
+        "wants": { "value": "To keep the seats and — if they give — to be thanked promptly and asked once.", "origin": "ai-confirmed", "promptId": "draft@journey-2026-07-22", "confidence": 0.82, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-07-22T16:05:00Z" },
+        "touchpoints": { "value": "Renewal invoice; Fund solicitation letter; gift form; the receipt, eventually.", "origin": "human" },
+        "thinkingFeeling": { "value": "\"You just asked me for money.\" The two asks read as one institution failing to keep track of itself.", "origin": "ai-confirmed", "promptId": "draft@journey-2026-07-22", "confidence": 0.87, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-07-22T16:05:00Z" },
+        "waitingFor": { "value": "A receipt and acknowledgment — which took about six weeks.", "origin": "human" },
+        "effort": "high",
+        "effortWhy": { "value": "High, and the highest in the map: this is the point where both the systems and the units change, and the fan absorbs the seam.", "origin": "human" },
+        "frictionRefs": ["FR-05", "FR-06", "FR-07", "FR-08"],
+        "duration": "Renewal window ~4 weeks in spring; Fund solicitation days later; receipt ~6 weeks after the gift"
+      },
+      {
+        "name": "Lapse and win-back",
+        "order": 6,
+        "doing": { "value": "Stops buying — usually without saying so — and is either worked in a post-season win-back campaign or is not.", "origin": "human" },
+        "wants": { "value": "Either a reason to come back or to be left alone; not to be worked as a stranger after five years of seats.", "origin": "ai-confirmed", "promptId": "draft@journey-2026-07-22", "confidence": 0.78, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-07-22T16:06:00Z" },
+        "touchpoints": { "value": "Win-back email, if it runs; renewal reminders that simply stop.", "origin": "human" },
+        "thinkingFeeling": { "value": "\"I guess I just stopped going.\" Lapse is rarely a decision the fan announces.", "origin": "human" },
+        "waitingFor": { "value": "Nothing. Lapse is silent, which is why it is discovered late.", "origin": "human" },
+        "effort": "moderate",
+        "effortWhy": { "value": "Moderate for the fan, high variance for the institution: whether a lapsed buyer is worked at all depends on available staff time rather than on who they were.", "origin": "ai-confirmed", "promptId": "draft@journey-2026-07-22", "confidence": 0.8, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-07-22T16:06:00Z" },
+        "frictionRefs": ["FR-09"],
+        "duration": "Discovered a season late; win-back run once, after the season"
+      }
+    ],
+    "momentsThatMatter": [
+      { "moment": "Game day itself (stage 3)", "why": "It is the only part of the lifecycle the fan describes without complaint, and the strongest evidence of interest the institution ever gets — and it is recorded as a count." },
+      { "moment": "The renewal invoice and the Fund letter arriving days apart (stage 5)", "why": "It is where the fan decides whether this is one relationship or two transactions, and the moment the institution's internal structure becomes visible to them." }
+    ],
+    "dropoutPoints": [
+      { "point": "After the game (stage 4)", "what": "The person who attended on a transferred ticket is never contacted, so an interested attendee leaves no trace and is never asked back." },
+      { "point": "Lapse (stage 6)", "what": "Buyers stop without notice and are discovered a season later; win-back is then worked in spreadsheet order until staff time runs out." }
+    ]
+  }
+}

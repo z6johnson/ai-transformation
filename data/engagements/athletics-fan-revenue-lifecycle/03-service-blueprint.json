@@ -1,0 +1,90 @@
+{
+  "artifactId": "03",
+  "engagementId": "athletics-fan-revenue-lifecycle",
+  "status": "confirmed",
+  "updatedAt": "2026-07-30T16:00:00Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": true,
+  "data": {
+    "header": {
+      "service": "DEMO — UC San Diego Athletics Fan & Revenue Lifecycle",
+      "scope": "First contact with Triton athletics → Renewal, lapse, or a first Triton Athletic Fund gift",
+      "lead": "A. Practice Lead, Director of AI Strategy"
+    },
+    "stageRows": [
+      {
+        "stage": "Awareness",
+        "personDoes": { "value": "Encounters a game through a friend, a social post, or the schedule page.", "origin": "human" },
+        "frontstage": { "value": "Marketing runs paid and organic promotion and sends campaign email to hand-built segments.", "origin": "ai-confirmed", "promptId": "draft@blueprint-2026-07-23", "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-07-23T15:00:00Z" },
+        "backstage": { "value": "Marketing exports last season's purchase history from the ticketing platform, re-uploads it to the email platform, and builds segments by hand — last season's buyers, single-game buyers, students, lapsed.", "origin": "ai-confirmed", "promptId": "draft@blueprint-2026-07-23", "confidence": 0.89, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-07-23T15:00:00Z" },
+        "systems": { "value": "Email & campaign platform; ticketing platform (as an exported file); web, social, and streaming.", "origin": "human" }
+      },
+      {
+        "stage": "First purchase",
+        "personDoes": { "value": "Buys on mobile; an account and a barcode are created.", "origin": "human" },
+        "frontstage": { "value": "Ticketing platform handles the sale and issues the ticket to the wallet app; confirmation email sent.", "origin": "human" },
+        "backstage": { "value": "Ticket operations holds the seat inventory and the price tier set before the season; the account record stays inside the ticketing platform.", "origin": "ai-confirmed", "promptId": "draft@blueprint-2026-07-23", "confidence": 0.84, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-07-23T15:01:00Z" },
+        "systems": { "value": "Ticketing & digital wallet platform.", "origin": "human" }
+      },
+      {
+        "stage": "Game day",
+        "personDoes": { "value": "Transfers a ticket to a guest, arrives, scans in, spends at concessions.", "origin": "human" },
+        "frontstage": { "value": "Gate staff scan tickets; event operations run the venue; concessions and merchandise operate at the till.", "origin": "human" },
+        "backstage": { "value": "The manifest is pushed to the scanners the morning of the game; scans are recorded against barcodes; the comp list is assembled in a spreadsheet the week of the game and excluded from the marketing audience by hand.", "origin": "ai-confirmed", "promptId": "draft@blueprint-2026-07-23", "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-07-23T15:02:00Z" },
+        "systems": { "value": "Gate scanning; ticketing platform; point-of-sale; comp-list spreadsheet.", "origin": "human" }
+      },
+      {
+        "stage": "After the game",
+        "personDoes": { "value": "Receives a thank-you and a next-game offer at the buying account.", "origin": "human" },
+        "frontstage": { "value": "Marketing sends post-event follow-up and retargeted offers on a one-to-two-week cadence.", "origin": "human" },
+        "backstage": { "value": "Scan data returns as a gate count rather than as identified accounts, so campaign response cannot be tied to attendance; follow-up is addressed to the account of record.", "origin": "ai-confirmed", "promptId": "draft@blueprint-2026-07-23", "confidence": 0.91, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-07-23T15:03:00Z" },
+        "systems": { "value": "Email & campaign platform; ticketing platform (attendance counts only).", "origin": "human" }
+      },
+      {
+        "stage": "Renewal or a first gift",
+        "personDoes": { "value": "Renews season tickets, receives a Fund letter days later, and makes a first gift.", "origin": "human" },
+        "frontstage": { "value": "Ticket operations issue renewal invoices; the Triton Athletic Fund mails the annual solicitation; central Advancement issues the receipt.", "origin": "human" },
+        "backstage": { "value": "Ticket operations email the season-ticket holder file to the Fund roughly monthly; the Fund director decides who is approached and at what amount; clearance against central prospect assignment is requested case by case, often after the letter has gone; gifts route to central Advancement for batch processing and receipting.", "origin": "ai-confirmed", "promptId": "draft@blueprint-2026-07-23", "confidence": 0.87, "confirmedBy": "A. Practice Lead", "confirmedAt": "2026-07-23T15:04:00Z" },
+        "systems": { "value": "Ticketing platform; Athletics donor records; central Advancement CRM; email.", "origin": "human" }
+      },
+      {
+        "stage": "Lapse and win-back",
+        "personDoes": { "value": "Stops buying without notice; may or may not receive a win-back offer.", "origin": "human" },
+        "frontstage": { "value": "A post-season win-back email, when it runs.", "origin": "human" },
+        "backstage": { "value": "Marketing builds a lapsed list from an export after the season and works it manually in spreadsheet order, as far as available student-worker time allows.", "origin": "human" },
+        "systems": { "value": "Email & campaign platform; lapsed-buyer spreadsheet; ticketing platform (as an exported file).", "origin": "human" }
+      }
+    ],
+    "handoffs": [
+      { "id": "H-01", "stage": "Awareness", "from": "Ticket operations", "to": "Marketing & fan engagement", "whatMoves": "Purchase history, as a campaign audience list", "how": "Manual export from the ticketing platform, re-uploaded to the email platform; promo codes configured by hand", "whatBreaks": "The file is already about a week old when the campaign sends, so people who have already bought are asked to buy again (FR-02).", "origin": "ai-confirmed" },
+      { "id": "H-02", "stage": "Game day", "from": "Ticket operations", "to": "Game-day operations", "whatMoves": "The event manifest and barcodes", "how": "Manifest pushed to the scanning devices on the morning of the game", "whatBreaks": "A transferred ticket still scans under the buyer's barcode, so the person at the gate is not the person of record (FR-01).", "origin": "human" },
+      { "id": "H-03", "stage": "After the game", "from": "Game-day operations", "to": "Marketing & ticket operations", "whatMoves": "Scan data", "how": "Returned as a gate count, not as identified accounts", "whatBreaks": "Nobody can answer whether the people who were emailed actually came, so follow-up is aimed at the buying account (FR-03, FR-04).", "origin": "ai-confirmed" },
+      { "id": "H-04", "stage": "Renewal or a first gift", "from": "Ticket operations", "to": "Triton Athletic Fund", "whatMoves": "The season-ticket holder file", "how": "Pulled by hand and emailed, roughly monthly, sometimes less often", "whatBreaks": "The Fund solicits from a picture weeks out of date; recent joiners and recent lapses are both missed (FR-05).", "origin": "human" },
+      { "id": "H-05", "stage": "Renewal or a first gift", "from": "Triton Athletic Fund", "to": "Central Advancement", "whatMoves": "The gift, for processing and receipting", "how": "Batch cycle through central gift processing", "whatBreaks": "Acknowledgment lags the gift by weeks, and the Fund cannot produce a receipt when the donor calls (FR-07).", "origin": "human" },
+      { "id": "H-06", "stage": "Renewal or a first gift", "from": "Central Advancement", "to": "Triton Athletic Fund", "whatMoves": "Prospect assignment and solicitation clearance", "how": "Requested by email, case by case; no shared identifier between the two donor systems", "whatBreaks": "Clearance is often requested after the letter has gone out, so an assigned prospect can be solicited without either side knowing (FR-06).", "origin": "ai-confirmed" }
+    ],
+    "decisions": [
+      { "id": "D-01", "stage": "First purchase", "decision": "Which price tier a game is set at", "whoDecides": "Assistant AD, Ticket & Event Operations, with the lifecycle owner's sign-off", "decidesOn": "Opponent draw, day of week, historical sell-through, and the conference slate", "basis": "A pre-season tier recommendation approved by the Senior Associate AD; marquee games adjusted in-season", "failurePath": "Tier set too high and the game does not sell, or too low and revenue is left behind", "kind": "judgment", "origin": "ai-confirmed" },
+      { "id": "D-02", "stage": "Awareness", "decision": "Which audience segment receives which offer, and when", "whoDecides": "Assistant AD, Marketing & Fan Engagement", "decidesOn": "Hand-built segments from an exported purchase file: last season's buyers, single-game buyers, students, lapsed", "basis": "Prior-season performance and the marketer's read; no automated scoring in use", "failurePath": "Offers sent to people who have already bought, or landing in the same week as a giving ask", "kind": "judgment", "origin": "ai-confirmed" },
+      { "id": "D-03", "stage": "Lapse and win-back", "decision": "Whether a lapsed buyer is worked in the win-back campaign", "whoDecides": "Assistant AD, Marketing & Fan Engagement", "decidesOn": "Last purchase date and available staff time", "basis": "A spreadsheet built after the season and worked in order until time runs out", "failurePath": "Lapsed buyers go unworked because capacity ran out, not because they were ruled out", "kind": "judgment", "origin": "human" },
+      { "id": "D-04", "stage": "Renewal or a first gift", "decision": "Which season-ticket holders are approached for a first Triton Athletic Fund gift, and at what amount", "whoDecides": "Director, Triton Athletic Fund", "decidesOn": "Tenure in seats, seat location, and attendance at events beyond basketball", "basis": "The Fund director's judgment against the monthly season-ticket file; no propensity model in use, and the unit is explicit that it wants care taken before one is introduced", "failurePath": "Solicitation runs off a stale file and the ask amount rests on partial history", "kind": "judgment", "origin": "ai-confirmed" },
+      { "id": "D-05", "stage": "Renewal or a first gift", "decision": "Who owns the relationship with a donor who gives to both Athletics and a campus unit", "whoDecides": "Central Advancement prospect management, with the Triton Athletic Fund", "decidesOn": "Existing prospect assignment in the central CRM", "basis": "Assignment is decided centrally, and a unit should request clearance before soliciting an assigned prospect", "failurePath": "Clearance is requested after the letter has gone out, or two officers cultivate the same household in the same year", "kind": "judgment", "origin": "human" },
+      { "id": "D-06", "stage": "Game day", "decision": "Whether a complimentary-ticket recipient enters the marketing audience", "whoDecides": "Assistant AD, Ticket & Event Operations", "decidesOn": "How the comp was issued — staff, recruit, or community group", "basis": "Comps are excluded from the marketing audience by rule", "failurePath": "The comp list is built in a spreadsheet the week of the game, so exclusions are applied by hand and can be missed", "kind": "clear-cut", "origin": "ai-confirmed" }
+    ],
+    "systems": [
+      { "name": "Ticketing & digital wallet platform (vendor — illustrative)", "usedFor": "Sales, seat inventory, season-ticket accounts, barcode issue and transfer", "dataHeld": "Purchase history, account records, seat locations, barcodes", "owner": "Ticket & Event Operations", "connectsTo": "Gate scanning; point-of-sale. Nothing automated to the email platform or to either donor system — those files move by hand.", "origin": "human" },
+      { "name": "Email & campaign platform (vendor — illustrative)", "usedFor": "Audience segmentation, campaign send, offer delivery", "dataHeld": "Contact records, segment membership, send and open history", "owner": "Marketing & Fan Engagement", "connectsTo": "Manual imports from the ticketing platform; sign-up forms on the web. No link to donor records.", "origin": "human" },
+      { "name": "Gate scanning", "usedFor": "Admission at the door", "dataHeld": "Scan events recorded against barcodes", "owner": "Game-day operations", "connectsTo": "Ticketing platform — counts only, not identified accounts.", "origin": "ai-confirmed" },
+      { "name": "Athletics donor records (Triton Athletic Fund)", "usedFor": "Fund solicitation lists, ask history, Fund giving levels", "dataHeld": "Donor names, giving history to Athletics, solicitation notes", "owner": "Triton Athletic Fund", "connectsTo": "Monthly file from the ticketing platform; central Advancement CRM by name-and-address matching.", "origin": "human" },
+      { "name": "Central Advancement CRM", "usedFor": "System of record for donors, prospect assignment, gift processing and receipting", "dataHeld": "Donor records, prospect assignments, gift and receipt history", "owner": "Central Advancement", "connectsTo": "Athletics donor records by manual matching. No visibility into ticket purchase at all.", "origin": "human" },
+      { "name": "Point-of-sale (concessions and merchandise)", "usedFor": "In-venue transactions", "dataHeld": "Transaction records, not tied to accounts", "owner": "Event operations / campus vendor", "connectsTo": "Nothing else in this map — the till is anonymous.", "origin": "ai-confirmed" },
+      { "name": "Web, social, and streaming", "usedFor": "Schedules, promotion, and broadcast", "dataHeld": "Traffic and engagement metrics, no identity", "owner": "Marketing & Fan Engagement", "connectsTo": "Email platform, via sign-up forms only.", "origin": "human" }
+    ],
+    "breakingPoints": [
+      { "what": "The same person exists as a ticket account, an email contact, a barcode, and two donor records, with no shared key between them", "refs": ["FR-01", "H-04", "H-06"] },
+      { "what": "Attendance returns as a gate count, so 'did they come back' cannot be answered account by account", "refs": ["FR-03", "FR-04", "H-03"] },
+      { "what": "The Fund solicits from a monthly file and asks clearance after the letter has gone", "refs": ["FR-05", "FR-06", "H-04", "H-06"] },
+      { "what": "Renewal and the giving ask arrive in the same window from two teams that do not share a calendar", "refs": ["FR-08", "D-02", "D-04"] }
+    ]
+  }
+}

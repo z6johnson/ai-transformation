@@ -43,18 +43,23 @@ export function LibrarySynthesisPanel({
   async function run() {
     setBusy("running");
     setMessage("");
-    const res = await callAi<SynthesisResponse>("/api/ai/library-synthesis", { engagementId });
-    setBusy("idle");
-    if (res.retrievalMode) setMode(res.retrievalMode);
-    if (res.degraded || !res.sections?.length) {
-      setDrafts([]);
-      setMessage(res.message || "No synthesis returned, or it is unavailable right now.");
-      return;
+    try {
+      const res = await callAi<SynthesisResponse>("/api/ai/library-synthesis", { engagementId });
+      if (res.retrievalMode) setMode(res.retrievalMode);
+      if (res.degraded || !res.sections?.length) {
+        setDrafts([]);
+        setMessage(res.message || "No synthesis returned, or it is unavailable right now.");
+        setLive("Synthesis unavailable — the baseline can still be written by hand.");
+        return;
+      }
+      setDrafts(res.sections.map((s) => ({ ...s, origin: "ai-draft" as const })));
+      if (res.summary) setSummary(res.summary);
+      setMessage(`AI drafted ${res.sections.length} section(s). Confirm the ones that hold.`);
+      setLive(`Synthesis returned ${res.sections.length} sections via ${res.retrievalMode} retrieval.`);
+    } finally {
+      // Never strand the button on "Synthesizing…" — the by-hand path stays open.
+      setBusy("idle");
     }
-    setDrafts(res.sections.map((s) => ({ ...s, origin: "ai-draft" as const })));
-    if (res.summary) setSummary(res.summary);
-    setMessage(`AI drafted ${res.sections.length} section(s). Confirm the ones that hold.`);
-    setLive(`Synthesis returned ${res.sections.length} sections via ${res.retrievalMode} retrieval.`);
   }
 
   function confirmDraft(s: SynthesisSection) {

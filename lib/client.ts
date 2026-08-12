@@ -54,13 +54,36 @@ export async function saveEngagement(args: {
   }
 }
 
+/**
+ * Call an AI route. Every AI route answers with the degraded shape ({degraded, message}) on
+ * failure — but the route is not the only thing that can fail. A hosting-platform request
+ * timeout, a crashed function, or a dropped connection returns a gateway error page, and
+ * parsing that as JSON used to throw straight through the caller: the panel stayed stuck on
+ * "Synthesizing…" with no message and nothing written to the AI decision log. Fail into the
+ * same degraded shape instead, naming the transport so the cause is visible in the UI.
+ */
 export async function callAi<T>(path: string, body: unknown): Promise<T> {
-  const res = await fetch(path, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  return (await res.json()) as T;
+  const degraded = (message: string) => ({ degraded: true, message }) as T;
+  try {
+    const res = await fetch(path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const text = await res.text();
+    try {
+      return JSON.parse(text) as T;
+    } catch {
+      const snippet = text.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 160);
+      return degraded(
+        `AI assist is unavailable. The request did not complete (HTTP ${res.status})${snippet ? `: ${snippet}` : ""}. ` +
+          `If this took a long time, the request likely hit the hosting request limit before the model answered.`,
+      );
+    }
+  } catch (err) {
+    const why = err instanceof Error ? err.message : "network error";
+    return degraded(`AI assist is unavailable. The request never completed (${why}).`);
+  }
 }
 
 /** Generic JSON save to a non-artifact store (reference library, gap analysis). */

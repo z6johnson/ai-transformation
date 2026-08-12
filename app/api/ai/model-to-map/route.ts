@@ -11,7 +11,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { callModel, parseJsonLoose, isAiConfigured, modelForFeature } from "@/lib/tritonai";
 import { redactPII } from "@/lib/pii";
 import { MODEL_TO_MAP } from "@/lib/prompts";
-import { metaFromResult } from "@/lib/ai-meta";
+import { metaFromResult, failureNote } from "@/lib/ai-meta";
 import { appendAiDecision } from "@/lib/ai-log";
 
 export const runtime = "nodejs";
@@ -82,8 +82,16 @@ export async function POST(req: NextRequest) {
       latencyMs: meta.latencyMs,
       outcome: meta.outcome,
       humanDecision: "BPMN export — AI unavailable, no map produced",
+      failureReason: meta.failureReason,
+      failureStatus: meta.failureStatus,
+      failureDetail: meta.failureDetail,
     });
-    return NextResponse.json({ degraded: true, graph: null, aiMeta: meta, message: "AI assist is unavailable. Build the map by hand." });
+    return NextResponse.json({
+      degraded: true,
+      graph: null,
+      aiMeta: meta,
+      message: `AI assist is unavailable. ${failureNote(result)} Build the map by hand.`,
+    });
   }
 
   const graph = parseJsonLoose<{ lanes?: unknown[]; nodes?: unknown[]; flows?: unknown[] }>(result.content);

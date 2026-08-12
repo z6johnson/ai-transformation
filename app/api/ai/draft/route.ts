@@ -27,8 +27,9 @@ import { loadSynthesis } from "@/lib/library-store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-// Drafting sends every interview's raw notes plus the confirmed upstream artifacts, so it is
-// a long generation. Without this the platform can kill the request before it answers or logs.
+// Bound the function so a slow model call gives up and answers rather than being killed
+// mid-flight, which returns a gateway error and leaves NO line in the AI decision log.
+// lib/tritonai.ts clamps its retry budget to fit inside this.
 export const maxDuration = 60;
 
 type Target = "journey" | "friction" | "blueprint" | "process";

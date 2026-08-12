@@ -20,7 +20,11 @@ import { appendAiDecision } from "@/lib/ai-log";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const BATCH = 64;
+// Sized against the embedding model's input window, not throughput. api-tgpt-embeddings caps at
+// 33K tokens per request; chunkText hard-splits at CHUNK_CHARS * 1.5 (~600 tokens), so 64 dense
+// chunks can reach ~38K and fail the batch — which drops the whole library to lexical retrieval.
+// 32 leaves headroom for the worst case at the same total token cost.
+const BATCH = 32;
 const round = (v: number) => Math.round(v * 1e6) / 1e6; // bound index.json size
 
 export async function POST(req: NextRequest) {

@@ -41,15 +41,30 @@ export function defaultModel(): string {
 }
 
 /**
- * Resolve the model for a feature. Tagging is verbatim-grounded classification and stays
- * on the fast/default model; the reasoning-heavy drafting and clustering tasks can opt into
- * a more capable model (set TRITONAI_MODEL_REASONING). Both fall back to TRITONAI_MODEL, so
- * behavior is unchanged until the env vars are set — we reach for the bigger model only when
- * deliberately configured (responsible-ai §7).
+ * Resolve the model for a feature. Three tiers, chosen by what the workload can actually use:
+ *
+ *  - tagging   — verbatim-grounded classification into a fixed enum, run while a human waits
+ *                and confirmed by that human. No capability headroom to buy; stays on the
+ *                fast/default model, where a non-reasoning model also means no thinking-token
+ *                latency on the one interactive path.
+ *  - draft /   — drafting, clustering, brief, model-to-map. This output is auto-applied rather
+ *    cluster     than approved item-by-item, so capability is the point (TRITONAI_MODEL_REASONING).
+ *  - synthesis — baseline library synthesis. Grounded descriptive summarization, and the client
+ *                confirms every section before it is saved, so it does NOT need a stronger model
+ *                than drafting. It gets its own knob only because it is the one call with a
+ *                different context and timeout profile (whole library, one shot, no retry):
+ *                leave TRITONAI_MODEL_SYNTHESIS unset and it follows the reasoning tier; set it
+ *                when a growing library outgrows that model's context window.
+ *
+ * Every tier falls back to the one below it and finally to TRITONAI_MODEL, so behavior is
+ * unchanged until the env vars are set — we reach for the bigger model only when deliberately
+ * configured (responsible-ai §7).
  */
-export function modelForFeature(feature: "tagging" | "draft" | "cluster"): string {
+export function modelForFeature(feature: "tagging" | "draft" | "cluster" | "synthesis"): string {
   if (feature === "tagging") return process.env.TRITONAI_MODEL_FAST || defaultModel();
-  return process.env.TRITONAI_MODEL_REASONING || defaultModel();
+  const reasoning = process.env.TRITONAI_MODEL_REASONING || defaultModel();
+  if (feature === "synthesis") return process.env.TRITONAI_MODEL_SYNTHESIS || reasoning;
+  return reasoning;
 }
 
 /** The embeddings model, if one is provisioned. "" means none → callers fall back to lexical. */
@@ -72,13 +87,22 @@ export function defaultTimeoutMs(): number {
 }
 
 /**
- * Reasoning-tier calls (drafting, clustering, synthesis, the design brief) send the whole
- * interview corpus or the whole library and generate a structured document back. They run
- * far longer than a tagging pass — tens of seconds on the models we point TRITONAI_MODEL_
- * REASONING at — so the tagging-sized default guarantees a timeout on every attempt.
+ * Ceiling on total wall clock across all attempts, sized to fit inside the AI routes'
+ * `maxDuration = 60` with room left to write the response and the decision log line.
+ * Raise it (with maxDuration) only on a plan whose function limit is above 60s.
+ */
+const MAX_BUDGET_MS = 55000;
+
+/**
+ * Per-attempt timeout for the reasoning tier. Those calls send the whole interview corpus
+ * or the whole library and generate a structured document back, so they run far longer than
+ * a tagging pass — tens of seconds on the models TRITONAI_MODEL_REASONING points at. The
+ * tagging-sized default is not a slow path for them, it is a guaranteed timeout on every
+ * attempt: the budget clamp above bounds the total, but three attempts that each die at 25s
+ * never produce an answer.
  *
- * Callers pair this with budgetMs so the whole call is ONE attempt: at this length a retry
- * cannot fit inside a hosting request cap, and re-sending a prompt the model was already
+ * Callers pair this with budgetMs so the whole call is ONE attempt. At this length a retry
+ * cannot fit under MAX_BUDGET_MS anyway, and re-sending a prompt the model was already
  * working on just burns the budget that would have let the first one finish.
  */
 export function reasoningTimeoutMs(): number {
@@ -141,7 +165,10 @@ export async function callModel(args: {
   const maxAttempts = 3; // 1 try + 2 retries
   // Bound total wall clock, not just each attempt: a caller running under a platform
   // request cap needs the call to give up in time to answer rather than be killed mid-flight.
-  const budgetMs = args.budgetMs ?? timeoutMs * maxAttempts;
+  // The clamp is what makes that true — timeoutMs * maxAttempts is 75s at the default 25s
+  // timeout, which overruns the routes' 60s maxDuration and gets the request killed with no
+  // answer and no line in the decision log. Retries still work; only the ceiling moves.
+  const budgetMs = args.budgetMs ?? Math.min(timeoutMs * maxAttempts, MAX_BUDGET_MS);
   let lastReason: FailureReason = "error";
   let lastStatus: number | undefined;
   let lastDetail: string | undefined;

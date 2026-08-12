@@ -17,7 +17,9 @@ import { loadArtifact } from "@/lib/store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-// A four-section synthesis of the whole confirmed map; see the draft route.
+// Bound the function so a slow model call gives up and answers rather than being killed
+// mid-flight, which returns a gateway error and leaves NO line in the AI decision log.
+// lib/tritonai.ts clamps its retry budget to fit inside this.
 export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {

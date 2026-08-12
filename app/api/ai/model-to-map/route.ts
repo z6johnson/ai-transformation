@@ -16,7 +16,9 @@ import { appendAiDecision } from "@/lib/ai-log";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-// Builds a full BPMN-shaped graph from the process doc; see the draft route.
+// Bound the function so a slow model call gives up and answers rather than being killed
+// mid-flight, which returns a gateway error and leaves NO line in the AI decision log.
+// lib/tritonai.ts clamps its retry budget to fit inside this.
 export const maxDuration = 60;
 
 type Step = {

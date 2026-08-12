@@ -1,0 +1,170 @@
+{
+  "engagementId": "osi-scholarship",
+  "status": "in-review",
+  "updatedAt": "2026-08-12T20:56:24.643Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": true,
+  "data": {
+    "sections": [
+      {
+        "id": "SEC-01",
+        "heading": "Scholarship Purpose and Eligibility",
+        "body": "The scholarship is offered as a professional development investment in UC San Diego staff and community. It covers up to the cost of the Green Belt class at UC San Diego Extension/Division of Extended Studies; current Green Belt practitioners may apply the credit toward a Black Belt (or accelerated Black Belt), with the applicant responsible for costs beyond the Green Belt-level coverage. Eligible applicants are UC San Diego career staff with at least one year of service; Health System employees are eligible. The scholarship can only be applied to project-focused Green or Black Belt courses, not the case-study format. Applicants may reapply if previously unsuccessful; prior awardees may apply only toward a Black Belt project. The scholarship must be used within the 2025-2026 fiscal year, meaning the course start date must fall within that window.",
+        "baselineRefs": [
+          "DOC-01#0",
+          "DOC-01#3",
+          "DOC-02#1",
+          "DOC-03#1",
+          "DOC-03#2"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-08-12T20:54:00.862Z"
+      },
+      {
+        "id": "SEC-02",
+        "heading": "Course and Project Requirements",
+        "body": "The Green Belt course includes six full days of instructor-led training over a three-month period at UC San Diego Division of Extended Studies. Candidates complete a process improvement project resulting in a minimum of $40K hard or soft savings and present project work for evaluation approximately six weeks after the last day of instruction. Projects should address an existing problem or opportunity, focus on quality and waste issues, fall within the applicant's job scope, be quantifiable and measurable, and be completable within 12 weeks. Project objectives must be reviewed and endorsed by the supervisor and critical stakeholders before applying. Scenarios to avoid include projects where data is not easily attainable, implementation of already-established solutions, designing new processes/products/services from scratch, projects without measurable goals, and projects exceeding 12 weeks. Awardees may be asked to partner with a classmate. By accepting the scholarship, candidates authorize Extended Studies to release their final project presentation to OSI for reporting, with confidentiality available for sensitive information. Awardees are required to attend a cohort launch discussion before the course and to submit project outcomes and total savings to OSI before the final presentation.",
+        "baselineRefs": [
+          "DOC-01#0",
+          "DOC-01#1",
+          "DOC-01#2",
+          "DOC-01#3",
+          "DOC-05#1",
+          "DOC-05#2"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-08-12T20:54:07.818Z"
+      },
+      {
+        "id": "SEC-03",
+        "heading": "Applicant Profile and Selection Priorities",
+        "body": "The Green Belt program is best suited for staff highly involved in business process activities. Applicants should have knowledge of basic statistics, project management, and team leadership skills; familiarity with Microsoft Excel and PowerPoint is strongly recommended. Highest priority goes to applicants with demonstrated experience or education in process improvement methodologies, one to five years of experience in business analysis and/or project management, one to five years in a current job position, Professional Level 2 equivalent or above (with case-by-case exceptions), a viable project, and demonstrated supervisor support. Applicants may use AI tools (e.g., TritonGPT) to assist with submissions but should avoid generic content.",
+        "baselineRefs": [
+          "DOC-01#2",
+          "DOC-01#3",
+          "DOC-03#1"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-08-12T20:54:08.968Z"
+      },
+      {
+        "id": "SEC-04",
+        "heading": "Application Process (Applicant-Side Steps)",
+        "body": "Applicants should first review available information on the OSI scholarship webpage, the UCSD Extension Green Belt page, FAQs, and the fictitious example project, and discuss the opportunity with their supervisor. The supervisor will be asked to respond in KualiBuild as part of the application and should be aware that work hours will be spent on the course and project. Applicants then submit via the KualiBuild form during the application window (documented as August 12–September 10). Each applicant must submit their own application even if partnering; partners should use the same project title. The application is considered complete only when both the submission and supervisor endorsement are received. Incomplete or late applications are not considered. Process maps, data, and SOPs are helpful but not required with the application.",
+        "baselineRefs": [
+          "DOC-01#0",
+          "DOC-02#1",
+          "DOC-02#2",
+          "DOC-03#0",
+          "DOC-03#2",
+          "DOC-03#4"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-08-12T20:54:09.709Z"
+      },
+      {
+        "id": "SEC-05",
+        "heading": "OSI Planning, Marketing, and Setup",
+        "body": "OSI creates a project plan determining funding opportunities with the VC-CFO and proposing a timeline for marketing, application window, and evaluation, coordinating with the DES Program Manager to ensure agreeable dates. Marketing and setup activities include editing applicant resources and marketing materials (images, flyers, banners, emails, process maps, website, FAQ), creating a campaign in IdeaWave as the submission portal, preparing and delivering content for a live Q&A session, and creating a ticket for Blink posts. OSI also confirms and coordinates committee members—ideally with visibility to different University needs—and schedules evaluation dates and a kickoff meeting.",
+        "baselineRefs": [
+          "DOC-06#1",
+          "DOC-06#2"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-08-12T20:54:10.515Z"
+      },
+      {
+        "id": "SEC-06",
+        "heading": "Application Review and Scoring",
+        "body": "The Scholarship Committee, composed of LSS practitioners, reviews project submissions and other relevant information. Per the documented evaluation guide, project submissions are scored within IdeaWave. Scoring guidance includes: submitting a project yields a baseline of 5; projects within the applicant's control add points while those outside subtract; a submission that is a project rather than a process improvement subtracts 3; graphics/data tables and understanding of available metrics add points; conveying cost of poor quality (COPQ) and customer impact adds points. Personal statements start at a baseline of 3, with additions for Process Palooza attendance, project management coursework, Yellow Belt training, and personal interest; deductions apply if the candidate appears focused only on promotion or on being the sole voice for continuous improvement. Supervisor endorsements start at a baseline of 5 if submitted, with additions for releasing time, having LSS Green/Black Belt, actively facilitating the project, and adding substantive information. Joint proposals should share the same title and project proposal but have different personal and supervisor statements. Additional considerations include whether the candidate attended the info session or reached out to OSI for scoping.",
+        "baselineRefs": [
+          "DOC-06#2",
+          "DOC-06#3",
+          "DOC-08#0",
+          "DOC-08#1"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-08-12T20:54:11.544Z"
+      },
+      {
+        "id": "SEC-07",
+        "heading": "Notification of Applicants",
+        "body": "All applicants are notified via email of their determination. Awardees receive guidance regarding available session dates and the registration process. Declined applicants receive a communication commending their proposal and offering alternative opportunities, including an Extended Studies LSS discount of $250 toward an upcoming Green or Black program (to be used within 2025-2026), a $100 discount toward select professional development courses, information about Process Palooza, and encouragement to participate in Yellow Belt and Promapp training. Notifications are documented as occurring around September 18, with all applicants anticipated to be notified by early October.",
+        "baselineRefs": [
+          "DOC-02#2",
+          "DOC-03#2",
+          "DOC-04#0",
+          "DOC-04#1"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-08-12T20:54:12.409Z"
+      },
+      {
+        "id": "SEC-08",
+        "heading": "Course Registration and Awardee Next Steps",
+        "body": "Awardees indicate their preferred course session and a backup option by emailing OSI with their Extended Studies Student ID number by a stated deadline (documented as October 1 for the 2025/2026 cycle). Process Programs registers awardees based on available seating and emails confirmation. Enrollment is first come, first served with limited availability per session. Awardees are encouraged to participate in Yellow Belt as an introduction or refresher and in Promapp. OSI remains available as a resource throughout the class and project. The first available course is documented as an in-person offering starting October 2. ITS awardees receive additional contact and support from ITS Continuous Service Improvement.",
+        "baselineRefs": [
+          "DOC-02#2",
+          "DOC-05#0",
+          "DOC-05#1",
+          "DOC-06#3"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-08-12T20:54:13.051Z"
+      },
+      {
+        "id": "SEC-09",
+        "heading": "Post-Award Progress Tracking",
+        "body": "OSI tracks awardee progress by remaining in contact with DES to stay aware of upcoming presentations, emailing awardees as their presentation date arrives to remind them to send their final presentation to OSI, attending final presentations if possible, and updating tracking documents including a GB Savings Tracker. Awardees are expected to provide regular project progress updates and final results to OSI. The process links to a separate 'Complete LSS Course - OSI Scholarships' process assigned to the Awardee role.",
+        "baselineRefs": [
+          "DOC-02#2",
+          "DOC-03#1",
+          "DOC-05#1",
+          "DOC-06#3",
+          "DOC-06#4"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-08-12T20:54:13.830Z"
+      },
+      {
+        "id": "SEC-10",
+        "heading": "Roles, Ownership, and Systems",
+        "body": "Documented responsible roles include All Staff, Awardee - Scholarship, Operational Strategic Initiatives, Scholarship Committee, Program Manager - DES, and Continuous Service Improvement - ITS. Antonio Nava is listed as process owner and process expert for both the 'Apply for Lean Six Sigma Scholarship' and 'Launch Scholarship applications for LSS Green Belt - OSI' processes. Systems referenced include Kuali_Build (application form), IdeaWave (submission portal and scoring), Blink (marketing posts), and Lean. Informed parties include all responsible roles plus system stakeholders such as the Promapp Promaster and Kris Hergert, notified via dashboard notifications.",
+        "baselineRefs": [
+          "DOC-02#0",
+          "DOC-02#3",
+          "DOC-06#4"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-08-12T20:54:14.491Z"
+      },
+      {
+        "id": "SEC-11",
+        "heading": "Application Timeline",
+        "body": "The documented application window for the current cycle is August 12–September 10, with committee review September 10–September 18 and applicant notifications on September 18. The FAQ states scholarship evaluations occur at the end of September with notifications sent by early October. For FY 26/27, the application window is anticipated in July or August, with awareness efforts including Blink posts, emails to past Yellow Belt participants, and newsletter connections. An informational session was held on August 19, 2025.",
+        "baselineRefs": [
+          "DOC-01#0",
+          "DOC-02#0",
+          "DOC-02#2",
+          "DOC-03#0"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-08-12T20:54:15.180Z"
+      }
+    ],
+    "summary": "The documented baseline describes a Lean Six Sigma (LSS) scholarship service operated by the Office of Operational Strategic Initiatives (OSI) at UC San Diego, funded jointly by OSI and the Office of the Vice Chancellor/CFO. The service covers the cost of a Green Belt course (or applies toward a Black Belt) at UC San Diego Division of Extended Studies for eligible career staff. The documented lifecycle spans OSI-led planning and marketing, an applicant submission and supervisor-endorsement step in KualiBuild, committee review and scoring, award/declination notifications, course registration, and post-award progress tracking including final project presentations and savings reporting. Roles include All Staff (applicants), supervisors, the Scholarship Committee, OSI, and the Program Manager at Division of Extended Studies. Antonio Nava is documented as process owner and expert.",
+    "generatedAt": "2026-08-12T20:56:23.234Z",
+    "retrievalMode": "embeddings"
+  }
+}

@@ -130,6 +130,22 @@ function logFailure(op: string, info: Record<string, unknown>): void {
   console.error(`[tritonai] ${op} failed ${JSON.stringify(info)}`);
 }
 
+/**
+ * Models that reject `temperature` outright, learned at runtime rather than hardcoded.
+ *
+ * Newer Claude models on Vertex answer a request carrying `temperature` with a 400
+ * ("`temperature` is deprecated for this model") instead of ignoring it, which fails the call
+ * on a parameter the caller never asked for. A model list would go stale on the hub's next
+ * update, so instead we retry once without the parameter and remember the model, which costs
+ * one round trip the first time an instance meets such a model and nothing afterwards.
+ */
+const TEMPERATURE_UNSUPPORTED = new Set<string>();
+
+/** Does this 4xx say the request failed *because of* the temperature parameter? */
+function isTemperatureRejection(status: number | undefined, detail: string): boolean {
+  return status === 400 && /temperature/i.test(detail);
+}
+
 export async function callModel(args: {
   messages: Msg[];
   jsonObject?: boolean;
@@ -178,7 +194,9 @@ export async function callModel(args: {
         body: JSON.stringify({
           model,
           messages: args.messages,
-          temperature: args.temperature ?? 0.2,
+          // Low temperature keeps the JSON extraction steady, but it is a preference, not a
+          // requirement — drop it for models that refuse it rather than lose the call.
+          ...(TEMPERATURE_UNSUPPORTED.has(model) ? {} : { temperature: args.temperature ?? 0.2 }),
           ...(args.jsonObject ? { response_format: { type: "json_object" } } : {}),
         }),
         signal: controller.signal,
@@ -201,6 +219,13 @@ export async function callModel(args: {
         lastReason = "error";
         lastStatus = res.status;
         lastDetail = await errorDetail(res);
+        // The one exception: a 400 blaming `temperature` names a parameter we can simply drop,
+        // so the retry is NOT the identical body and is worth spending an attempt on.
+        if (isTemperatureRejection(res.status, lastDetail) && !TEMPERATURE_UNSUPPORTED.has(model)) {
+          TEMPERATURE_UNSUPPORTED.add(model);
+          console.warn(`[tritonai] ${model} rejects temperature; retrying without it`);
+          if (attempt < maxAttempts && budgetMs - (Date.now() - started) > 0) continue;
+        }
         return fail();
       }
 

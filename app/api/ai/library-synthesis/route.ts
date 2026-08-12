@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
   // Chunk text is already redacted at index time; redact again only to count for the log.
   const { text: baseline, redactions } = redactPII(baselineBlock(passages));
   const inputSummary = `${byDoc.size} document(s), ${passages.length} passage(s), ${redactions} PII redaction(s)`;
-  const model = modelForFeature("draft");
+  const model = modelForFeature("synthesis");
   const result = await callModel({
     messages: LIBRARY_SYNTHESIS.build(baseline),
     jsonObject: true,

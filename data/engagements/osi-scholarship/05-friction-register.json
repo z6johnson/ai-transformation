@@ -2,7 +2,7 @@
   "artifactId": "05",
   "engagementId": "osi-scholarship",
   "status": "in-review",
-  "updatedAt": "2026-08-12T23:18:38.461Z",
+  "updatedAt": "2026-08-12T23:18:55.445Z",
   "updatedBy": "z6johnson@ucsd.edu",
   "aiAssisted": true,
   "data": {
@@ -61,7 +61,32 @@
         "origin": "ai-applied"
       }
     ],
-    "clusters": [],
+    "clusters": [
+      {
+        "name": "Evaluation committee coordination",
+        "frIds": [
+          "FR-01"
+        ],
+        "sharedRoot": "Coordinating participants, dates, times, and calendar blocks requires repeated email exchanges.",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Low uptake of available awardee support",
+        "frIds": [
+          "FR-02"
+        ],
+        "sharedRoot": "Many awardees are not taking up the available OSI support and thought-partnering opportunity.",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Insufficient capability or data to validate financial impact",
+        "frIds": [
+          "FR-03"
+        ],
+        "sharedRoot": "Candidates cannot measure or validate project financial impacts because they do not know how to make the calculation or do not have enough data.",
+        "origin": "ai-applied"
+      }
+    ],
     "honestAccount": ""
   }
 }

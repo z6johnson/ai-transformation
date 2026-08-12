@@ -1,0 +1,195 @@
+{
+  "artifactId": "03",
+  "engagementId": "osi-scholarship",
+  "status": "in-review",
+  "updatedAt": "2026-08-12T23:15:55.931Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": true,
+  "data": {
+    "header": {
+      "service": "",
+      "scope": "",
+      "lead": ""
+    },
+    "stageRows": [],
+    "handoffs": [
+      {
+        "id": "H-01",
+        "stage": "",
+        "from": "KualiBuild form",
+        "to": "Applicant's supervisor",
+        "whatMoves": "Notification that the applicant submitted an application",
+        "how": "KualiBuild automatically sends a notification",
+        "whatBreaks": "",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "H-02",
+        "stage": "",
+        "from": "Applicant's supervisor",
+        "to": "Scholarship committee",
+        "whatMoves": "Supervisor recommendation, acknowledgement that the person is applying, and expected support for classwork and project time",
+        "how": "Supervisor completes additional steps after receiving the KualiBuild notification",
+        "whatBreaks": "",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "H-03",
+        "stage": "",
+        "from": "Awardees",
+        "to": "DES program manager",
+        "whatMoves": "Direction to set up a student account and register for the class term",
+        "how": "Awardees are directed to the DES program manager after notification",
+        "whatBreaks": "",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "H-04",
+        "stage": "",
+        "from": "Awardees",
+        "to": "OSI",
+        "whatMoves": "Final presentation and related project details",
+        "how": "Awardees send them to OSI after delivering the final presentation",
+        "whatBreaks": "",
+        "origin": "ai-applied"
+      }
+    ],
+    "decisions": [
+      {
+        "id": "D-01",
+        "stage": "",
+        "decision": "Move the project task into project accepted",
+        "whoDecides": "",
+        "decidesOn": "",
+        "basis": "The process does not require an MOU like other processes",
+        "failurePath": "",
+        "kind": "judgment",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "D-02",
+        "stage": "",
+        "decision": "Review applicants and score their submissions",
+        "whoDecides": "Evaluation committee",
+        "decidesOn": "Whether submissions fit the expectations of the class",
+        "basis": "A rubric comparing different requirements and an evaluation guide",
+        "failurePath": "",
+        "kind": "clear-cut",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "D-03",
+        "stage": "",
+        "decision": "Determine how many scholarships can be awarded",
+        "whoDecides": "Evaluation committee",
+        "decidesOn": "The number of awards the program is able to provide and the overall set of applicants",
+        "basis": "Available awards, representation from different VC areas and campus portions, different project types, and avoiding awards focused on the same problems",
+        "failurePath": "",
+        "kind": "judgment",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "D-04",
+        "stage": "",
+        "decision": "Give a recommendation on the application",
+        "whoDecides": "Applicant's supervisor",
+        "decidesOn": "The applicant's application and the supervisor's awareness and ability to support class and project time",
+        "basis": "",
+        "failurePath": "",
+        "kind": "judgment",
+        "origin": "ai-applied"
+      }
+    ],
+    "systems": [
+      {
+        "name": "OSI's ClickUp intake board",
+        "usedFor": "Creating and moving the scholarship project task through the intake subprocess",
+        "dataHeld": "Project resources and potential timeline information",
+        "owner": "OSI",
+        "connectsTo": "ClickUp project dashboard",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "ClickUp project dashboard",
+        "usedFor": "Tracking the scholarship project after intake",
+        "dataHeld": "Project task information",
+        "owner": "OSI",
+        "connectsTo": "OSI's ClickUp intake board",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Teams",
+        "usedFor": "Storing resources for each individual project and sharing information through channels",
+        "dataHeld": "Project resources; communications about the scholarship window",
+        "owner": "",
+        "connectsTo": "",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "KualiBuild form",
+        "usedFor": "Collecting applicant submissions, routing supervisor steps, and sending award or non-award notifications",
+        "dataHeld": "Applicant name, supervisor information, process details, data, and pain points; supervisor recommendation and support information; preset notification language",
+        "owner": "",
+        "connectsTo": "Applicant, applicant's supervisor, scholarship committee",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Zoom",
+        "usedFor": "Delivering the live informational session",
+        "dataHeld": "Session access and information",
+        "owner": "",
+        "connectsTo": "Applicants",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "OSI website",
+        "usedFor": "Publishing scholarship information and updated materials",
+        "dataHeld": "Images, flyers, banners, emails, process maps, website content, and the year's frequently asked questions document",
+        "owner": "OSI",
+        "connectsTo": "Applicants",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Blink website",
+        "usedFor": "Posting information about the scholarship window",
+        "dataHeld": "Scholarship-window announcement",
+        "owner": "",
+        "connectsTo": "Interested parties",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Email",
+        "usedFor": "Coordinating committee availability, communicating the scholarship window, and sending applicant outcome notifications",
+        "dataHeld": "Committee coordination messages, outreach messages, and customized award or non-award email language",
+        "owner": "",
+        "connectsTo": "Committee members, applicants",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Newsletters",
+        "usedFor": "Communicating that the scholarship window will be available",
+        "dataHeld": "Scholarship-window information",
+        "owner": "",
+        "connectsTo": "Interested parties",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Excel file",
+        "usedFor": "Capturing project impact and updating the OSI impact savings tracker and dashboards",
+        "dataHeld": "Project name, financial outcomes, and how the calculation was reached",
+        "owner": "OSI",
+        "connectsTo": "Awardees",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "DES program manager's registration process",
+        "usedFor": "Setting up a student account and registering awardees for a class term",
+        "dataHeld": "Student account and class registration information",
+        "owner": "DES program manager",
+        "connectsTo": "Awardees",
+        "origin": "ai-applied"
+      }
+    ],
+    "breakingPoints": []
+  }
+}

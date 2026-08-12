@@ -8,14 +8,17 @@
  * and restates the decisions carried forward, but proposes no fix.
  */
 import { NextRequest, NextResponse } from "next/server";
-import { callModel, parseJsonLoose, isAiConfigured, modelForFeature } from "@/lib/tritonai";
+import { callModel, parseJsonLoose, isAiConfigured, modelForFeature, reasoningTimeoutMs } from "@/lib/tritonai";
 import { redactPII } from "@/lib/pii";
 import { DRAFT_REPORT } from "@/lib/prompts";
-import { metaFromResult } from "@/lib/ai-meta";
+import { metaFromResult, failureNote } from "@/lib/ai-meta";
+import { appendAiDecision } from "@/lib/ai-log";
 import { loadArtifact } from "@/lib/store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+// A four-section synthesis of the whole confirmed map; see the draft route.
+export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
   const { engagementId } = (await req.json().catch(() => ({}))) as { engagementId?: string };
@@ -60,11 +63,32 @@ export async function POST(req: NextRequest) {
 
   const prompt = DRAFT_REPORT;
   const model = modelForFeature("draft");
-  const result = await callModel({ messages: prompt.build(text), jsonObject: true, model });
+  const timeoutMs = reasoningTimeoutMs();
+  const result = await callModel({ messages: prompt.build(text), jsonObject: true, model, timeoutMs, budgetMs: timeoutMs });
 
   if (!result.ok) {
     const meta = metaFromResult({ result, promptId: prompt.id, model, inputSummary, outputSummary: "no output" });
-    return NextResponse.json({ degraded: true, draft: null, aiMeta: meta, message: "AI assist is unavailable. Write the briefing by hand." });
+    await appendAiDecision({
+      ts: new Date().toISOString(),
+      actor: process.env.PRACTICE_ACTOR || "unknown",
+      feature: "draft-report",
+      promptId: prompt.id,
+      model,
+      engagementId,
+      inputSummary,
+      outputSummary: "no output",
+      latencyMs: result.latencyMs,
+      outcome: meta.outcome,
+      failureReason: meta.failureReason,
+      failureStatus: meta.failureStatus,
+      failureDetail: meta.failureDetail,
+    });
+    return NextResponse.json({
+      degraded: true,
+      draft: null,
+      aiMeta: meta,
+      message: `AI assist is unavailable. ${failureNote(result)} Write the briefing by hand.`,
+    });
   }
 
   const draft = parseJsonLoose<Record<string, unknown>>(result.content);

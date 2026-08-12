@@ -71,6 +71,20 @@ export function defaultTimeoutMs(): number {
   return Number(process.env.AI_TIMEOUT_MS || 25000);
 }
 
+/**
+ * Reasoning-tier calls (drafting, clustering, synthesis, the design brief) send the whole
+ * interview corpus or the whole library and generate a structured document back. They run
+ * far longer than a tagging pass — tens of seconds on the models we point TRITONAI_MODEL_
+ * REASONING at — so the tagging-sized default guarantees a timeout on every attempt.
+ *
+ * Callers pair this with budgetMs so the whole call is ONE attempt: at this length a retry
+ * cannot fit inside a hosting request cap, and re-sending a prompt the model was already
+ * working on just burns the budget that would have let the first one finish.
+ */
+export function reasoningTimeoutMs(): number {
+  return Number(process.env.AI_TIMEOUT_MS_REASONING || 50000);
+}
+
 /** Never let an API key reach a log line, however the provider echoed the request back. */
 function scrub(text: string): string {
   return text

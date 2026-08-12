@@ -37,8 +37,9 @@ For **Vercel**, set them as Project environment variables (see Deploy); do not s
 | `TRITONAI_MODEL` | No | Defaults to `api-gemma-4-31b`. The fallback for the two tier vars below. |
 | `TRITONAI_MODEL_FAST` | No | Model for tagging (verbatim-grounded classification). Falls back to `TRITONAI_MODEL`. |
 | `TRITONAI_MODEL_REASONING` | No | Model for journey/friction drafting and friction clustering (synthesis + root-cause reasoning). Set a more capable model here to back auto-applied drafts. Falls back to `TRITONAI_MODEL`. |
-| `AI_TIMEOUT_MS` | No | Per-attempt AI call timeout (default `25000`). Up to 3 attempts, bounded so the total wall clock never exceeds 3× this. |
-| `AI_TIMEOUT_MS_SYNTHESIS` | No | Timeout for the baseline synthesis call, which reads the whole library and is the longest call in the app (default `50000`, one attempt, sized to fit the route's 60s `maxDuration`). |
+| `AI_TIMEOUT_MS` | No | Per-attempt timeout for the **tagging** call (default `25000`). Up to 3 attempts, capped so the total can't outlive the request. |
+| `AI_TIMEOUT_MS_REASONING` | No | Timeout for every **reasoning-tier** call — drafting (journey/blueprint/process/friction), friction clustering, gap analysis, the design brief, model-to-map, and baseline synthesis (default `50000`, one attempt, sized to fit the routes' 60s `maxDuration`). These send whole transcripts or the whole library and routinely run past the tagging default; raise this before raising `AI_TIMEOUT_MS`. |
+| `AI_TIMEOUT_MS_SYNTHESIS` | No | Overrides `AI_TIMEOUT_MS_REASONING` for baseline synthesis alone, the single longest call in the app. |
 | `GITHUB_TOKEN` | **Yes** | Fine-grained PAT scoped to this repo, Contents: read/write. |
 | `GITHUB_REPO` | No | e.g. `z6johnson/ai-transformation`. |
 | `GITHUB_BRANCH` | No | Branch that holds engagement data and receives saves (default `data`). Create it from a branch containing `data/engagements/...` so the seed is visible. |

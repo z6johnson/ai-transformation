@@ -11,11 +11,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { callModel, parseJsonLoose, isAiConfigured, modelForFeature } from "@/lib/tritonai";
 import { redactPII } from "@/lib/pii";
 import { SUGGEST_TAGS } from "@/lib/prompts";
-import { metaFromResult } from "@/lib/ai-meta";
+import { metaFromResult, failureNote } from "@/lib/ai-meta";
 import { TAGS } from "@/lib/schemas";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
+
+// Tagging keeps the short per-attempt timeout and its retries — it is a fast classification
+// pass, and a transient failure is worth a second try. The total is capped below
+// maxDuration so the retries can never outlive the request and lose the answer.
+const TAGGING_BUDGET_MS = 55000;
 
 export async function POST(req: NextRequest) {
   const { notes } = (await req.json().catch(() => ({}))) as { notes?: string };
@@ -33,7 +39,12 @@ export async function POST(req: NextRequest) {
   const { text, redactions } = redactPII(notes);
   const inputSummary = `interview notes, ${notes.length} chars, ${redactions} PII redaction(s)`;
   const model = modelForFeature("tagging");
-  const result = await callModel({ messages: SUGGEST_TAGS.build(text), jsonObject: true, model });
+  const result = await callModel({
+    messages: SUGGEST_TAGS.build(text),
+    jsonObject: true,
+    model,
+    budgetMs: TAGGING_BUDGET_MS,
+  });
 
   if (!result.ok) {
     const meta = metaFromResult({ result, promptId: SUGGEST_TAGS.id, model, inputSummary, outputSummary: "no output" });
@@ -41,7 +52,7 @@ export async function POST(req: NextRequest) {
       degraded: true,
       suggestions: [],
       aiMeta: meta,
-      message: "AI assist is unavailable right now. Add tags by hand.",
+      message: `AI assist is unavailable right now. ${failureNote(result)} Add tags by hand.`,
     });
   }
 

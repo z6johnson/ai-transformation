@@ -8,7 +8,7 @@
  * record, so this route appends the AI decision to the engagement's log itself.
  */
 import { NextRequest, NextResponse } from "next/server";
-import { callModel, parseJsonLoose, isAiConfigured, modelForFeature } from "@/lib/tritonai";
+import { callModel, parseJsonLoose, isAiConfigured, modelForFeature, reasoningTimeoutMs } from "@/lib/tritonai";
 import { redactPII } from "@/lib/pii";
 import { MODEL_TO_MAP } from "@/lib/prompts";
 import { metaFromResult, failureNote } from "@/lib/ai-meta";
@@ -16,6 +16,8 @@ import { appendAiDecision } from "@/lib/ai-log";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+// Builds a full BPMN-shaped graph from the process doc; see the draft route.
+export const maxDuration = 60;
 
 type Step = {
   id?: string;
@@ -64,7 +66,8 @@ export async function POST(req: NextRequest) {
 
   const prompt = MODEL_TO_MAP;
   const model = modelForFeature("draft");
-  const result = await callModel({ messages: prompt.build(text), jsonObject: true, model });
+  const timeoutMs = reasoningTimeoutMs();
+  const result = await callModel({ messages: prompt.build(text), jsonObject: true, model, timeoutMs, budgetMs: timeoutMs });
 
   if (!result.ok) {
     const meta = metaFromResult({ result, promptId: prompt.id, model, inputSummary, outputSummary: "no output" });

@@ -81,17 +81,25 @@ type Msg = { role: "system" | "user" | "assistant"; content: string };
 
 const DETAIL_MAX = 400;
 
-/** Default per-attempt timeout. A single call may raise it for a long generation. */
-export function defaultTimeoutMs(): number {
-  return Number(process.env.AI_TIMEOUT_MS || 25000);
-}
-
 /**
  * Ceiling on total wall clock across all attempts, sized to fit inside the AI routes'
  * `maxDuration = 60` with room left to write the response and the decision log line.
  * Raise it (with maxDuration) only on a plan whose function limit is above 60s.
  */
 const MAX_BUDGET_MS = 55000;
+
+/**
+ * Default per-attempt timeout. Sized to let a single attempt use essentially the whole
+ * budget, because timeouts are not retried: a frontier model drafting from a full set of
+ * interviews routinely runs past 25s, and three short attempts fail where one long attempt
+ * succeeds. Lower it only if you would rather fail fast than wait.
+ */
+export function defaultTimeoutMs(): number {
+  return Number(process.env.AI_TIMEOUT_MS || 50000);
+}
+
+/** Per-attempt timeout for an embedding batch. See callEmbeddings for why it is separate. */
+const EMBED_TIMEOUT_MS = 25000;
 
 /** Never let an API key reach a log line, however the provider echoed the request back. */
 function scrub(text: string): string {
@@ -254,10 +262,10 @@ export async function callModel(args: {
       lastDetail = isAbort
         ? `no response within ${Math.min(timeoutMs, remaining)}ms (attempt ${attempt})`
         : scrub(err instanceof Error ? err.message : String(err)).slice(0, DETAIL_MAX);
-      if (attempt < maxAttempts && isAbort && budgetMs - (Date.now() - started) > backoffMs(attempt)) {
-        await backoff(attempt);
-        continue;
-      }
+      // A timeout is NOT retried. The retry would send the identical prompt to the identical
+      // model, so a model that needs 40s fails three times at 25s and burns the whole budget
+      // learning nothing — where one long attempt would have answered. Retries are reserved
+      // for 429/5xx, which are transient conditions on the server's side.
       return fail();
     }
   }
@@ -289,7 +297,11 @@ export async function callEmbeddings(args: { input: string[]; model?: string }):
   if (!args.input.length) return { ok: true, vectors: [], modelVersion: model, latencyMs: 0 };
 
   const base = process.env.TRITONAI_BASE_URL!.replace(/\/$/, "");
-  const timeoutMs = defaultTimeoutMs();
+  // Deliberately NOT the chat timeout. Embedding a batch is a fast, mechanical call, and the
+  // index route runs many batches back to back — inheriting the long generation timeout would
+  // let one stalled batch eat the whole function. A slow batch here costs only embeddings,
+  // and retrieval degrades to lexical.
+  const timeoutMs = EMBED_TIMEOUT_MS;
   const maxAttempts = 3;
   let lastReason: FailureReason = "error";
   let lastStatus: number | undefined;
@@ -358,10 +370,7 @@ export async function callEmbeddings(args: { input: string[]; model?: string }):
       lastDetail = isAbort
         ? `no response within ${timeoutMs}ms (attempt ${attempt})`
         : scrub(err instanceof Error ? err.message : String(err)).slice(0, DETAIL_MAX);
-      if (attempt < maxAttempts && isAbort) {
-        await backoff(attempt);
-        continue;
-      }
+      // Same rule as callModel: an identical batch to an identical model will time out again.
       return fail();
     }
   }

@@ -38,7 +38,7 @@ For **Vercel**, set them as Project environment variables (see Deploy); do not s
 | `TRITONAI_MODEL_FAST` | No | Tagging. Falls back to `TRITONAI_MODEL`. |
 | `TRITONAI_MODEL_REASONING` | No | Drafting (journey/blueprint/process/friction), friction clustering, the briefing, and model-to-map. Falls back to `TRITONAI_MODEL`. |
 | `TRITONAI_MODEL_SYNTHESIS` | No | Baseline library synthesis only. Falls back to `TRITONAI_MODEL_REASONING`. Leave unset unless the library outgrows that model's context window. |
-| `AI_TIMEOUT_MS` | No | Per-attempt AI call timeout (default `25000`). Up to 3 attempts, bounded so the total wall clock never exceeds 3× this. |
+| `AI_TIMEOUT_MS` | No | Per-attempt AI call timeout (default `50000`). Timeouts are not retried, so this is effectively the window one call gets; retries apply to 429/5xx only, and total wall clock is capped at 55s to stay inside the routes' 60s `maxDuration`. |
 | `AI_TIMEOUT_MS_SYNTHESIS` | No | Timeout for the baseline synthesis call, which reads the whole library and is the longest call in the app (default `50000`, one attempt, sized to fit the route's 60s `maxDuration`). |
 | `GITHUB_TOKEN` | **Yes** | Fine-grained PAT scoped to this repo, Contents: read/write. |
 | `GITHUB_REPO` | No | e.g. `z6johnson/ai-transformation`. |

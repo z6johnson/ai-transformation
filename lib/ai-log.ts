@@ -21,13 +21,20 @@ export type AiLogRecord = {
   latencyMs: number;
   outcome: "ok" | "timeout" | "fallback" | "error";
   humanDecision?: string;
+  /** On a degraded run: why. An outcome with no cause is not an audit trail. */
+  failureReason?: string;
+  failureStatus?: number;
+  failureDetail?: string;
 };
 
 export async function appendAiDecision(rec: AiLogRecord): Promise<void> {
   try {
     await appendLine(aiLogFile(rec.engagementId), JSON.stringify(rec), `chore(${rec.engagementId}): ai-log ${rec.feature}`);
-  } catch {
+  } catch (err) {
     // Logging must never break the user flow; the model call already succeeded or fell back.
-    // A failed log line is surfaced in server logs by the caller if needed.
+    // But it must not vanish either — a swallowed append looks exactly like a call that
+    // never happened, so write the line and the reason to the server log instead.
+    const why = err instanceof Error ? err.message : String(err);
+    console.error(`[ai-log] append failed (${why}) — unwritten record: ${JSON.stringify(rec)}`);
   }
 }

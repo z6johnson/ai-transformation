@@ -12,17 +12,26 @@ import { NextRequest, NextResponse } from "next/server";
 import { callModel, parseJsonLoose, isAiConfigured, modelForFeature } from "@/lib/tritonai";
 import { redactPII } from "@/lib/pii";
 import { LIBRARY_SYNTHESIS, baselineBlock } from "@/lib/prompts";
-import { metaFromResult } from "@/lib/ai-meta";
+import { metaFromResult, failureNote } from "@/lib/ai-meta";
 import { loadIndex } from "@/lib/library-store";
 import { appendAiDecision } from "@/lib/ai-log";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+// Synthesis reads the whole library, so it is the longest single call in the app. Give the
+// function room to finish and answer; without this the platform can kill the request first,
+// which returns a gateway error to the browser and leaves NO line in the AI decision log.
+export const maxDuration = 60;
 
 // Bound the prompt so a large library can't crowd the model: keep coverage across documents
 // (a per-document cap) while capping the overall passage count.
 const PER_DOC = 12;
 const MAX_TOTAL = 80;
+
+// One long attempt beats three short ones here: a full-library synthesis routinely runs past
+// the 25s default, and retrying an identical prompt that timed out just burns the budget.
+// The total stays inside maxDuration so the route always gets to log and answer.
+const SYNTHESIS_TIMEOUT_MS = Number(process.env.AI_TIMEOUT_MS_SYNTHESIS || 50000);
 
 const str = (v: unknown): string => (typeof v === "string" ? v : "");
 const arr = (v: unknown): string[] => (Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : []);
@@ -62,7 +71,13 @@ export async function POST(req: NextRequest) {
   const { text: baseline, redactions } = redactPII(baselineBlock(passages));
   const inputSummary = `${byDoc.size} document(s), ${passages.length} passage(s), ${redactions} PII redaction(s)`;
   const model = modelForFeature("draft");
-  const result = await callModel({ messages: LIBRARY_SYNTHESIS.build(baseline), jsonObject: true, model });
+  const result = await callModel({
+    messages: LIBRARY_SYNTHESIS.build(baseline),
+    jsonObject: true,
+    model,
+    timeoutMs: SYNTHESIS_TIMEOUT_MS,
+    budgetMs: SYNTHESIS_TIMEOUT_MS,
+  });
 
   if (!result.ok) {
     const meta = metaFromResult({ result, promptId: LIBRARY_SYNTHESIS.id, model, inputSummary, outputSummary: "no output" });
@@ -77,6 +92,9 @@ export async function POST(req: NextRequest) {
       outputSummary: "no output",
       latencyMs: result.latencyMs,
       outcome: result.reason === "timeout" ? "timeout" : "fallback",
+      failureReason: result.reason,
+      failureStatus: result.status,
+      failureDetail: result.detail,
     });
     return NextResponse.json({
       degraded: true,
@@ -84,7 +102,7 @@ export async function POST(req: NextRequest) {
       summary: "",
       aiMeta: meta,
       retrievalMode,
-      message: "AI assist is unavailable. Try again.",
+      message: `AI assist is unavailable. ${failureNote(result)} Try again, or write the baseline by hand.`,
     });
   }
 

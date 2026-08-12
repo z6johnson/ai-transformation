@@ -73,6 +73,9 @@ export async function POST(req: NextRequest) {
         latencyMs: aiLog.latencyMs || 0,
         outcome: aiLog.outcome || "ok",
         humanDecision: aiLog.humanDecision,
+        failureReason: aiLog.failureReason,
+        failureStatus: aiLog.failureStatus,
+        failureDetail: aiLog.failureDetail,
       });
     }
 

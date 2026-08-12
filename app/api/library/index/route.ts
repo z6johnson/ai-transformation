@@ -19,6 +19,10 @@ import { appendAiDecision } from "@/lib/ai-log";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+// This route runs one embedding call per batch, back to back, so it is the longest-running
+// route in the app after synthesis. Bound it so a large library fails cleanly to a lexical
+// index rather than being killed mid-rebuild.
+export const maxDuration = 60;
 
 // Sized against the embedding model's input window, not throughput. api-tgpt-embeddings caps at
 // 33K tokens per request; chunkText hard-splits at CHUNK_CHARS * 1.5 (~600 tokens), so 64 dense

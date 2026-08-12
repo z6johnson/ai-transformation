@@ -1,0 +1,15 @@
+{
+  "id": "osi-scholarship",
+  "name": "OSI Scholarship",
+  "service": "LSS Green Belt",
+  "scopeStart": "Scholarship established with funding",
+  "scopeEnd": "Scholarship recipient reports out final results upon completion of project work",
+  "lead": "Tony N. ",
+  "lifecycleOwner": {
+    "name": "Kathryn H.",
+    "role": "Scholarship Admin"
+  },
+  "stage": "mapping",
+  "owner": "z6johnson@ucsd.edu",
+  "createdAt": "2026-08-12T15:28:18.513Z"
+}

@@ -1,0 +1,300 @@
+{
+  "artifactId": "02",
+  "engagementId": "osi-scholarship",
+  "status": "in-review",
+  "updatedAt": "2026-08-12T23:16:39.815Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": true,
+  "data": {
+    "header": {
+      "service": "",
+      "scope": "",
+      "person": "",
+      "others": "",
+      "sources": []
+    },
+    "stages": [
+      {
+        "name": "Learn about the scholarship",
+        "order": 0,
+        "doing": {
+          "value": "Reviews information on the OSI website and KualiBuild form after hearing about the scholarship through the website, email, Blink website, Teams channels, or newsletters.",
+          "origin": "ai-applied"
+        },
+        "wants": {
+          "value": "Understand the scholarship opportunity and what is needed to apply.",
+          "origin": "ai-applied"
+        },
+        "touchpoints": {
+          "value": "OSI website; KualiBuild form; emails; Blink website; Teams channels; newsletters; live informational session.",
+          "origin": "ai-applied"
+        },
+        "thinkingFeeling": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "waitingFor": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "effort": "low",
+        "effortWhy": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "frictionRefs": [],
+        "duration": "Application window is typically about 1 month."
+      },
+      {
+        "name": "Develop and discuss a project idea",
+        "order": 1,
+        "doing": {
+          "value": "Thinks about and documents the process they will work on during the class, using a Word document or notes, and reviews the process with their supervisor before applying.",
+          "origin": "ai-applied"
+        },
+        "wants": {
+          "value": "Identify a process to work on and discuss it with their supervisor.",
+          "origin": "ai-applied"
+        },
+        "touchpoints": {
+          "value": "Supervisor; project notes or Word document; live informational session.",
+          "origin": "ai-applied"
+        },
+        "thinkingFeeling": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "waitingFor": {
+          "value": "Supervisor review before filling out the application form.",
+          "origin": "ai-applied"
+        },
+        "effort": "moderate",
+        "effortWhy": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "frictionRefs": [],
+        "duration": "Within the 1-month application window."
+      },
+      {
+        "name": "Submit the application",
+        "order": 2,
+        "doing": {
+          "value": "Clicks the KualiBuild link and fills out the required fields, including name, supervisor information, process details, data, and pain points, then submits the form.",
+          "origin": "ai-applied"
+        },
+        "wants": {
+          "value": "Submit the application with information that helps the evaluation committee understand whether the process fits the class.",
+          "origin": "ai-applied"
+        },
+        "touchpoints": {
+          "value": "KualiBuild form.",
+          "origin": "ai-applied"
+        },
+        "thinkingFeeling": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "waitingFor": {
+          "value": "The supervisor notification and additional supervisor steps after submission.",
+          "origin": "ai-applied"
+        },
+        "effort": "moderate",
+        "effortWhy": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "frictionRefs": [],
+        "duration": ""
+      },
+      {
+        "name": "Obtain supervisor recommendation",
+        "order": 3,
+        "doing": {
+          "value": "The applicant's supervisor acknowledges awareness of the application, gives a recommendation, and addresses support for classwork and project time during work hours.",
+          "origin": "ai-applied"
+        },
+        "wants": {
+          "value": "Have supervisor support for taking the class and working on the project.",
+          "origin": "ai-applied"
+        },
+        "touchpoints": {
+          "value": "KualiBuild notification to the supervisor; supervisor application step.",
+          "origin": "ai-applied"
+        },
+        "thinkingFeeling": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "waitingFor": {
+          "value": "Supervisor recommendation and acknowledgment.",
+          "origin": "ai-applied"
+        },
+        "effort": "moderate",
+        "effortWhy": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "frictionRefs": [],
+        "duration": ""
+      },
+      {
+        "name": "Wait for application review",
+        "order": 4,
+        "doing": {
+          "value": "Waits while the application window closes and the evaluation committee reviews and scores submissions using a rubric and evaluation guide, followed by an additional review of the overall set of awards.",
+          "origin": "ai-applied"
+        },
+        "wants": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "touchpoints": {
+          "value": "KualiBuild form; evaluation committee; rubric; evaluation guide.",
+          "origin": "ai-applied"
+        },
+        "thinkingFeeling": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "waitingFor": {
+          "value": "The application window to close, committee review, scoring, and agreement on how many scholarships can be awarded.",
+          "origin": "ai-applied"
+        },
+        "effort": "moderate",
+        "effortWhy": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "frictionRefs": [],
+        "duration": "Review takes about 2 weeks."
+      },
+      {
+        "name": "Receive the award decision",
+        "order": 5,
+        "doing": {
+          "value": "Receives a customized email notifying them whether they were awarded or not awarded a scholarship.",
+          "origin": "ai-applied"
+        },
+        "wants": {
+          "value": "Know the outcome of the application.",
+          "origin": "ai-applied"
+        },
+        "touchpoints": {
+          "value": "Customized email sent through the KualiBuild form.",
+          "origin": "ai-applied"
+        },
+        "thinkingFeeling": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "waitingFor": {
+          "value": "The award decision notification.",
+          "origin": "ai-applied"
+        },
+        "effort": "low",
+        "effortWhy": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "frictionRefs": [],
+        "duration": ""
+      },
+      {
+        "name": "Set up enrollment and join the awardee session",
+        "order": 6,
+        "doing": {
+          "value": "If awarded, contacts or works with the DES program manager to set up a student account and register for the class term, then attends an informational meeting with awardees, OSI, and the DES program manager.",
+          "origin": "ai-applied"
+        },
+        "wants": {
+          "value": "Register for the class, understand what is needed moving forward, meet other awardees, and know that OSI and DES are available as resources.",
+          "origin": "ai-applied"
+        },
+        "touchpoints": {
+          "value": "DES program manager; student account; class registration; meeting with awardees, OSI, and DES program manager.",
+          "origin": "ai-applied"
+        },
+        "thinkingFeeling": {
+          "value": "The session is intended to help awardees understand that they are not alone and can rely on OSI as a resource.",
+          "origin": "ai-applied"
+        },
+        "waitingFor": {
+          "value": "Direction from the DES program manager about setting up an account and registering for a class term.",
+          "origin": "ai-applied"
+        },
+        "effort": "moderate",
+        "effortWhy": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "frictionRefs": [],
+        "duration": "The kickoff meeting takes about 1 hour."
+      },
+      {
+        "name": "Take the class and work on the project",
+        "order": 7,
+        "doing": {
+          "value": "Takes the class and works on the process project, with the expectation that time is blocked for both classwork and project work.",
+          "origin": "ai-applied"
+        },
+        "wants": {
+          "value": "Complete the class and project with supervisor support for the required time.",
+          "origin": "ai-applied"
+        },
+        "touchpoints": {
+          "value": "UC San Diego Division of Extended Studies; supervisor; OSI as a resource.",
+          "origin": "ai-applied"
+        },
+        "thinkingFeeling": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "waitingFor": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "effort": "moderate",
+        "effortWhy": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "frictionRefs": [],
+        "duration": "Follow-up occurs over approximately 3 to 9 months while students are taking the classes; the overall process is roughly 6 months."
+      },
+      {
+        "name": "Present the project and report outcomes",
+        "order": 8,
+        "doing": {
+          "value": "Delivers a final presentation, sends the presentation and related details to OSI, and meets with OSI to discuss process changes and estimate financial impacts for the savings tracker and dashboards.",
+          "origin": "ai-applied"
+        },
+        "wants": {
+          "value": "Share how the project went and provide the project and financial outcome details.",
+          "origin": "ai-applied"
+        },
+        "touchpoints": {
+          "value": "Final presentation; OSI; OSI Excel impact savings tracker; meeting with OSI.",
+          "origin": "ai-applied"
+        },
+        "thinkingFeeling": {
+          "value": "Candidates are often not skilled at measuring financial impacts and may feel they do not know how to make the calculation or do not have enough data to validate it.",
+          "origin": "ai-applied"
+        },
+        "waitingFor": {
+          "value": "The project to finish and the final presentation; OSI follow-up to quantify the impact.",
+          "origin": "ai-applied"
+        },
+        "effort": "high",
+        "effortWhy": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "frictionRefs": [],
+        "duration": "The individual follow-up meeting takes about 30 minutes to 1 hour; projects finish about 3 to 6 months later, with 3 to 9 months of potential follow-up."
+      }
+    ],
+    "momentsThatMatter": [],
+    "dropoutPoints": []
+  }
+}

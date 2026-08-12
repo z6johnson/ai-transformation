@@ -1,0 +1,67 @@
+{
+  "artifactId": "05",
+  "engagementId": "osi-scholarship",
+  "status": "in-review",
+  "updatedAt": "2026-08-12T23:18:38.461Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": true,
+  "data": {
+    "header": {
+      "service": "",
+      "scope": "",
+      "lead": ""
+    },
+    "entries": [
+      {
+        "id": "FR-01",
+        "where": "Wait for application review",
+        "type": "Effort",
+        "whatsWrong": "Coordinating the evaluation committee requires repeated email exchanges to confirm participants, dates, times, and calendar blocks.",
+        "whoFeels": "OSI and evaluation committee members",
+        "evidence": "“there's a lot of emails back and forth trying to coordinate folks and get the right dates and times so that we can meet and block some times on the calendars”",
+        "severity": "moderate",
+        "frequency": "frequent",
+        "atDecision": {
+          "yes": false,
+          "ref": ""
+        },
+        "notes": "",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "FR-02",
+        "where": "Set up enrollment and join the awardee session",
+        "type": "Experience",
+        "whatsWrong": "The available OSI support and thought-partnering opportunity is not being taken up by many awardees.",
+        "whoFeels": "OSI and awardees",
+        "evidence": "“One of the, I guess, pain points or missed opportunities is that not a lot of people take us up on that”",
+        "severity": "moderate",
+        "frequency": "occasional",
+        "atDecision": {
+          "yes": false,
+          "ref": ""
+        },
+        "notes": "",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "FR-03",
+        "where": "Present the project and report outcomes",
+        "type": "Effort",
+        "whatsWrong": "Candidates often cannot measure or validate the financial impacts of their projects because they do not know how to make the calculation or do not have enough data.",
+        "whoFeels": "Candidates and OSI",
+        "evidence": "“candidates are often not not very skilled at being able to measure the impacts, the financial impacts in particular of their processes. They end up feeling like they they don't know how to make that calculation, or that they don't. They don't have enough data to validate it.”",
+        "severity": "high",
+        "frequency": "frequent",
+        "atDecision": {
+          "yes": false,
+          "ref": ""
+        },
+        "notes": "",
+        "origin": "ai-applied"
+      }
+    ],
+    "clusters": [],
+    "honestAccount": ""
+  }
+}

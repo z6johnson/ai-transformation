@@ -15,6 +15,7 @@ import {
   embeddingModel,
   modelForFeature,
   defaultTimeoutMs,
+  reasoningTimeoutMs,
 } from "@/lib/tritonai";
 
 export const runtime = "nodejs";
@@ -37,8 +38,12 @@ export async function GET() {
       embed: embeddingModel(),
     },
     timeouts: {
-      perAttemptMs: defaultTimeoutMs(),
-      synthesisMs: Number(process.env.AI_TIMEOUT_MS_SYNTHESIS || 50000),
+      // Tagging: this per-attempt budget, retried, with the total clamped to fit maxDuration.
+      taggingMs: defaultTimeoutMs(),
+      // Everything on the reasoning tier: one attempt at this budget, no retry.
+      reasoningMs: reasoningTimeoutMs(),
+      // Baseline synthesis; follows `reasoningMs` unless AI_TIMEOUT_MS_SYNTHESIS is set.
+      synthesisMs: Number(process.env.AI_TIMEOUT_MS_SYNTHESIS || reasoningTimeoutMs()),
     },
   });
 }

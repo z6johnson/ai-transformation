@@ -38,8 +38,9 @@ For **Vercel**, set them as Project environment variables (see Deploy); do not s
 | `TRITONAI_MODEL_FAST` | No | Tagging. Falls back to `TRITONAI_MODEL`. |
 | `TRITONAI_MODEL_REASONING` | No | Drafting (journey/blueprint/process/friction), friction clustering, the briefing, and model-to-map. Falls back to `TRITONAI_MODEL`. |
 | `TRITONAI_MODEL_SYNTHESIS` | No | Baseline library synthesis only. Falls back to `TRITONAI_MODEL_REASONING`. Leave unset unless the library outgrows that model's context window. |
-| `AI_TIMEOUT_MS` | No | Per-attempt AI call timeout (default `25000`). Up to 3 attempts, bounded so the total wall clock never exceeds 3× this. |
-| `AI_TIMEOUT_MS_SYNTHESIS` | No | Timeout for the baseline synthesis call, which reads the whole library and is the longest call in the app (default `50000`, one attempt, sized to fit the route's 60s `maxDuration`). |
+| `AI_TIMEOUT_MS` | No | Per-attempt timeout for the **tagging** call (default `25000`). Up to 3 attempts, with the total clamped to 55s so the retries can't outlive the request. |
+| `AI_TIMEOUT_MS_REASONING` | No | Per-attempt timeout for every **reasoning-tier** call — drafting, friction clustering, gap analysis, the briefing, model-to-map, and baseline synthesis (default `50000`, one attempt, sized to fit the routes' 60s `maxDuration`). These send whole transcripts or the whole library and run for tens of seconds; at the tagging-sized `AI_TIMEOUT_MS` every attempt times out. Raise this, not `AI_TIMEOUT_MS`, if drafts time out. |
+| `AI_TIMEOUT_MS_SYNTHESIS` | No | Overrides `AI_TIMEOUT_MS_REASONING` for baseline synthesis alone, the one call that reads the whole library in a single shot. |
 | `GITHUB_TOKEN` | **Yes** | Fine-grained PAT scoped to this repo, Contents: read/write. |
 | `GITHUB_REPO` | No | e.g. `z6johnson/ai-transformation`. |
 | `GITHUB_BRANCH` | No | Branch that holds engagement data and receives saves (default `data`). Create it from a branch containing `data/engagements/...` so the seed is visible. |

@@ -6,10 +6,19 @@
  * (→ ai-confirmed) and may push divergences into the Friction Register.
  */
 import { NextRequest, NextResponse } from "next/server";
-import { callModel, callEmbeddings, parseJsonLoose, isAiConfigured, isEmbeddingsConfigured, modelForFeature } from "@/lib/tritonai";
+import {
+  callModel,
+  callEmbeddings,
+  parseJsonLoose,
+  isAiConfigured,
+  isEmbeddingsConfigured,
+  modelForFeature,
+  reasoningTimeoutMs,
+} from "@/lib/tritonai";
 import { redactPII } from "@/lib/pii";
 import { GAP_ANALYSIS, baselineBlock } from "@/lib/prompts";
-import { metaFromResult } from "@/lib/ai-meta";
+import { metaFromResult, failureNote } from "@/lib/ai-meta";
+import { appendAiDecision } from "@/lib/ai-log";
 import { loadArtifact } from "@/lib/store";
 import { loadIndex } from "@/lib/library-store";
 import { retrieve } from "@/lib/embeddings";
@@ -116,20 +125,38 @@ export async function POST(req: NextRequest) {
   const { text: redactedMap, redactions } = redactPII(mapSummary);
   const inputSummary = `${passages.length} baseline passage(s), ${j.stages.length} stage(s), ${f.entries.length} friction entr(ies), ${redactions} PII redaction(s)`;
   const model = modelForFeature("draft");
+  const timeoutMs = reasoningTimeoutMs();
   const result = await callModel({
     messages: GAP_ANALYSIS.build(redactedMap, baselineBlock(passages)),
     jsonObject: true,
     model,
+    timeoutMs,
+    budgetMs: timeoutMs,
   });
 
   if (!result.ok) {
     const meta = metaFromResult({ result, promptId: GAP_ANALYSIS.id, model, inputSummary, outputSummary: "no output" });
+    await appendAiDecision({
+      ts: new Date().toISOString(),
+      actor: process.env.PRACTICE_ACTOR || "unknown",
+      feature: "gap-analysis",
+      promptId: GAP_ANALYSIS.id,
+      model,
+      engagementId,
+      inputSummary,
+      outputSummary: "no output",
+      latencyMs: result.latencyMs,
+      outcome: meta.outcome,
+      failureReason: meta.failureReason,
+      failureStatus: meta.failureStatus,
+      failureDetail: meta.failureDetail,
+    });
     return NextResponse.json({
       degraded: true,
       findings: [],
       aiMeta: meta,
       retrievalMode,
-      message: "AI assist is unavailable. Try again.",
+      message: `AI assist is unavailable. ${failureNote(result)} Try again.`,
     });
   }
 

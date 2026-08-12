@@ -93,6 +93,22 @@ export function defaultTimeoutMs(): number {
  */
 const MAX_BUDGET_MS = 55000;
 
+/**
+ * Per-attempt timeout for the reasoning tier. Those calls send the whole interview corpus
+ * or the whole library and generate a structured document back, so they run far longer than
+ * a tagging pass — tens of seconds on the models TRITONAI_MODEL_REASONING points at. The
+ * tagging-sized default is not a slow path for them, it is a guaranteed timeout on every
+ * attempt: the budget clamp above bounds the total, but three attempts that each die at 25s
+ * never produce an answer.
+ *
+ * Callers pair this with budgetMs so the whole call is ONE attempt. At this length a retry
+ * cannot fit under MAX_BUDGET_MS anyway, and re-sending a prompt the model was already
+ * working on just burns the budget that would have let the first one finish.
+ */
+export function reasoningTimeoutMs(): number {
+  return Number(process.env.AI_TIMEOUT_MS_REASONING || 50000);
+}
+
 /** Never let an API key reach a log line, however the provider echoed the request back. */
 function scrub(text: string): string {
   return text

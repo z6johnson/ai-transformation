@@ -17,10 +17,11 @@
  * the baseline label keep the interviews the sole source of asserted facts.
  */
 import { NextRequest, NextResponse } from "next/server";
-import { callModel, parseJsonLoose, isAiConfigured, modelForFeature } from "@/lib/tritonai";
+import { callModel, parseJsonLoose, isAiConfigured, modelForFeature, reasoningTimeoutMs } from "@/lib/tritonai";
 import { redactPII } from "@/lib/pii";
 import { DRAFT_JOURNEY, DRAFT_FRICTION, DRAFT_BLUEPRINT, DRAFT_PROCESS, baselineBlock } from "@/lib/prompts";
-import { metaFromResult } from "@/lib/ai-meta";
+import { metaFromResult, failureNote } from "@/lib/ai-meta";
+import { appendAiDecision } from "@/lib/ai-log";
 import { loadArtifact } from "@/lib/store";
 import { loadSynthesis } from "@/lib/library-store";
 
@@ -40,6 +41,14 @@ const PROMPTS = {
   blueprint: DRAFT_BLUEPRINT,
   process: DRAFT_PROCESS,
 } as const;
+
+/** Log feature names, matching what each editor stamps when it saves an applied draft. */
+const FEATURES: Record<Target, string> = {
+  journey: "draft-journey",
+  blueprint: "draft-blueprint",
+  process: "draft-process",
+  friction: "friction-assist",
+};
 
 /** A compact, line-per-item view of the confirmed journey for downstream prompts. */
 function journeyDigest(stages: { name: string; doing: { value: string }; touchpoints: { value: string } }[]): string {
@@ -119,11 +128,40 @@ export async function POST(req: NextRequest) {
   const prompt = PROMPTS[target];
   const promptId = withBaseline ? `${prompt.id}+baseline` : prompt.id;
   const model = modelForFeature("draft");
-  const result = await callModel({ messages: prompt.build(text, withBaseline), jsonObject: true, model });
+  const timeoutMs = reasoningTimeoutMs();
+  const result = await callModel({
+    messages: prompt.build(text, withBaseline),
+    jsonObject: true,
+    model,
+    timeoutMs,
+    budgetMs: timeoutMs,
+  });
 
   if (!result.ok) {
     const meta = metaFromResult({ result, promptId, model, inputSummary, outputSummary: "no output" });
-    return NextResponse.json({ degraded: true, draft: null, aiMeta: meta, message: "AI assist is unavailable. Build by hand." });
+    // A draft that never came back is part of the audit trail too — without this line the
+    // log shows only the drafts that succeeded, which reads as a feature that always works.
+    await appendAiDecision({
+      ts: new Date().toISOString(),
+      actor: process.env.PRACTICE_ACTOR || "unknown",
+      feature: FEATURES[target],
+      promptId,
+      model,
+      engagementId,
+      inputSummary,
+      outputSummary: "no output",
+      latencyMs: result.latencyMs,
+      outcome: meta.outcome,
+      failureReason: meta.failureReason,
+      failureStatus: meta.failureStatus,
+      failureDetail: meta.failureDetail,
+    });
+    return NextResponse.json({
+      degraded: true,
+      draft: null,
+      aiMeta: meta,
+      message: `AI assist is unavailable. ${failureNote(result)} Build by hand.`,
+    });
   }
 
   const draft = parseJsonLoose<Record<string, unknown>>(result.content);

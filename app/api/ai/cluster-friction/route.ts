@@ -4,10 +4,11 @@
  * clusters the client applies (marked ai-applied). The human edits or removes any of them.
  */
 import { NextRequest, NextResponse } from "next/server";
-import { callModel, parseJsonLoose, isAiConfigured, modelForFeature } from "@/lib/tritonai";
+import { callModel, parseJsonLoose, isAiConfigured, modelForFeature, reasoningTimeoutMs } from "@/lib/tritonai";
 import { redactPII } from "@/lib/pii";
 import { CLUSTER_FRICTION } from "@/lib/prompts";
-import { metaFromResult } from "@/lib/ai-meta";
+import { metaFromResult, failureNote } from "@/lib/ai-meta";
+import { appendAiDecision } from "@/lib/ai-log";
 import { loadArtifact } from "@/lib/store";
 
 export const runtime = "nodejs";
@@ -35,10 +36,31 @@ export async function POST(req: NextRequest) {
   const inputSummary = `${entries.length} friction entries, ${redactions} PII redaction(s)`;
 
   const model = modelForFeature("cluster");
-  const result = await callModel({ messages: CLUSTER_FRICTION.build(text), jsonObject: true, model });
+  const timeoutMs = reasoningTimeoutMs();
+  const result = await callModel({ messages: CLUSTER_FRICTION.build(text), jsonObject: true, model, timeoutMs, budgetMs: timeoutMs });
   if (!result.ok) {
     const meta = metaFromResult({ result, promptId: CLUSTER_FRICTION.id, model, inputSummary, outputSummary: "no output" });
-    return NextResponse.json({ degraded: true, clusters: [], aiMeta: meta, message: "AI assist is unavailable. Cluster by hand." });
+    await appendAiDecision({
+      ts: new Date().toISOString(),
+      actor: process.env.PRACTICE_ACTOR || "unknown",
+      feature: "friction-cluster",
+      promptId: CLUSTER_FRICTION.id,
+      model,
+      engagementId,
+      inputSummary,
+      outputSummary: "no output",
+      latencyMs: result.latencyMs,
+      outcome: meta.outcome,
+      failureReason: meta.failureReason,
+      failureStatus: meta.failureStatus,
+      failureDetail: meta.failureDetail,
+    });
+    return NextResponse.json({
+      degraded: true,
+      clusters: [],
+      aiMeta: meta,
+      message: `AI assist is unavailable. ${failureNote(result)} Cluster by hand.`,
+    });
   }
 
   const parsed = parseJsonLoose<{ clusters?: Array<{ name?: string; frIds?: string[]; sharedRoot?: string }> }>(result.content);

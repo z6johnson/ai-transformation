@@ -9,7 +9,7 @@
  * account of what actually happens. Every generation is logged for the audit trail.
  */
 import { NextRequest, NextResponse } from "next/server";
-import { callModel, parseJsonLoose, isAiConfigured, modelForFeature } from "@/lib/tritonai";
+import { callModel, parseJsonLoose, isAiConfigured, modelForFeature, reasoningTimeoutMs } from "@/lib/tritonai";
 import { redactPII } from "@/lib/pii";
 import { LIBRARY_SYNTHESIS, baselineBlock } from "@/lib/prompts";
 import { metaFromResult, failureNote } from "@/lib/ai-meta";
@@ -29,9 +29,10 @@ const PER_DOC = 12;
 const MAX_TOTAL = 80;
 
 // One long attempt beats three short ones here: a full-library synthesis routinely runs past
-// the 25s default, and retrying an identical prompt that timed out just burns the budget.
-// The total stays inside maxDuration so the route always gets to log and answer.
-const SYNTHESIS_TIMEOUT_MS = Number(process.env.AI_TIMEOUT_MS_SYNTHESIS || 50000);
+// the tagging-sized default, and retrying an identical prompt that timed out just burns the
+// budget. The total stays inside maxDuration so the route always gets to log and answer.
+// AI_TIMEOUT_MS_SYNTHESIS overrides the shared reasoning budget for this route alone.
+const synthesisTimeoutMs = () => Number(process.env.AI_TIMEOUT_MS_SYNTHESIS || reasoningTimeoutMs());
 
 const str = (v: unknown): string => (typeof v === "string" ? v : "");
 const arr = (v: unknown): string[] => (Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : []);
@@ -75,8 +76,8 @@ export async function POST(req: NextRequest) {
     messages: LIBRARY_SYNTHESIS.build(baseline),
     jsonObject: true,
     model,
-    timeoutMs: SYNTHESIS_TIMEOUT_MS,
-    budgetMs: SYNTHESIS_TIMEOUT_MS,
+    timeoutMs: synthesisTimeoutMs(),
+    budgetMs: synthesisTimeoutMs(),
   });
 
   if (!result.ok) {

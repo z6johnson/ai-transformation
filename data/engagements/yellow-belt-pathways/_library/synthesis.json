@@ -1,0 +1,86 @@
+{
+  "engagementId": "yellow-belt-pathways",
+  "status": "in-review",
+  "updatedAt": "2026-08-20T22:46:20.359Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": true,
+  "data": {
+    "sections": [
+      {
+        "id": "SEC-01",
+        "heading": "Service purpose and agreement",
+        "body": "The MOU describes OSI as partnering with the client to support a culture of continuous improvement and establish a continuous improvement program integrated with the client’s services, processes, projects, and programs. The MOU governs the training services through the stated end date, and significant changes to the described services require mutual agreement. Payments are processed through Recharge, with pricing set at $1,000 for up to 20 participants or $1,500 for up to 40 participants for the specified attendee workshops; the pricing does not apply to OSI open-enrollment classes.",
+        "baselineRefs": [
+          "DOC-01#0",
+          "DOC-01#1"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-08-20T22:44:17.220Z"
+      },
+      {
+        "id": "SEC-02",
+        "heading": "Training content and participant materials",
+        "body": "The documented training includes tailored Rath and Strong Courier Simulation content for a UC San Diego audience, Lean Six Sigma tools and methodology, and facilitated Courier Simulation Yellow Belt workshops. The facilitator agenda covers introductions, Lean Six Sigma overview and belt levels, basic principles, a mini-DMAIC exercise, Courier Simulation rounds with preparation, ground rules, conduct, and debriefs, project charter, Gemba Walk, VOC, critical path, value stream mapping, value-added analysis, waste, flow, 5S, data visualization, process capability, root cause analysis, control and reaction planning, automation and AI, applications and next steps, and certificates. Electronic PowerPoint slides are to be posted on the client intranet for participants who have completed training and are not for replication or distribution.",
+        "baselineRefs": [
+          "DOC-01#0",
+          "DOC-01#1",
+          "DOC-02#1"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-08-20T22:44:25.676Z"
+      },
+      {
+        "id": "SEC-03",
+        "heading": "Planning and authorization",
+        "body": "For a department-specific session, the planning procedure says to begin scope and onboarding discussions as soon as possible, create an MOU from the template, obtain signatures through Docusign, update Orchestra with the annual Yellow Belt project, add the MOU and onboarding notes to the files, and add a line to the gantt. For an open-registration session, the procedure says that two months in advance the team should set tentative dates, confirm them with the SI team, request a new UCLC Classes item, add dates to the OSI Outlook calendar, add the course to the OSI Yellow Belt website through the CMS, and reserve a training space.",
+        "baselineRefs": [
+          "DOC-03#0"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-08-20T22:45:12.779Z"
+      },
+      {
+        "id": "SEC-04",
+        "heading": "Preparation before the session",
+        "body": "One to two weeks before the session, the procedure says to copy the PowerPoint from Master Files into a new SharePoint or Google folder for the cohort, place it on a thumb drive and/or link it in the OSI calendar invitation, edit slides when appropriate for the audience, pull the roster from UCLC, add participants to the Teams general Yellow Belt channel, send an email reminder, create a catering order through HDH using recommended items, and sort Courier materials and print extra copies if needed. Two days before the session, the procedure says to create certificates and assemble printed materials, certificates, handouts, the UCLC roster, posters, wayfinding signage, and other facilitator materials; posters must be ordered in advance.",
+        "baselineRefs": [
+          "DOC-03#0",
+          "DOC-03#1"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-08-20T22:45:20.333Z"
+      },
+      {
+        "id": "SEC-06",
+        "heading": "Post-class processing",
+        "body": "For open-registration sessions, the documented procedure says to send the roster to UCLC and request Project/Task information, update UCLC attendance, and, once Project/Tasks are received, prepare an RMP file and submit it through the RMP app. For department sessions, it says to create and send an invoice and, once approval is received, prepare an RMP file and submit it through the RMP app. The procedure also says to create a SurveyMonkey collector and send the email template, add information to the LSS Emails tracking file, add headcount to the LSS/CI Participant tracking file, update the OSI MOU tracking document and Orchestra by marking the task complete, and send survey results to facilitators after a week or two.",
+        "baselineRefs": [
+          "DOC-03#1"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-08-20T22:45:35.884Z"
+      },
+      {
+        "id": "SEC-07",
+        "heading": "Systems and records",
+        "body": "The documented workflow uses Docusign for signatures; Orchestra, a gantt, and OSI MOU tracking documents for project and agreement tracking; UCLC for course, roster, attendance, and Project/Task information; OSI Outlook and the OSI website CMS for scheduling and course publication; SharePoint or Google folders, a thumb drive, and the OSI calendar invitation for cohort materials; Teams for participant communication; HDH for catering; the RMP app for RMP submission; SurveyMonkey for survey collection; and LSS Emails and LSS/CI Participant tracking files for communications and participant records. The procedure specifically notes that some files should be opened in particular applications: Courier materials in PowerPoint rather than Google Slides, and the participant tracking file in Sheets rather than Excel.",
+        "baselineRefs": [
+          "DOC-01#1",
+          "DOC-03#0",
+          "DOC-03#1"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-08-20T22:45:42.054Z"
+      }
+    ],
+    "summary": "The documented baseline describes OSI Yellow Belt training as a planned service delivered under an MOU, with Lean Six Sigma content, Courier Simulation activities, certified facilitators, participant materials, and logistical coordination. Planning includes scope and onboarding discussions, agreements and signatures, scheduling, course and facility setup, cohort communications, materials and catering preparation, day-of facilitation roles, and post-class attendance, project, invoicing, survey, and tracking activities. The documents identify systems including Docusign, Orchestra, UCLC, OSI Outlook, the OSI website CMS, SharePoint or Google folders, Teams, HDH, the RMP application, SurveyMonkey, and tracking files.",
+    "generatedAt": "2026-08-20T22:46:19.986Z",
+    "retrievalMode": "embeddings"
+  }
+}

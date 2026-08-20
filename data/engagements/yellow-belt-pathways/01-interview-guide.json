@@ -1,0 +1,48 @@
+{
+  "artifactId": "01",
+  "engagementId": "yellow-belt-pathways",
+  "status": "in-review",
+  "updatedAt": "2026-08-20T22:51:39.589Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": false,
+  "data": {
+    "interviews": [
+      {
+        "id": "INT-01",
+        "header": {
+          "person": "Angela",
+          "role": "DES Program Lead",
+          "relationship": "Support and parallel process owner",
+          "interviewer": "Sancho",
+          "date": "8/15/26",
+          "consent": "Yes"
+        },
+        "rawNotes": "[Angela - DES] 14:57:27\nHi, my name is Angela. I am the program manager for the Division of Extended Studies version of the Yellow Belt.\n\n[Angela - DES] 14:57:36\nThe program that we oversee, uh, caters to the general public, so that means that, um, staff can take the class if they choose to, um, but our, our course is really meant to be for, uh, industry, uh, so in that way, it's not, um.\n\n[Angela - DES] 14:57:54\nyou know, not higher Ed folks specifically. And we don't have a particular like discount for for Uc. San Diego staff that want to go through this program. So typically, when I hear that as a staff member, I will direct them to.\n\n[Angela - DES] 14:58:10\neither transformational healthcare team or to OSI, depending on if they are a health system or a campus staff member. They're still, of course, welcome to take our version of the training if they choose to.\n\n[Angela - DES] 14:58:23\nUm, the other thing that we deliver and support, uh, are the, um… well, technically, I guess, with the, um…\n\n[Angela - DES] 14:58:33\ntransformational healthcare team. We also support.\n\n[Angela - DES] 14:58:37\nthe facilitation of those, so we coordinate the instructors and all of that, but it's different than the Yellow Belt.\n\n[Angela - DES] 14:58:45\nactual class that we, um, deliver for the public. So there's some nuance there, um, where we support, um, Transformational Healthcare Team by coordinating the instructors.\n\n[Angela - DES] 14:58:57\nYeah, um…\n\n[Angela - DES] 14:58:59\nWe also deliver the Green Belt program. So if folks are interested in going through the Green Belt, again, this could be staff, it could be members of the public or industry. They register through our website for that. They have to create a student account.\n\n[Angela - DES] 14:59:15\nUm, and become sort of a student of DES. Um, but once they do that, then they can, um, register for really any of our programs. Uh, we coordinate closely with, uh, OSI when scholarship season rolls around.\n\n[Angela - DES] 14:59:28\nAnd we, um…\n\n[Angela - DES] 14:59:30\nyeah, we we help them sort of pick dates. And and we're part of the review committee for the applicants, and we closely.\n\n[Angela - DES] 14:59:42\nsupport OSI as they, um, are partnering with the students to go through, um, those things.",
+        "tags": [],
+        "source": {
+          "filename": "Angela -DES.txt",
+          "uploadedAt": "2026-08-20T22:46:51.189Z",
+          "uploadedBy": "you"
+        }
+      },
+      {
+        "id": "INT-02",
+        "header": {
+          "person": "Brad",
+          "role": "THT Trainer",
+          "relationship": "Service owner of parallel process",
+          "interviewer": "Sancho",
+          "date": "8/19/2026",
+          "consent": "YES"
+        },
+        "rawNotes": "[Brad - THT] 15:00:36\nHello! My name is Brad. I am one of the instructors for the transformational healthcare teams. Lean trainings. I I've been doing this for a number of years. I myself am a black belt. So the course that we offer is.\n\n[Brad - THT] 15:00:54\nit's a lean training, um, and we… our audience is primarily folks from the health system side of UC San Diego. Um, that means they are going to be clinicians, practitioners, uh, physicians, those sorts of things. Um, as such, our trainings are.\n\n[Brad - THT] 15:01:11\nUm, you know, uh, leverage the simulation and hands-on components and discussion topics that are going to be relatable in a healthcare field. Um…\n\n[Brad - THT] 15:01:20\nfolks who are interested in our, uh, program will go through our Pulse site. Uh, there's login required for that. Um, but, uh, you know, we, we administer everything from, uh, what would be considered white belt through yellow belt, green belt, and black belt.\n\n[Brad - THT] 15:01:37\num, in partnership or with support from instructors that are, uh, through the Division of Extended Studies. So, uh, we've trained, uh, thousands of staff, and we have a, uh, monthly report-out series that we have, uh, for the Green Belt and Black Belt level, or for the different initiatives that are happening.\n\n[Brad - THT] 15:01:54\nIt's very fast paced, a lot more project driven.\n\n[Brad - THT] 15:01:59\nI am.\n\n[Brad - THT] 15:02:00\nUh, yeah, so, uh, we are looking to revamp our training since, um, you know, we still have some, some videos and things that we would like to, um.\n\n[Brad - THT] 15:02:10\nmake more modern. Um, some things that my understanding are different from the other trainings, uh, in addition to the healthcare settings, is that we focus on the A3.\n\n[Brad - THT] 15:02:20\nand Pdca examples more heavily than the Demaic models or the actual 6 Sigma tool set. We talk about the tool set, and we talk about the methodology, of course, especially in a healthcare setting. It's really important to.\n\n[Brad - THT] 15:02:36\nReduce defects. Um, but we, um…\n\n[Brad - THT] 15:02:39\nYou know, we focus more on some of the lean tool sets specifically. Let's see, what else?\n\n[Brad - THT] 15:02:48\nWe don't charge for any of our trainings, uh, there's no fees, um…\n\n[Brad - THT] 15:02:55\nfor any healthcare, uh, health system staff that, uh, choose to go through our trainings. Um, and also, if somebody goes through the white belt or the yellow belt, either online or through, um, OSI or DES, um, they can progress on.\n\n[Brad - THT] 15:03:12\nin our green belt or or our black belt. They don't have to retake it. so it suffices, I guess, as a prerequisite.",
+        "tags": [],
+        "source": {
+          "filename": "Brad - THT.txt",
+          "uploadedAt": "2026-08-20T22:50:33.603Z",
+          "uploadedBy": "you"
+        }
+      }
+    ]
+  }
+}

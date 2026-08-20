@@ -2,7 +2,7 @@
   "engagementId": "yellow-belt-pathways",
   "embeddingModel": "api-tgpt-embeddings",
   "dims": 1024,
-  "builtAt": "2026-08-20T22:32:04.848Z",
+  "builtAt": "2026-08-20T22:32:39.402Z",
   "chunkCount": 5,
   "chunks": [
     {

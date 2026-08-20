@@ -1,7 +1,7 @@
 {
   "engagementId": "yellow-belt-pathways",
   "status": "in-review",
-  "updatedAt": "2026-08-20T22:31:47.984Z",
+  "updatedAt": "2026-08-20T22:32:43.747Z",
   "updatedBy": "z6johnson@ucsd.edu",
   "aiAssisted": false,
   "data": {
@@ -33,6 +33,22 @@
           "format": "paste",
           "bytes": 2008,
           "parser": "paste",
+          "parseWarnings": [],
+          "piiRedactions": 0
+        },
+        "origin": "human"
+      },
+      {
+        "id": "DOC-03",
+        "filename": "How To Prepare for in-person YB session.docx",
+        "kind": "procedure",
+        "text": "In-person Yellow Belt Planning\n\nReviewed August 2022\n\nAs soon as possible (IF this is a department-specific session)\n\nScope and Onboard discussions (guide)\n\nCreate MOU from template\n\nObtain signatures via Docusign\n\nUpdate Orchestra (annual YB project)\n\nAdd MOU to files\n\nAdd onboarding discussion notes to files\n\nAdd a line to gantt\n\nTwo months in advance of session (IF this is an open registration session)\n\nSet tentative dates, confirm with SI team\n\nRequest new course UCLC Classes - New Item\n\nAdd dates to OSI Outlook calendar\n\nAdd course to OSI YB website by updating with WYSIWYG in CMS\n\nReserve a space for the training (Previous spaces: Dugout, Red Shoe, Price Center Forum)\n\n1-2 Weeks out\n\nCopy PPT from Master Files, and place in a new Sharepoint folder  or new Google folder for this cohort.  \n\nPlace on thumb drive and/or place link in OSI calendar invitation\n\nEdit slides if appropriate based on audience\n\nPull roster from UCLC\n\nAdd participants to Teams general YB channel\n\nSend email reminder\n\nCreate catering order through HDH (recommended items)\n\nSort Courier materials and print extra if necessary (NOTE: open in PPT, not Google slides, due to formatting)\n\nTwo Days before\n\nCreate certificates \n\nPrinted materials\n\nCertificates\n\nHandouts\n\nRoster (from UCLC)\n\nPosters (histogram, time plot, end of round) – These must be ordered in advance\n\nWayfinding Signage\n\nGather other facilitator materials\n\nDay-of FORMAT\n\nHost setup and timekeeping\n\nLead facilitator and CEO guide\n\nCustomer guide\n\nBreak-out guide\n\nAfter the class ends\n\nOpen registration sessions\n\nSend roster to UCLC and request Project/Task information \n\nUpdate UCLC attendance \n\nOnce Project/Tasks are received, prepare RMP file and submit via RMP app\n\nDepartment sessions\n\nCreate/send Invoice\n\nOnce approval is received, prepare RMP file and submit via RMP app\n\nCreate a SurveyMonkey collector, and send email template\n\nAdd information to LSS Emails tracking file \n\nAdd headcount to LSS/CI Participant tracking file (be sure to open in Sheets, not Excel!)\n\nUpdate OSI MOU tracking document and Orchestra (mark task complete)\n\nSend survey results to facilitators after a week or two",
+        "parsedAt": "2026-08-20T22:32:35.089Z",
+        "uploadedBy": "you",
+        "source": {
+          "format": "docx",
+          "bytes": 13359,
+          "parser": "mammoth",
           "parseWarnings": [],
           "piiRedactions": 0
         },

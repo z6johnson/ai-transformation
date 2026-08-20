@@ -1,0 +1,15 @@
+{
+  "id": "yellow-belt-pathways",
+  "name": "Yellow Belt Pathways",
+  "service": "Lean training for staff",
+  "scopeStart": "Planning dates for sessions",
+  "scopeEnd": "Delivered content and processed payment if needed",
+  "lead": "Sancho",
+  "lifecycleOwner": {
+    "name": "Antonio",
+    "role": "Programs Director"
+  },
+  "stage": "mapping",
+  "owner": "z6johnson@ucsd.edu",
+  "createdAt": "2026-08-20T22:26:45.446Z"
+}

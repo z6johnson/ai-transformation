@@ -1,0 +1,12 @@
+{
+  "engagementId": "yellow-belt-pathways",
+  "status": "in-review",
+  "updatedAt": "2026-08-20T22:35:05.827Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": true,
+  "data": {
+    "findings": [],
+    "generatedAt": "2026-08-20T22:35:05.424Z",
+    "retrievalMode": "none"
+  }
+}

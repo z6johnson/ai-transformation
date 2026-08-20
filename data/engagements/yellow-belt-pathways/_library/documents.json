@@ -1,0 +1,43 @@
+{
+  "engagementId": "yellow-belt-pathways",
+  "status": "in-review",
+  "updatedAt": "2026-08-20T22:31:47.984Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": false,
+  "data": {
+    "documents": [
+      {
+        "id": "DOC-01",
+        "filename": "MOU LSS YB TEMPLATE 2022.DOCX",
+        "kind": "other",
+        "text": "MEMORANDUM OF UNDERSTANDING\n\nBETWEEN:\n\n<Client>\n\nAND\n\nOffice of Operational Strategic Initiatives\n\nUniversity of California, San Diego\n\nThis Memorandum of Understanding (“MOU”) is made as of <long date>, 2017, by <client> (“<client acronym>”) and the Office of Operational Strategic Initiatives (“OSI”) at University of California, San Diego.\n\nWHEREAS, <client acronym> seeks to acquire the services of OSI to partner in achieving <client acronym> goal to implement a culture of continuous improvement in <client acronym> operations and establish a continuous improvement program that integrates with other <client acronym> services, processes, and projects/programs.\n\nNOW, THEREFORE, the parties agree as follows.\n\nOFFICE OF OPERATIONAL STRATEGIC INITIATIVES SERVICES INCLUDE:\n\nTRAINING\n\nCourier Simulation Yellow Belt Training Workshops will be executed in <start date/month> through May 2017, with the objective of training <end date/month> team members in Lean Six Sigma tools and methodology.  The facilitated sessions for groups of 16-20 or 32-40 include the following related services:\n\nTailoring of Rath and Strong Courier Simulation™ content and design to be more relevant to a UC San Diego audience.\n\nFacilitation of participants by certified Lean Six Sigma Black Belts and Green Belts.\n\nOrdering and coordination of relevant supplies, materials, facilities, equipment, and food for participants related to the trainings.\n\nElectronic copy of PowerPoint slides to be posted on <client acronym> intranet (not for replication and distribution) for participants who have completed the training.\n\nTERM\n\nThe term of this MOU is through <end date/month>.\n\nCONSIDERATION\n\nThe service fee for OSI services to be rendered to <client acronym> assumes that any significant changes to the services outlined above would require mutual agreement from both parties.  The service fee (“Fee”) shall equal the following.\n\nPRICING\n\nAttendee Courier Simulation/Yellow Belt Training Workshops on <training dates>:\t\n\n$1,000.00 for up to 20 participants\n\n$1,500.00 for up to 40 participants\n\nThis pricing does not apply to open-enrollment classes provided by OSI\n\nNOTICES AND PAYMENTS\n\nPayments will be process via Recharge. Any notice shall be deemed delivered five (5) days after invoice is mailed, or, if personally delivered or electronically mailed, when acknowledgement of receipt is signed or an electronic receipt is received, as provided above.\t\t\n\nIN WITNESS WHEREOF, the parties hereto have executed this MOU on the dates specified below.\n\n<Client>, University of California, San Diego:\n\nBY: ___________________________________________________________ (Sponsor signatory)\n\nTITLE:         _____________________________________________________\t\n\nINDEX: _____________________________     \n\nOffice of Operational Strategic Initiatives, University of California, San Diego:\n\nBY: ___________________________________________________________ (OSI signatory)\n\nTITLE:         _______________________________________\t\t\t\n\nDATE:",
+        "parsedAt": "2026-08-20T22:29:38.209Z",
+        "uploadedBy": "you",
+        "source": {
+          "format": "docx",
+          "bytes": 50826,
+          "parser": "mammoth",
+          "parseWarnings": [],
+          "piiRedactions": 0
+        },
+        "origin": "human"
+      },
+      {
+        "id": "DOC-02",
+        "filename": "pasted text",
+        "kind": "procedure",
+        "text": "12/1/23 Facilitator Agenda \n\nTime\nTopic\nLead\nTime\n9:00am \nWelcome and Introductions\nAbout OSI (Kristin)\nIcebreaker (Savannah) \nSavannah, Kristin \n25 mins\n9:25am \nOverview of LSS\nLSS Belt Levels (Savannah) \nWhat is LSS (Kristin)\nBasic Principles (Kristin)\nMini-DMAIC Exercise (count the Fs) (Kristin)\nLSS Applications \nSavannah, Kristin \n25 mins\n9:50am \nIntroduction to Courier Simulation - Round 1\nPrepare for Round 1 - 10 mins\nGround Rules for Round 1 - 5 mins \nConduct Round 1 Simulation - 25 mins \nDebrief Round 1 - 15 mins \nKristin \n60 mins \n10:50am \nBreak - 10 mins\nFacilitator Create histogram of delivery time from customer log\nFacilitator Create run chart (deliveries by time received) from customer log\nAll \n10 mins\n11:00am \nDEFINE:\nProject Charter (Savannah) \nGemba Walk (Savannah) \nVOC and Exercise (Savannah)\nCritical Path (Kristin)\nVSM and Exercise (Kristin) - 35 mins \nSavannah,\nKristin \n60 mins\n12:00pm\nLunch \nAll\n45 min\n12:45pm \nANALYZE: \nValue Added Defined\nOverview of 8 Wastes \nExercise: Identify Value \nKristin\n20 mins\n1:05pm\nIndividual vs System Efficiency, Takt Time, and Continuous / FIFO Flow \nKristin \n10 mins\n1:15pm\nLean 5S Principles \nExample of Lean 5S\n5S Reports \nKristin \n10 mins\n1:25pm\nKaizen Rapid Improvement (Simulation Round 2) \nGround Rules \nConduct Round 2 - 10 mins\nDebrief Round 2\nKristin \n25 mins\n1:50m\nData Visualization, Verifying Data, Measuring Process Capability \nFrequency Plot / Histogram \nRun Charts and Examples of Signals \nPareto Chart \nMeasuring Process Capability\nProcess Sigma \nKristin \n20 mins\n2:10pm\nAnalyze\nFishbone Diagram (Ishikawa) \n5 “Whys”\nRoot Cause Analysis \nKristin \n15 mins\n2:25pm\nSimulation - Round 3\nOverview of constraints \nConduct Round 3 - 10 mins \nDebrief final round \nKristin \n25 mins\n2:50pm\nControl and Reaction Plan \nKristin \n10 mins\n3:00pm\nAutomation & AI\nKristin \n5 mins\n3:05pm\nApplications and Next Steps \nKristin \n5 mins\n3:10pm\nStrategic Partnerships and celebrating YB (certificates)\nKristin \n5 mins \n3:15pm \nPack-up\nAll \n15 mins",
+        "parsedAt": "2026-08-20T22:31:40.706Z",
+        "uploadedBy": "you",
+        "source": {
+          "format": "paste",
+          "bytes": 2008,
+          "parser": "paste",
+          "parseWarnings": [],
+          "piiRedactions": 0
+        },
+        "origin": "human"
+      }
+    ]
+  }
+}

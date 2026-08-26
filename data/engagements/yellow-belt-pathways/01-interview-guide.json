@@ -2,9 +2,9 @@
   "artifactId": "01",
   "engagementId": "yellow-belt-pathways",
   "status": "in-review",
-  "updatedAt": "2026-08-20T22:51:39.589Z",
+  "updatedAt": "2026-08-26T17:12:15.542Z",
   "updatedBy": "z6johnson@ucsd.edu",
-  "aiAssisted": false,
+  "aiAssisted": true,
   "data": {
     "interviews": [
       {
@@ -18,7 +18,78 @@
           "consent": "Yes"
         },
         "rawNotes": "[Angela - DES] 14:57:27\nHi, my name is Angela. I am the program manager for the Division of Extended Studies version of the Yellow Belt.\n\n[Angela - DES] 14:57:36\nThe program that we oversee, uh, caters to the general public, so that means that, um, staff can take the class if they choose to, um, but our, our course is really meant to be for, uh, industry, uh, so in that way, it's not, um.\n\n[Angela - DES] 14:57:54\nyou know, not higher Ed folks specifically. And we don't have a particular like discount for for Uc. San Diego staff that want to go through this program. So typically, when I hear that as a staff member, I will direct them to.\n\n[Angela - DES] 14:58:10\neither transformational healthcare team or to OSI, depending on if they are a health system or a campus staff member. They're still, of course, welcome to take our version of the training if they choose to.\n\n[Angela - DES] 14:58:23\nUm, the other thing that we deliver and support, uh, are the, um… well, technically, I guess, with the, um…\n\n[Angela - DES] 14:58:33\ntransformational healthcare team. We also support.\n\n[Angela - DES] 14:58:37\nthe facilitation of those, so we coordinate the instructors and all of that, but it's different than the Yellow Belt.\n\n[Angela - DES] 14:58:45\nactual class that we, um, deliver for the public. So there's some nuance there, um, where we support, um, Transformational Healthcare Team by coordinating the instructors.\n\n[Angela - DES] 14:58:57\nYeah, um…\n\n[Angela - DES] 14:58:59\nWe also deliver the Green Belt program. So if folks are interested in going through the Green Belt, again, this could be staff, it could be members of the public or industry. They register through our website for that. They have to create a student account.\n\n[Angela - DES] 14:59:15\nUm, and become sort of a student of DES. Um, but once they do that, then they can, um, register for really any of our programs. Uh, we coordinate closely with, uh, OSI when scholarship season rolls around.\n\n[Angela - DES] 14:59:28\nAnd we, um…\n\n[Angela - DES] 14:59:30\nyeah, we we help them sort of pick dates. And and we're part of the review committee for the applicants, and we closely.\n\n[Angela - DES] 14:59:42\nsupport OSI as they, um, are partnering with the students to go through, um, those things.",
-        "tags": [],
+        "tags": [
+          {
+            "id": "T-mtacm91g-0",
+            "tag": "TOUCH",
+            "sourceWords": "register through our website",
+            "span": {
+              "start": 1666,
+              "end": 1694
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 1,
+            "confirmedAt": "2026-08-26T17:09:13.156Z"
+          },
+          {
+            "id": "T-mtacm91g-1",
+            "tag": "HAND",
+            "sourceWords": "direct them to either transformational healthcare team or to OSI",
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:13.156Z"
+          },
+          {
+            "id": "T-mtacm91g-2",
+            "tag": "HAND",
+            "sourceWords": "sourceWords own the process of coordinating the instructors",
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.8,
+            "confirmedAt": "2026-08-26T17:09:13.156Z"
+          },
+          {
+            "id": "T-mtacm91g-3",
+            "tag": "HAND",
+            "sourceWords": "coordinate closely with, uh, OSI when scholarship season rolls around",
+            "span": {
+              "start": 1904,
+              "end": 1973
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:13.156Z"
+          },
+          {
+            "id": "T-mtacm91g-4",
+            "tag": "HAND",
+            "sourceWords": "part of the review committee for the applicants",
+            "span": {
+              "start": 2093,
+              "end": 2140
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:13.156Z"
+          },
+          {
+            "id": "T-mtacm91g-5",
+            "tag": "HAND",
+            "sourceWords": "support OSI as they, um, are partnering with the students",
+            "span": {
+              "start": 2183,
+              "end": 2240
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:13.156Z"
+          }
+        ],
         "source": {
           "filename": "Angela -DES.txt",
           "uploadedAt": "2026-08-20T22:46:51.189Z",
@@ -36,10 +107,1021 @@
           "consent": "YES"
         },
         "rawNotes": "[Brad - THT] 15:00:36\nHello! My name is Brad. I am one of the instructors for the transformational healthcare teams. Lean trainings. I I've been doing this for a number of years. I myself am a black belt. So the course that we offer is.\n\n[Brad - THT] 15:00:54\nit's a lean training, um, and we… our audience is primarily folks from the health system side of UC San Diego. Um, that means they are going to be clinicians, practitioners, uh, physicians, those sorts of things. Um, as such, our trainings are.\n\n[Brad - THT] 15:01:11\nUm, you know, uh, leverage the simulation and hands-on components and discussion topics that are going to be relatable in a healthcare field. Um…\n\n[Brad - THT] 15:01:20\nfolks who are interested in our, uh, program will go through our Pulse site. Uh, there's login required for that. Um, but, uh, you know, we, we administer everything from, uh, what would be considered white belt through yellow belt, green belt, and black belt.\n\n[Brad - THT] 15:01:37\num, in partnership or with support from instructors that are, uh, through the Division of Extended Studies. So, uh, we've trained, uh, thousands of staff, and we have a, uh, monthly report-out series that we have, uh, for the Green Belt and Black Belt level, or for the different initiatives that are happening.\n\n[Brad - THT] 15:01:54\nIt's very fast paced, a lot more project driven.\n\n[Brad - THT] 15:01:59\nI am.\n\n[Brad - THT] 15:02:00\nUh, yeah, so, uh, we are looking to revamp our training since, um, you know, we still have some, some videos and things that we would like to, um.\n\n[Brad - THT] 15:02:10\nmake more modern. Um, some things that my understanding are different from the other trainings, uh, in addition to the healthcare settings, is that we focus on the A3.\n\n[Brad - THT] 15:02:20\nand Pdca examples more heavily than the Demaic models or the actual 6 Sigma tool set. We talk about the tool set, and we talk about the methodology, of course, especially in a healthcare setting. It's really important to.\n\n[Brad - THT] 15:02:36\nReduce defects. Um, but we, um…\n\n[Brad - THT] 15:02:39\nYou know, we focus more on some of the lean tool sets specifically. Let's see, what else?\n\n[Brad - THT] 15:02:48\nWe don't charge for any of our trainings, uh, there's no fees, um…\n\n[Brad - THT] 15:02:55\nfor any healthcare, uh, health system staff that, uh, choose to go through our trainings. Um, and also, if somebody goes through the white belt or the yellow belt, either online or through, um, OSI or DES, um, they can progress on.\n\n[Brad - THT] 15:03:12\nin our green belt or or our black belt. They don't have to retake it. so it suffices, I guess, as a prerequisite.",
-        "tags": [],
+        "tags": [
+          {
+            "id": "T-mtacmprp-0",
+            "tag": "TOUCH",
+            "sourceWords": "folks who are interested in our, uh, program will go through our Pulse site",
+            "span": {
+              "start": 697,
+              "end": 772
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:34.837Z"
+          },
+          {
+            "id": "T-mtacmprp-1",
+            "tag": "TOUCH",
+            "sourceWords": "login required for that",
+            "span": {
+              "start": 786,
+              "end": 809
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.8,
+            "confirmedAt": "2026-08-26T17:09:34.837Z"
+          },
+          {
+            "id": "T-mtacmprp-2",
+            "tag": "TOUCH",
+            "sourceWords": "online or through, um, OSI or DES",
+            "span": {
+              "start": 2452,
+              "end": 2485
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.8,
+            "confirmedAt": "2026-08-26T17:09:34.837Z"
+          },
+          {
+            "id": "T-mtacmprp-3",
+            "tag": "HAND",
+            "sourceWords": "in partnership or with support from instructors that are, uh, through the Division of Extended Studies",
+            "span": {
+              "start": 985,
+              "end": 1087
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.8,
+            "confirmedAt": "2026-08-26T17:09:34.837Z"
+          },
+          {
+            "id": "T-mtacmprp-4",
+            "tag": "DEC",
+            "sourceWords": "if somebody goes through the white belt or the yellow belt... they can progress on. in our green belt or or our black belt. They don't have to retake it.",
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.8,
+            "confirmedAt": "2026-08-26T17:09:34.837Z"
+          }
+        ],
         "source": {
           "filename": "Brad - THT.txt",
           "uploadedAt": "2026-08-20T22:50:33.603Z",
+          "uploadedBy": "you"
+        }
+      },
+      {
+        "id": "INT-03",
+        "header": {
+          "person": "Tony",
+          "role": "Lead",
+          "relationship": "Process owner",
+          "interviewer": "Sancho",
+          "date": "8/26/26",
+          "consent": ""
+        },
+        "rawNotes": "[Tony - YB Virtual lead] 15:04:07\nHi. So yeah, I'm one of the administrators for the Yellow Belt program through OSI. One of the first things that we do is I'll meet up with the person who's in charge of the in-person trainings, Jessica.\n\n[Tony - YB Virtual lead] 15:04:22\nand we'll make sure that we have training dates scheduled out through either a 6 month period or through the end of the year. We'll look at our calendars and and sort of try to set a 6 week cadence. Ish, we alternate. We try to alternate between virtual and in person.\n\n[Tony - YB Virtual lead] 15:04:38\nUh, once we have those dates, we submit them through a services and support ticket.\n\n[Tony - YB Virtual lead] 15:04:44\nthrough through service. Now, right? To get the classes listed in the Uc. Learning right Uclc platform. And we add those dates to the internal calendar and the facilitation. So the internal calendar, by the way, is in outlook.\n\n[Tony - YB Virtual lead] 15:04:59\nAnd we have a facilitator Excel sheet that we keep updated for for our team discussions and to request facilitator support. So during our team meetings on either Tuesday or Friday, we'll talk about the dates that are upcoming, and we'll try to get facilitators secured for those.\n\n[Tony - YB Virtual lead] 15:05:19\nUh, to make sure that we have coverage for the facilitation. Um, so let's see what else. We'll also update the website, so I have to go into the CMS and make sure that the dates are posted in there.\n\n[Tony - YB Virtual lead] 15:05:30\nUh, once all of that is ready to go, um…\n\n[Tony - YB Virtual lead] 15:05:35\nI will, uh, make sure that I set up a calendar invite with the Zoom. Uh, typically it's the same Zoom link, so that, um, it's an open Zoom, so that anybody knows I can… can lead it. Um, what else?\n\n[Tony - YB Virtual lead] 15:05:58\nI will also, um…\n\n[Tony - YB Virtual lead] 15:06:02\nCopy the PowerPoint deck, so I'll make sure that I have a version of that ready to go. Um…\n\n[Tony - YB Virtual lead] 15:06:09\nAs the course date approaches, I will pull the roster from UC Learning. So I'll go into UC Learning and I'll grab the list of attendees and I'll, I put them on an internal tracker. So basically we have a little Excel sheet that we have that will take attendance on as the class progresses.\n\n[Tony - YB Virtual lead] 15:06:26\nUm, I'll also open a Teams channel, so basically I'm duplicating a channel from one of the previous iterations, um, and I'm making sure that the updated templates and all that are in there.\n\n[Tony - YB Virtual lead] 15:06:37\nUm, and I add, one by one, every single person that's, um, going to be attending the virtual, uh, into the Teams environment. I have to add them manually, because there's not a batch way to add them.\n\n[Tony - YB Virtual lead] 15:06:50\nI'll send an email to all the participants, uh, we have our template that we send out, it's like a reminder to let them know, um, you know, to really be focused and to not schedule other meetings in that time, that sort of thing.\n\n[Tony - YB Virtual lead] 15:07:02\nUm, about a day before the session, I will go through and I'll look to see if there were any late cancellations or late adds, um, and I'll make sure to add those people to the roster or remove them as needed.\n\n[Tony - YB Virtual lead] 15:07:15\nPretty straightforward in terms of the facilitation. You know, we'll go through, uh, set up Zoom, and, um…\n\n[Tony - YB Virtual lead] 15:07:21\nrun through the facilitation today, we give them homework. So one of the things that we need to do is we need to review the homework. Uh, so after the session is done for day one, um, we send them an email, again, another template, and we let them know, hey, here's… we remind them, here's what the homework assignments are, and it has the, uh, attachments in there as well.\n\n[Tony - YB Virtual lead] 15:07:43\nAs folks are submitting in assignments over the next day or two, I will go into the Teams environment, and I will give some feedback on the different submissions. I'll also write some notes down on some common themes that I'm seeing.\n\n[Tony - YB Virtual lead] 15:07:58\nbased on what people have submitted. Let's see what else. It's around this time that I will create the actual certificates. So we have a template, and I go ahead and make the certificates at this point, because now I know really who's attended. So I don't want to make them earlier, because sometimes people drop or add late, so I will wait until the end of day one.\n\n[Tony - YB Virtual lead] 15:08:19\nAnd before the certificate to make the templates for everyone to make the certificates. I go through and facilitate.\n\n[Tony - YB Virtual lead] 15:08:26\nWe do have a quiz in Kahoot, so that's one of the other systems, aside from Zoom and Outlook, that we use in Excel, I guess, for the attendance roster. I use a tool called Kahoot to do the quiz. It's a very fun, kind of silly way to recap from day one, as well as to check the learning and.\n\n[Tony - YB Virtual lead] 15:08:43\nprovide an opportunity to reinforce some of what we talked about. During day two, we actually also do an activity in Lucidchart. So there's another system that we use, Lucid. I have a template for the breakout sessions, and so we.\n\n[Tony - YB Virtual lead] 15:08:59\nI copy that template, basically, and put everyone, uh, share it with everyone so that they can leverage it. Um, in that, we make a future state map, so everyone kind of moves boxes around and has some opportunity to, um.\n\n[Tony - YB Virtual lead] 15:09:12\nto practice not only with Lucid, but with, you know, engaging with the team in a breakout space in a confined set of rules and that sort of thing. So it's very fun, kind of chaotic after the end of the day. We will send out another email.\n\n[Tony - YB Virtual lead] 15:09:27\nThanking everyone for attending. Um, we will, uh, send out a survey, so we have a, um…\n\n[Tony - YB Virtual lead] 15:09:34\nUh, team survey link that we send out, it's in Qualtrics, so there's another system, um…\n\n[Tony - YB Virtual lead] 15:09:40\nWe send an email using again the template. We remind people that the certificates, if they, you know, lose them over the next month, or whatever they're gonna be in the teams folder. We also remind them that they can continue using the teams environment if they want to ask questions and that sort of thing.\n\n[Tony - YB Virtual lead] 15:09:57\nUm, once all of that's done, then I will… I have to update our tracking in a few different places, so I need to go into UC Learning and actually mark everyone who attended as present, everyone who didn't as absent. Um, I need to update… there's two different Excel sheets that I update for OSI.\n\n[Tony - YB Virtual lead] 15:10:15\nOne is just a raw headcount, just the sheer number of people and the other is the actual specific names, emails, and dates of the people who attended that can potentially be used for different email efforts that Osi has.\n\n[Tony - YB Virtual lead] 15:10:30\nIn terms of getting word out about scholarships and things like that.\n\n[Tony - YB Virtual lead] 15:10:35\nUm, we don't have currently any fees, so we don't process any recharges, but if this were a Yellow Belt session that was requested by a department, then we would, um…\n\n[Tony - YB Virtual lead] 15:10:47\nwe would recharge the department, not the individuals which is an important call out, too. So from the start of our process at the very, very beginning, it really depends on whether we're talking about open registration, or if we're talking about you know, a department requested.\n\n[Tony - YB Virtual lead] 15:11:03\nyou know, session. If a department requests a yellow belt. The couple of steps that are different are gonna be the very beginning. So where we're planning out the dates, you know, we're not. Obviously, we're not calendaring them based on our needs. But we're working with the sponsor to see what works for them.\n\n[Tony - YB Virtual lead] 15:11:19\nUm, we are, uh, having them provide us the roster instead of checking UC Learning.\n\n[Tony - YB Virtual lead] 15:11:25\nWe let's see what else is different.\n\n[Tony - YB Virtual lead] 15:11:28\nThey might have their own Teams instance, or if they're not a Teams group, then we might set up something in Google for them to sort of align with what they're more likely going to use in the workplace. Same thing with Lucid. If they're Miro people, we might use Miro. It hasn't happened often, but.\n\n[Tony - YB Virtual lead] 15:11:45\nWe have had one team request Miro instead of Lucid.\n\n[Tony - YB Virtual lead] 15:11:50\nand then, yeah, the the other major differences at the end. Of course they we process a recharge. So at the beginning we asked them for a recharge amount for the the cost of the session, and at the very end I need to contact our financial person to.\n\n[Tony - YB Virtual lead] 15:12:07\nprocess the recharge something else I forgot. I guess if they're a department is, we would need to create an mou. So this would be early again in the process. We would set up an agreement with them so that they understand what we're responsible for and what they're responsible for. And and at that time we ask them for their.\n\n[Tony - YB Virtual lead] 15:12:24\nproject and task numbers so that, um, so that we can recharge that. Um, once we have the draft MOU, it's usually a Word document, a template, um, then we, uh, send that through DocuSign, so there's another system, DocuSign.\n\n[Tony - YB Virtual lead] 15:12:38\nWe send that through to get their signature as well as our internal signature.\n\n[Tony - YB Virtual lead] 15:12:44\nUm, there's also a bunch of stuff that gets updated in ClickUp to track the movement of the MOU and the agreement with the sponsor. Um, all stuff that we don't necessarily need to do when we're, uh, talking about, um, an open registration.\n\n[Tony - YB Virtual lead] 15:12:59\nUm, session. Um…\n\n[Tony - YB Virtual lead] 15:13:03\nYeah, those are the major bits. Um, if it's a department, we also have.\n\n[Tony - YB Virtual lead] 15:13:08\nsome pre-discussion, so there's a meeting or two that we have, you know, before the session officially launches, so that we can make sure we customize it where necessary, and we kind of understand who will be in attendance, and that sort of thing. So…",
+        "tags": [
+          {
+            "id": "T-mtacn6m0-0",
+            "tag": "HAND",
+            "sourceWords": "I'll meet up with the person who's in charge of the in-person trainings, Jessica",
+            "span": {
+              "start": 156,
+              "end": 236
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-1",
+            "tag": "TOUCH",
+            "sourceWords": "submit them through a services and support ticket",
+            "span": {
+              "start": 610,
+              "end": 659
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-2",
+            "tag": "TOUCH",
+            "sourceWords": "internal calendar, by the way, is in outlook",
+            "span": {
+              "start": 877,
+              "end": 921
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-3",
+            "tag": "TOUCH",
+            "sourceWords": "facilitator Excel sheet",
+            "span": {
+              "start": 972,
+              "end": 995
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-4",
+            "tag": "TOUCH",
+            "sourceWords": "go into the CMS",
+            "span": {
+              "start": 1406,
+              "end": 1421
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-5",
+            "tag": "TOUCH",
+            "sourceWords": "calendar invite with the Zoom",
+            "span": {
+              "start": 1621,
+              "end": 1650
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-6",
+            "tag": "TOUCH",
+            "sourceWords": "pull the roster from UC Learning",
+            "span": {
+              "start": 2031,
+              "end": 2063
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-7",
+            "tag": "TOUCH",
+            "sourceWords": "internal tracker. So basically we have a little Excel sheet",
+            "span": {
+              "start": 2156,
+              "end": 2215
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-8",
+            "tag": "TOUCH",
+            "sourceWords": "open a Teams channel",
+            "span": {
+              "start": 2332,
+              "end": 2352
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-9",
+            "tag": "FRICTION",
+            "sourceWords": "I have to add them manually, because there's not a batch way to add them",
+            "span": {
+              "start": 2669,
+              "end": 2741
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 1,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-10",
+            "tag": "TOUCH",
+            "sourceWords": "send an email to all the participants",
+            "span": {
+              "start": 2783,
+              "end": 2820
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-11",
+            "tag": "TOUCH",
+            "sourceWords": "set up Zoom",
+            "span": {
+              "start": 3372,
+              "end": 3383
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-12",
+            "tag": "TOUCH",
+            "sourceWords": "send them an email",
+            "span": {
+              "start": 3616,
+              "end": 3634
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-13",
+            "tag": "TOUCH",
+            "sourceWords": "go into the Teams environment",
+            "span": {
+              "start": 3911,
+              "end": 3940
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-14",
+            "tag": "TOUCH",
+            "sourceWords": "sourceWords own a tool called Kahoot",
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.7,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-15",
+            "tag": "TOUCH",
+            "sourceWords": "activity in Lucidchart",
+            "span": {
+              "start": 5093,
+              "end": 5115
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-16",
+            "tag": "TOUCH",
+            "sourceWords": "send out another email",
+            "span": {
+              "start": 5725,
+              "end": 5747
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-17",
+            "tag": "TOUCH",
+            "sourceWords": "team survey link that we send out, it's in Qualtrics",
+            "span": {
+              "start": 5910,
+              "end": 5962
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-18",
+            "tag": "TOUCH",
+            "sourceWords": "go into UC Learning and actually mark everyone who attended as present",
+            "span": {
+              "start": 6485,
+              "end": 6555
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-19",
+            "tag": "TOUCH",
+            "sourceWords": "two different Excel sheets that I update for OSI",
+            "span": {
+              "start": 6618,
+              "end": 6666
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-20",
+            "tag": "DEC",
+            "sourceWords": "depends on whether we're talking about open registration, or if we're talking about you know, a department requested",
+            "span": {
+              "start": 7429,
+              "end": 7545
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 1,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-21",
+            "tag": "HAND",
+            "sourceWords": "working with the sponsor to see what works for them",
+            "span": {
+              "start": 7841,
+              "end": 7892
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-22",
+            "tag": "TOUCH",
+            "sourceWords": "set up something in Google",
+            "span": {
+              "start": 8208,
+              "end": 8234
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.8,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-23",
+            "tag": "TOUCH",
+            "sourceWords": "use Miro",
+            "span": {
+              "start": 8378,
+              "end": 8386
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.8,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-24",
+            "tag": "HAND",
+            "sourceWords": "contact our financial person to process the recharge",
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-25",
+            "tag": "TOUCH",
+            "sourceWords": "send that through DocuSign",
+            "span": {
+              "start": 9347,
+              "end": 9373
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacn6m0-26",
+            "tag": "TOUCH",
+            "sourceWords": "updated in ClickUp",
+            "span": {
+              "start": 9605,
+              "end": 9623
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:09:56.664Z"
+          },
+          {
+            "id": "T-mtacotb7-0",
+            "tag": "HAND",
+            "sourceWords": "I'll meet up with the person who's in charge of the in-person trainings, Jessica",
+            "span": {
+              "start": 156,
+              "end": 236
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:12.739Z"
+          },
+          {
+            "id": "T-mtacotb7-1",
+            "tag": "TOUCH",
+            "sourceWords": "submit them through a services and support ticket",
+            "span": {
+              "start": 610,
+              "end": 659
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:12.739Z"
+          },
+          {
+            "id": "T-mtacotb7-2",
+            "tag": "TOUCH",
+            "sourceWords": "internal calendar, by the way, is in outlook",
+            "span": {
+              "start": 877,
+              "end": 921
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:12.739Z"
+          },
+          {
+            "id": "T-mtacotb7-3",
+            "tag": "TOUCH",
+            "sourceWords": "facilitator Excel sheet",
+            "span": {
+              "start": 972,
+              "end": 995
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:12.739Z"
+          },
+          {
+            "id": "T-mtacotb7-4",
+            "tag": "TOUCH",
+            "sourceWords": "go into the CMS",
+            "span": {
+              "start": 1406,
+              "end": 1421
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:12.739Z"
+          },
+          {
+            "id": "T-mtacotb7-5",
+            "tag": "TOUCH",
+            "sourceWords": "calendar invite with the Zoom",
+            "span": {
+              "start": 1621,
+              "end": 1650
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:12.739Z"
+          },
+          {
+            "id": "T-mtacotb7-6",
+            "tag": "TOUCH",
+            "sourceWords": "pull the roster from UC Learning",
+            "span": {
+              "start": 2031,
+              "end": 2063
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:12.739Z"
+          },
+          {
+            "id": "T-mtacotb7-7",
+            "tag": "TOUCH",
+            "sourceWords": "internal tracker. So basically we have a little Excel sheet",
+            "span": {
+              "start": 2156,
+              "end": 2215
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:12.739Z"
+          },
+          {
+            "id": "T-mtacotb7-8",
+            "tag": "TOUCH",
+            "sourceWords": "open a Teams channel",
+            "span": {
+              "start": 2332,
+              "end": 2352
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:12.739Z"
+          },
+          {
+            "id": "T-mtacotb7-9",
+            "tag": "FRICTION",
+            "sourceWords": "I have to add them manually, because there's not a batch way to add them",
+            "span": {
+              "start": 2669,
+              "end": 2741
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 1,
+            "confirmedAt": "2026-08-26T17:11:12.739Z"
+          },
+          {
+            "id": "T-mtacotb7-10",
+            "tag": "TOUCH",
+            "sourceWords": "send an email to all the participants",
+            "span": {
+              "start": 2783,
+              "end": 2820
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:12.739Z"
+          },
+          {
+            "id": "T-mtacotb7-11",
+            "tag": "TOUCH",
+            "sourceWords": "Kahoot to do the quiz",
+            "span": {
+              "start": 4834,
+              "end": 4855
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:12.739Z"
+          },
+          {
+            "id": "T-mtacotb7-12",
+            "tag": "TOUCH",
+            "sourceWords": "activity in Lucidchart",
+            "span": {
+              "start": 5093,
+              "end": 5115
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:12.739Z"
+          },
+          {
+            "id": "T-mtacotb7-13",
+            "tag": "TOUCH",
+            "sourceWords": "team survey link that we send out, it's in Qualtrics",
+            "span": {
+              "start": 5910,
+              "end": 5962
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:12.739Z"
+          },
+          {
+            "id": "T-mtacotb7-14",
+            "tag": "TOUCH",
+            "sourceWords": "go into UC Learning and actually mark everyone who attended as present",
+            "span": {
+              "start": 6485,
+              "end": 6555
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:12.739Z"
+          },
+          {
+            "id": "T-mtacotb7-15",
+            "tag": "TOUCH",
+            "sourceWords": "two different Excel sheets that I update for OSI",
+            "span": {
+              "start": 6618,
+              "end": 6666
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:12.739Z"
+          },
+          {
+            "id": "T-mtacotb7-16",
+            "tag": "DEC",
+            "sourceWords": "depends on whether we're talking about open registration, or if we're talking about you know, a department requested",
+            "span": {
+              "start": 7429,
+              "end": 7545
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 1,
+            "confirmedAt": "2026-08-26T17:11:12.739Z"
+          },
+          {
+            "id": "T-mtacotb7-17",
+            "tag": "TOUCH",
+            "sourceWords": "DocuSign",
+            "span": {
+              "start": 9365,
+              "end": 9373
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:12.739Z"
+          },
+          {
+            "id": "T-mtacotb7-18",
+            "tag": "TOUCH",
+            "sourceWords": "updated in ClickUp",
+            "span": {
+              "start": 9605,
+              "end": 9623
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:12.739Z"
+          },
+          {
+            "id": "T-mtacotb7-19",
+            "tag": "HAND",
+            "sourceWords": "contact our financial person to process the recharge",
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:12.739Z"
+          }
+        ],
+        "source": {
+          "filename": "Tony - Program Lead Virtual.txt",
+          "uploadedAt": "2026-08-26T17:09:52.893Z",
+          "uploadedBy": "you"
+        }
+      },
+      {
+        "id": "INT-04",
+        "header": {
+          "person": "Jerald",
+          "role": "Attendee",
+          "relationship": "Customer",
+          "interviewer": "Sancho",
+          "date": "9/30/26",
+          "consent": ""
+        },
+        "rawNotes": "[Jerald - Attendee] 14:53:06\nOkay, so…\n\n[Jerald - Attendee] 14:53:11\nI am with School of Medicine. My name is Gerald, and I wanted to take some professional development. So I asked around, and I looked on Blink, and I did a Google search for what things were available.\n\n[Jerald - Attendee] 14:53:27\nUh, I used San Diego.\n\n[Jerald - Attendee] 14:53:29\nI came across the lean 6 sigma training. But I found out that I guess it's offered for health system through transformational team or something, and it's offered through the extended studies program. Which has a fee. So I was confused about that.\n\n[Jerald - Attendee] 14:53:47\nUh, and then there's this one offered by, uh, OSI. So, not being sure which one I was supposed to apply for, um, I emailed each of them and kind of asked.\n\n[Jerald - Attendee] 14:53:56\nyou know, told them a little bit about my situation. Turns out. I'm I could potentially attend any of them, I guess. From where I sit. But what I was told was the the best fit for me was gonna be the one that is offered by Osi, because.\n\n[Jerald - Attendee] 14:54:14\nsomething about the DES one being, um, public, I guess, and the…\n\n[Jerald - Attendee] 14:54:20\ntransformational health team being just for like health system, like nurses and stuff. So.\n\n[Jerald - Attendee] 14:54:25\nThey pointed me in the direction of OSI and gave me a link to the UC Learning platform, which I had never really used before for training. So I went into that platform and used my AD login and tried to register for the class, but I got, like, an error, so…\n\n[Jerald - Attendee] 14:54:44\nI had to email the OSI inbox and ask them maybe what the error was about. Turns out it was just like some acknowledgement, like a checkbox that was in the UC Learning platform. So it's not like it was a OSI thing, but it was within the UCLC.\n\n[Jerald - Attendee] 14:55:03\nSo, after checking that box, I was able to register for a class, and there was no fee, so that was great.\n\n[Jerald - Attendee] 14:55:11\nthey have virtual and in-person, but I had to go to the virtual one because, you know, I work a lot of remote, so the virtual one just works better for my schedule. I had to wait a few months because it isn't offered very long, but, you know, it's.\n\n[Jerald - Attendee] 14:55:26\nSo I'm I guess we're not paying for it right? So it I'll take what I can get.\n\n[Jerald - Attendee] 14:55:32\nWhat else? Let's see, so I registered for the class, uh, I got some emails leading up, um, some reminders, uh, I did the Zoom sessions, uh, got my certificate afterwards.\n\n[Jerald - Attendee] 14:55:43\nLearned some useful things, but I feel a little bit overwhelmed. A little unsure of where to go next. Because it was a lot of information kind of overload. But I get it. They're trying to get as much information out to us as they can. So.\n\n[Jerald - Attendee] 14:55:59\nI'm looking for ways to practice what I learned. I'm also going to be looking for other resources, maybe videos or templates or something.\n\n[Jerald - Attendee] 14:56:09\nAnd, uh, well, you know, we'll figure it out. But, um…\n\n[Jerald - Attendee] 14:56:16\nYeah. So I also saw an email recently about scholarships or something for Greenbelt, which could be interesting. So I'll look out for that as more information gets sent out.",
+        "tags": [
+          {
+            "id": "T-mtacpd5b-0",
+            "tag": "TOUCH",
+            "sourceWords": "looked on Blink, and I did a Google search",
+            "span": {
+              "start": 195,
+              "end": 237
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:38.447Z"
+          },
+          {
+            "id": "T-mtacpd5b-1",
+            "tag": "FRICTION",
+            "sourceWords": "I was confused about that",
+            "span": {
+              "start": 572,
+              "end": 597
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:38.447Z"
+          },
+          {
+            "id": "T-mtacpd5b-2",
+            "tag": "TOUCH",
+            "sourceWords": "emailed each of them",
+            "span": {
+              "start": 744,
+              "end": 764
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:38.447Z"
+          },
+          {
+            "id": "T-mtacpd5b-3",
+            "tag": "TOUCH",
+            "sourceWords": "gave me a link to the UC Learning platform",
+            "span": {
+              "start": 1341,
+              "end": 1383
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:38.447Z"
+          },
+          {
+            "id": "T-mtacpd5b-4",
+            "tag": "TOUCH",
+            "sourceWords": "went into that platform and used my AD login",
+            "span": {
+              "start": 1441,
+              "end": 1485
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:38.447Z"
+          },
+          {
+            "id": "T-mtacpd5b-5",
+            "tag": "FRICTION",
+            "sourceWords": "I got, like, an error",
+            "span": {
+              "start": 1527,
+              "end": 1548
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:38.447Z"
+          },
+          {
+            "id": "T-mtacpd5b-6",
+            "tag": "TOUCH",
+            "sourceWords": "email the OSI inbox",
+            "span": {
+              "start": 1593,
+              "end": 1612
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:38.447Z"
+          },
+          {
+            "id": "T-mtacpd5b-7",
+            "tag": "FRICTION",
+            "sourceWords": "some acknowledgement, like a checkbox that was in the UC Learning platform",
+            "span": {
+              "start": 1685,
+              "end": 1759
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:38.447Z"
+          },
+          {
+            "id": "T-mtacpd5b-8",
+            "tag": "TOUCH",
+            "sourceWords": "Zoom sessions",
+            "span": {
+              "start": 2500,
+              "end": 2513
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:38.447Z"
+          },
+          {
+            "id": "T-mtacpd5b-9",
+            "tag": "FRICTION",
+            "sourceWords": "feel a little bit overwhelmed. A little unsure of where to go next. Because it was a lot of information kind of overload",
+            "span": {
+              "start": 2614,
+              "end": 2734
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:11:38.447Z"
+          },
+          {
+            "id": "T-mtacpzmx-0",
+            "tag": "TOUCH",
+            "sourceWords": "looked on Blink, and I did a Google search",
+            "span": {
+              "start": 195,
+              "end": 237
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:12:07.593Z"
+          },
+          {
+            "id": "T-mtacpzmx-1",
+            "tag": "FRICTION",
+            "sourceWords": "I was confused about that",
+            "span": {
+              "start": 572,
+              "end": 597
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:12:07.593Z"
+          },
+          {
+            "id": "T-mtacpzmx-2",
+            "tag": "FRICTION",
+            "sourceWords": "not being sure which one I was supposed to apply for",
+            "span": {
+              "start": 684,
+              "end": 736
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:12:07.593Z"
+          },
+          {
+            "id": "T-mtacpzmx-3",
+            "tag": "TOUCH",
+            "sourceWords": "emailed each of them",
+            "span": {
+              "start": 744,
+              "end": 764
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:12:07.593Z"
+          },
+          {
+            "id": "T-mtacpzmx-4",
+            "tag": "DEC",
+            "sourceWords": "the best fit for me was gonna be the one that is offered by Osi",
+            "span": {
+              "start": 977,
+              "end": 1040
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.8,
+            "confirmedAt": "2026-08-26T17:12:07.593Z"
+          },
+          {
+            "id": "T-mtacpzmx-5",
+            "tag": "TOUCH",
+            "sourceWords": "gave me a link to the UC Learning platform",
+            "span": {
+              "start": 1341,
+              "end": 1383
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:12:07.593Z"
+          },
+          {
+            "id": "T-mtacpzmx-6",
+            "tag": "TOUCH",
+            "sourceWords": "went into that platform and used my AD login",
+            "span": {
+              "start": 1441,
+              "end": 1485
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:12:07.593Z"
+          },
+          {
+            "id": "T-mtacpzmx-7",
+            "tag": "FRICTION",
+            "sourceWords": "I got, like, an error",
+            "span": {
+              "start": 1527,
+              "end": 1548
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 1,
+            "confirmedAt": "2026-08-26T17:12:07.593Z"
+          },
+          {
+            "id": "T-mtacpzmx-8",
+            "tag": "TOUCH",
+            "sourceWords": "email the OSI inbox",
+            "span": {
+              "start": 1593,
+              "end": 1612
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:12:07.593Z"
+          },
+          {
+            "id": "T-mtacpzmx-9",
+            "tag": "FRICTION",
+            "sourceWords": "some acknowledgement, like a checkbox that was in the UC Learning platform",
+            "span": {
+              "start": 1685,
+              "end": 1759
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.8,
+            "confirmedAt": "2026-08-26T17:12:07.593Z"
+          },
+          {
+            "id": "T-mtacpzmx-10",
+            "tag": "TOUCH",
+            "sourceWords": "register for a class",
+            "span": {
+              "start": 1899,
+              "end": 1919
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:12:07.593Z"
+          },
+          {
+            "id": "T-mtacpzmx-11",
+            "tag": "TOUCH",
+            "sourceWords": "did the Zoom sessions",
+            "span": {
+              "start": 2492,
+              "end": 2513
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:12:07.593Z"
+          },
+          {
+            "id": "T-mtacpzmx-12",
+            "tag": "FRICTION",
+            "sourceWords": "feel a little bit overwhelmed. A little unsure of where to go next. Because it was a lot of information kind of overload",
+            "span": {
+              "start": 2614,
+              "end": 2734
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:12:07.593Z"
+          },
+          {
+            "id": "T-mtacpzmx-13",
+            "tag": "TOUCH",
+            "sourceWords": "got my certificate afterwards",
+            "span": {
+              "start": 2519,
+              "end": 2548
+            },
+            "origin": "ai-applied",
+            "promptId": "suggest-tags.v1",
+            "confidence": 0.9,
+            "confirmedAt": "2026-08-26T17:12:07.593Z"
+          }
+        ],
+        "source": {
+          "filename": "Jerald - Attendee SOM.txt",
+          "uploadedAt": "2026-08-26T17:11:35.482Z",
           "uploadedBy": "you"
         }
       }

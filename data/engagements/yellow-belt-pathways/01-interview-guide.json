@@ -2,7 +2,7 @@
   "artifactId": "01",
   "engagementId": "yellow-belt-pathways",
   "status": "in-review",
-  "updatedAt": "2026-08-26T17:12:15.542Z",
+  "updatedAt": "2026-08-26T17:13:24.719Z",
   "updatedBy": "z6johnson@ucsd.edu",
   "aiAssisted": true,
   "data": {
@@ -872,19 +872,6 @@
             "confirmedAt": "2026-08-26T17:11:38.447Z"
           },
           {
-            "id": "T-mtacpd5b-5",
-            "tag": "FRICTION",
-            "sourceWords": "I got, like, an error",
-            "span": {
-              "start": 1527,
-              "end": 1548
-            },
-            "origin": "ai-applied",
-            "promptId": "suggest-tags.v1",
-            "confidence": 0.9,
-            "confirmedAt": "2026-08-26T17:11:38.447Z"
-          },
-          {
             "id": "T-mtacpd5b-6",
             "tag": "TOUCH",
             "sourceWords": "email the OSI inbox",
@@ -1038,32 +1025,6 @@
             "origin": "ai-applied",
             "promptId": "suggest-tags.v1",
             "confidence": 1,
-            "confirmedAt": "2026-08-26T17:12:07.593Z"
-          },
-          {
-            "id": "T-mtacpzmx-8",
-            "tag": "TOUCH",
-            "sourceWords": "email the OSI inbox",
-            "span": {
-              "start": 1593,
-              "end": 1612
-            },
-            "origin": "ai-applied",
-            "promptId": "suggest-tags.v1",
-            "confidence": 0.9,
-            "confirmedAt": "2026-08-26T17:12:07.593Z"
-          },
-          {
-            "id": "T-mtacpzmx-9",
-            "tag": "FRICTION",
-            "sourceWords": "some acknowledgement, like a checkbox that was in the UC Learning platform",
-            "span": {
-              "start": 1685,
-              "end": 1759
-            },
-            "origin": "ai-applied",
-            "promptId": "suggest-tags.v1",
-            "confidence": 0.8,
             "confirmedAt": "2026-08-26T17:12:07.593Z"
           },
           {

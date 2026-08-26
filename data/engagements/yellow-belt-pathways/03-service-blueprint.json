@@ -1,0 +1,408 @@
+{
+  "artifactId": "03",
+  "engagementId": "yellow-belt-pathways",
+  "status": "in-review",
+  "updatedAt": "2026-08-26T17:24:54.524Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": true,
+  "data": {
+    "header": {
+      "service": "test 2",
+      "scope": "yes ",
+      "lead": "sometimes"
+    },
+    "stageRows": [],
+    "handoffs": [
+      {
+        "id": "H-01",
+        "stage": "Ask which program fits",
+        "from": "DES",
+        "to": "Transformational Healthcare Team or OSI",
+        "whatMoves": "Staff member's program inquiry and direction to a program",
+        "how": "Angela directs staff depending on whether they are health system or campus staff",
+        "whatBreaks": "",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "H-02",
+        "stage": "Ask which program fits",
+        "from": "Attendee",
+        "to": "OSI and other programs",
+        "whatMoves": "Description of the attendee's situation and question about which training to take",
+        "how": "Emailing each program",
+        "whatBreaks": "The attendee was confused about which program to apply for",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "H-03",
+        "stage": "Register through UC Learning",
+        "from": "OSI",
+        "to": "Attendee",
+        "whatMoves": "A link to the UC Learning platform",
+        "how": "The attendee was given the link",
+        "whatBreaks": "",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "H-04",
+        "stage": "Register through UC Learning",
+        "from": "Attendee",
+        "to": "UC Learning",
+        "whatMoves": "Registration information and acknowledgement of the platform checkbox",
+        "how": "Using an AD login, checking the acknowledgement box, and registering",
+        "whatBreaks": "The attendee received an error until the acknowledgement checkbox was checked",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "H-05",
+        "stage": "Wait for the virtual class",
+        "from": "Tony and Jessica",
+        "to": "OSI Yellow Belt delivery team",
+        "whatMoves": "Training dates and the planned virtual or in-person cadence",
+        "how": "Meeting, reviewing calendars, and setting dates through a six-month period or the end of the year",
+        "whatBreaks": "",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "H-06",
+        "stage": "Wait for the virtual class",
+        "from": "Tony",
+        "to": "UC Learning and service support",
+        "whatMoves": "Scheduled class dates and class-listing request",
+        "how": "Submitting dates through a services and support ticket to get classes listed in UC Learning",
+        "whatBreaks": "",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "H-07",
+        "stage": "Wait for the virtual class",
+        "from": "Tony",
+        "to": "Facilitators",
+        "whatMoves": "Upcoming class dates and requests for facilitation coverage",
+        "how": "Discussing upcoming dates in team meetings and updating the facilitator Excel sheet",
+        "whatBreaks": "",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "H-08",
+        "stage": "Wait for the virtual class",
+        "from": "Tony",
+        "to": "Participants",
+        "whatMoves": "Class reminders, attendance information, Zoom details, and updated templates",
+        "how": "Updating the website and Teams, adding virtual attendees manually, and sending template emails",
+        "whatBreaks": "Participants have to be added one by one because there is no batch way to add them",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "H-09",
+        "stage": "Attend the training",
+        "from": "Tony",
+        "to": "Participants",
+        "whatMoves": "Facilitation, homework assignments, quiz activity, and breakout activity",
+        "how": "Using Zoom, email, Kahoot, and Lucidchart",
+        "whatBreaks": "",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "H-10",
+        "stage": "Attend the training",
+        "from": "Participants",
+        "to": "Tony",
+        "whatMoves": "Homework submissions",
+        "how": "Submitting assignments in the Teams environment over the following day or two",
+        "whatBreaks": "",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "H-11",
+        "stage": "Attend the training",
+        "from": "Tony",
+        "to": "Participants",
+        "whatMoves": "Feedback on submissions and notes on common themes",
+        "how": "Reviewing assignments in Teams and writing notes",
+        "whatBreaks": "",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "H-12",
+        "stage": "Receive the certificate and consider next steps",
+        "from": "Tony",
+        "to": "Participants",
+        "whatMoves": "Certificates, attendance follow-up, survey link, and information about continued Teams access",
+        "how": "Creating certificates after day one and sending a post-class email",
+        "whatBreaks": "",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "H-13",
+        "stage": "Receive the certificate and consider next steps",
+        "from": "Participants",
+        "to": "OSI records",
+        "whatMoves": "Attendance status and participant names, emails, and dates",
+        "how": "Tony marks attendees present or absent in UC Learning and updates two OSI Excel sheets",
+        "whatBreaks": "",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "H-14",
+        "stage": "Receive the certificate and consider next steps",
+        "from": "Participants",
+        "to": "Qualtrics",
+        "whatMoves": "Survey responses",
+        "how": "Using the survey link sent after the training",
+        "whatBreaks": "",
+        "origin": "ai-applied"
+      }
+    ],
+    "decisions": [
+      {
+        "id": "D-01",
+        "stage": "Ask which program fits",
+        "decision": "Which training is the best fit for the person",
+        "whoDecides": "The responding program staff; Angela describes routing staff based on their affiliation",
+        "decidesOn": "Whether the person is health system staff, campus staff, or a member of the public or industry",
+        "basis": "DES is meant for the general public and industry; Angela directs health system staff to Transformational Healthcare Team and campus staff to OSI",
+        "failurePath": "",
+        "kind": "judgment",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "D-02",
+        "stage": "Register through UC Learning",
+        "decision": "Whether the attendee can complete registration",
+        "whoDecides": "UC Learning platform",
+        "decidesOn": "Whether the acknowledgement checkbox has been checked",
+        "basis": "The attendee could register after checking the acknowledgement box",
+        "failurePath": "The attendee emailed the OSI inbox after receiving an error",
+        "kind": "clear-cut",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "D-03",
+        "stage": "Wait for the virtual class",
+        "decision": "Whether the session is an open-registration session or a department-requested session",
+        "whoDecides": "OSI Yellow Belt administrator",
+        "decidesOn": "How the session was requested",
+        "basis": "Tony says the process depends on whether it is open registration or department requested",
+        "failurePath": "",
+        "kind": "clear-cut",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "D-04",
+        "stage": "Wait for the virtual class",
+        "decision": "Which dates and delivery format to schedule",
+        "whoDecides": "Tony and Jessica",
+        "decidesOn": "Their calendars, a planned six-week cadence, and alternating virtual and in-person delivery",
+        "basis": "They meet, review calendars, and try to set dates through a six-month period or the end of the year",
+        "failurePath": "",
+        "kind": "judgment",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "D-05",
+        "stage": "Wait for the virtual class",
+        "decision": "Whether to add or remove people from the roster",
+        "whoDecides": "Tony",
+        "decidesOn": "Late cancellations and late adds identified about a day before the session",
+        "basis": "Tony reviews the roster before the session",
+        "failurePath": "",
+        "kind": "judgment",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "D-06",
+        "stage": "Attend the training",
+        "decision": "Whether prior white belt or yellow belt training suffices as a prerequisite for Green Belt or Black Belt",
+        "whoDecides": "Transformational Healthcare Team",
+        "decidesOn": "Whether the person completed white belt or yellow belt through an online course, OSI, or DES",
+        "basis": "Brad says they can progress without retaking it",
+        "failurePath": "",
+        "kind": "clear-cut",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "D-07",
+        "stage": "Receive the certificate and consider next steps",
+        "decision": "Whether a participant is marked present or absent",
+        "whoDecides": "Tony",
+        "decidesOn": "Whether the participant attended",
+        "basis": "Tony updates UC Learning after the session",
+        "failurePath": "",
+        "kind": "judgment",
+        "origin": "ai-applied"
+      }
+    ],
+    "systems": [
+      {
+        "name": "Blink",
+        "usedFor": "Finding professional development and Lean Six Sigma training options",
+        "dataHeld": "",
+        "owner": "",
+        "connectsTo": "Google search",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Google search",
+        "usedFor": "Finding available professional development and Lean Six Sigma training",
+        "dataHeld": "Search results or training information",
+        "owner": "",
+        "connectsTo": "Blink",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Email",
+        "usedFor": "Asking programs which training fits, sending reminders, homework instructions, and post-class information",
+        "dataHeld": "Participant questions, situation descriptions, reminders, homework attachments, and follow-up information",
+        "owner": "OSI Yellow Belt delivery team",
+        "connectsTo": "OSI inbox",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "OSI inbox",
+        "usedFor": "Responding to registration questions",
+        "dataHeld": "Registration error inquiry",
+        "owner": "OSI",
+        "connectsTo": "UC Learning",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "UC Learning platform",
+        "usedFor": "Listing classes, registering attendees, holding rosters, and recording attendance",
+        "dataHeld": "Class dates, attendee rosters, registration records, and attendance status",
+        "owner": "",
+        "connectsTo": "Services and support ticket; AD login; OSI Excel sheets",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "AD login",
+        "usedFor": "Signing in to UC Learning",
+        "dataHeld": "Login credentials",
+        "owner": "",
+        "connectsTo": "UC Learning platform",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Services and support ticket",
+        "usedFor": "Requesting that classes be listed in UC Learning",
+        "dataHeld": "Training dates and class-listing request",
+        "owner": "",
+        "connectsTo": "UC Learning platform",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Outlook",
+        "usedFor": "Maintaining the internal calendar and calendar invites",
+        "dataHeld": "Training dates, calendar invites, and Zoom information",
+        "owner": "OSI Yellow Belt delivery team",
+        "connectsTo": "Zoom",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Facilitator Excel sheet",
+        "usedFor": "Tracking facilitator support and coverage requests",
+        "dataHeld": "Upcoming dates and facilitator coverage information",
+        "owner": "OSI Yellow Belt delivery team",
+        "connectsTo": "",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "CMS",
+        "usedFor": "Posting training dates on the website",
+        "dataHeld": "Training dates",
+        "owner": "OSI Yellow Belt delivery team",
+        "connectsTo": "Website",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Zoom",
+        "usedFor": "Delivering the virtual training sessions",
+        "dataHeld": "Virtual session access information",
+        "owner": "",
+        "connectsTo": "Outlook; Teams",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Internal attendance Excel tracker",
+        "usedFor": "Taking attendance as the class progresses",
+        "dataHeld": "Participant attendance",
+        "owner": "Tony",
+        "connectsTo": "UC Learning",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Teams",
+        "usedFor": "Participant access, templates, homework submissions, feedback, questions, and certificate storage",
+        "dataHeld": "Participant membership, updated templates, homework submissions, feedback, common-theme notes, and certificates",
+        "owner": "OSI Yellow Belt delivery team",
+        "connectsTo": "Email",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Kahoot",
+        "usedFor": "Running the day-one quiz",
+        "dataHeld": "Quiz activity and learning check information",
+        "owner": "",
+        "connectsTo": "Zoom",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Lucidchart",
+        "usedFor": "Running the day-two future-state mapping activity",
+        "dataHeld": "Future-state map and breakout activity content",
+        "owner": "",
+        "connectsTo": "Zoom",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Qualtrics",
+        "usedFor": "Collecting the team survey",
+        "dataHeld": "Survey responses",
+        "owner": "OSI Yellow Belt delivery team",
+        "connectsTo": "Email",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "OSI Excel sheets",
+        "usedFor": "Tracking headcount and participant information for OSI",
+        "dataHeld": "Headcount; participant names, email addresses, and attendance dates",
+        "owner": "OSI",
+        "connectsTo": "UC Learning",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Google",
+        "usedFor": "Providing an alternative collaboration environment for some department-requested sessions",
+        "dataHeld": "",
+        "owner": "",
+        "connectsTo": "Teams",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "Miro",
+        "usedFor": "Providing an alternative mapping activity environment for a department-requested team",
+        "dataHeld": "Mapping activity content",
+        "owner": "",
+        "connectsTo": "Lucidchart",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "DocuSign",
+        "usedFor": "Obtaining signatures on a department-session agreement",
+        "dataHeld": "Agreement document and internal and sponsor signatures",
+        "owner": "",
+        "connectsTo": "ClickUp",
+        "origin": "ai-applied"
+      },
+      {
+        "name": "ClickUp",
+        "usedFor": "Tracking movement of the agreement with a department sponsor",
+        "dataHeld": "Agreement and MOU movement",
+        "owner": "",
+        "connectsTo": "DocuSign",
+        "origin": "ai-applied"
+      }
+    ],
+    "breakingPoints": []
+  }
+}

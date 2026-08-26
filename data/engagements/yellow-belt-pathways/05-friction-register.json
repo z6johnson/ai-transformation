@@ -1,0 +1,83 @@
+{
+  "artifactId": "05",
+  "engagementId": "yellow-belt-pathways",
+  "status": "in-review",
+  "updatedAt": "2026-08-26T17:31:59.848Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": true,
+  "data": {
+    "header": {
+      "service": "",
+      "scope": "",
+      "lead": ""
+    },
+    "entries": [
+      {
+        "id": "FR-01",
+        "where": "D-01",
+        "type": "Effort",
+        "whatsWrong": "The attendee could not tell which Lean Six Sigma training was the appropriate option among DES, Transformational Healthcare Team, and OSI, so they contacted each program.",
+        "whoFeels": "The attendee, particularly staff trying to identify the appropriate program.",
+        "evidence": "\"Which has a fee. So I was confused about that.\"; \"not being sure which one I was supposed to apply for\"; \"I emailed each of them and kind of asked.\"",
+        "severity": "moderate",
+        "frequency": "occasional",
+        "atDecision": {
+          "yes": false,
+          "ref": ""
+        },
+        "notes": "",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "FR-02",
+        "where": "D-02",
+        "type": "Error",
+        "whatsWrong": "UC Learning displayed an error during registration, and the attendee could register only after identifying and checking an acknowledgement checkbox.",
+        "whoFeels": "The attendee registering through UC Learning; OSI also receives the resulting registration question.",
+        "evidence": "\"I went into that platform and used my AD login and tried to register for the class, but I got, like, an error\"; \"I had to email the OSI inbox and ask them maybe what the error was about\"; \"some acknowledgement, like a checkbox that was in the UC Learning platform\"",
+        "severity": "moderate",
+        "frequency": "occasional",
+        "atDecision": {
+          "yes": false,
+          "ref": ""
+        },
+        "notes": "",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "FR-03",
+        "where": "H-08",
+        "type": "Effort",
+        "whatsWrong": "Adding virtual attendees to the Teams environment requires Tony to add each person individually because there is no batch-add capability.",
+        "whoFeels": "Tony and the Yellow Belt delivery team managing virtual-session access.",
+        "evidence": "\"I add, one by one, every single person that's, um, going to be attending the virtual, uh, into the Teams environment. I have to add them manually, because there's not a batch way to add them\"",
+        "severity": "moderate",
+        "frequency": "frequent",
+        "atDecision": {
+          "yes": false,
+          "ref": ""
+        },
+        "notes": "",
+        "origin": "ai-applied"
+      },
+      {
+        "id": "FR-04",
+        "where": "Receive the certificate and consider next steps",
+        "type": "Experience",
+        "whatsWrong": "After completing the training, the attendee experienced information overload and was unsure how to proceed or practice what they had learned.",
+        "whoFeels": "The attendee after receiving the certificate and completing the Zoom sessions.",
+        "evidence": "\"I feel a little bit overwhelmed. A little unsure of where to go next. Because it was a lot of information kind of overload\"; \"I'm looking for ways to practice what I learned\"",
+        "severity": "moderate",
+        "frequency": "occasional",
+        "atDecision": {
+          "yes": false,
+          "ref": ""
+        },
+        "notes": "",
+        "origin": "ai-applied"
+      }
+    ],
+    "clusters": [],
+    "honestAccount": ""
+  }
+}

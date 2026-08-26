@@ -1,0 +1,207 @@
+{
+  "artifactId": "02",
+  "engagementId": "yellow-belt-pathways",
+  "status": "in-review",
+  "updatedAt": "2026-08-26T17:19:42.199Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": true,
+  "data": {
+    "header": {
+      "service": "Poopy poop",
+      "scope": "test",
+      "person": "jackhammer",
+      "others": "bobby",
+      "sources": []
+    },
+    "stages": [
+      {
+        "name": "Discover and compare training options",
+        "order": 0,
+        "doing": {
+          "value": "Asking around, looking on Blink, and doing a Google search for available professional development and Lean Six Sigma training.",
+          "origin": "ai-applied"
+        },
+        "wants": {
+          "value": "Professional development and to understand which training option is available for them.",
+          "origin": "ai-applied"
+        },
+        "touchpoints": {
+          "value": "Blink; Google search",
+          "origin": "ai-applied"
+        },
+        "thinkingFeeling": {
+          "value": "Confused about the different offerings and not sure which one to apply for.",
+          "origin": "ai-applied"
+        },
+        "waitingFor": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "effort": "moderate",
+        "effortWhy": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "frictionRefs": [],
+        "duration": ""
+      },
+      {
+        "name": "Ask which program fits",
+        "order": 1,
+        "doing": {
+          "value": "Emailing each program to describe their situation and ask which training to take.",
+          "origin": "ai-applied"
+        },
+        "wants": {
+          "value": "Guidance on whether to apply through Transformational Healthcare Team, DES, or OSI.",
+          "origin": "ai-applied"
+        },
+        "touchpoints": {
+          "value": "Emails to the programs; OSI",
+          "origin": "ai-applied"
+        },
+        "thinkingFeeling": {
+          "value": "Not being sure which one they were supposed to apply for; told that OSI was the best fit.",
+          "origin": "ai-applied"
+        },
+        "waitingFor": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "effort": "moderate",
+        "effortWhy": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "frictionRefs": [],
+        "duration": ""
+      },
+      {
+        "name": "Register through UC Learning",
+        "order": 2,
+        "doing": {
+          "value": "Following the link to UC Learning, using an AD login, resolving an error by checking an acknowledgement checkbox, and registering for a class.",
+          "origin": "ai-applied"
+        },
+        "wants": {
+          "value": "To register for the class without a fee.",
+          "origin": "ai-applied"
+        },
+        "touchpoints": {
+          "value": "UC Learning platform; AD login; OSI inbox",
+          "origin": "ai-applied"
+        },
+        "thinkingFeeling": {
+          "value": "Encountered an error and asked the OSI inbox what it was about; felt positive that there was no fee after registering.",
+          "origin": "ai-applied"
+        },
+        "waitingFor": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "effort": "high",
+        "effortWhy": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "frictionRefs": [],
+        "duration": ""
+      },
+      {
+        "name": "Wait for the virtual class",
+        "order": 3,
+        "doing": {
+          "value": "Choosing the virtual class because they work a lot remotely and waiting for it to be offered.",
+          "origin": "ai-applied"
+        },
+        "wants": {
+          "value": "A class format that works better for their schedule.",
+          "origin": "ai-applied"
+        },
+        "touchpoints": {
+          "value": "Virtual class; emails and reminders leading up to the class",
+          "origin": "ai-applied"
+        },
+        "thinkingFeeling": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "waitingFor": {
+          "value": "The virtual class, which is not offered very often.",
+          "origin": "ai-applied"
+        },
+        "effort": "moderate",
+        "effortWhy": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "frictionRefs": [],
+        "duration": "A few months"
+      },
+      {
+        "name": "Attend the training",
+        "order": 4,
+        "doing": {
+          "value": "Taking part in the Zoom sessions.",
+          "origin": "ai-applied"
+        },
+        "wants": {
+          "value": "To learn useful things through the training.",
+          "origin": "ai-applied"
+        },
+        "touchpoints": {
+          "value": "Zoom sessions",
+          "origin": "ai-applied"
+        },
+        "thinkingFeeling": {
+          "value": "Learned some useful things.",
+          "origin": "ai-applied"
+        },
+        "waitingFor": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "effort": "moderate",
+        "effortWhy": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "frictionRefs": [],
+        "duration": ""
+      },
+      {
+        "name": "Receive the certificate and consider next steps",
+        "order": 5,
+        "doing": {
+          "value": "Getting the certificate afterwards, looking for ways to practice what was learned, considering other resources such as videos or templates, and looking out for more information about Green Belt scholarships.",
+          "origin": "ai-applied"
+        },
+        "wants": {
+          "value": "Ways to practice what was learned, additional resources, and information about possible Green Belt scholarships.",
+          "origin": "ai-applied"
+        },
+        "touchpoints": {
+          "value": "Certificate; email about Green Belt scholarships",
+          "origin": "ai-applied"
+        },
+        "thinkingFeeling": {
+          "value": "A little overwhelmed and unsure where to go next because there was a lot of information; interested in Green Belt.",
+          "origin": "ai-applied"
+        },
+        "waitingFor": {
+          "value": "More information about Green Belt scholarships.",
+          "origin": "ai-applied"
+        },
+        "effort": "moderate",
+        "effortWhy": {
+          "value": "",
+          "origin": "ai-applied"
+        },
+        "frictionRefs": [],
+        "duration": ""
+      }
+    ],
+    "momentsThatMatter": [],
+    "dropoutPoints": []
+  }
+}

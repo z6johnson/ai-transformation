@@ -1,0 +1,34 @@
+{
+  "artifactId": "07",
+  "engagementId": "yellow-belt-pathways",
+  "status": "in-review",
+  "updatedAt": "2026-08-26T17:35:31.800Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": true,
+  "data": {
+    "header": {
+      "service": "",
+      "scope": "",
+      "lead": ""
+    },
+    "synthesis": {
+      "whereItStands": {
+        "value": "The map follows six stages, from discovering and comparing training options through receiving the certificate and considering next steps. Effort is spread across choosing a program, registering through UC Learning, preparing the virtual class, managing attendance, and following up after training. The service uses many systems, including UC Learning, Teams, Excel trackers, email, Zoom, and other tools.",
+        "origin": "ai-applied"
+      },
+      "frictionPatterns": {
+        "value": "The four recorded friction entries occur at separate points: choosing among programs, registering in UC Learning, adding virtual attendees to Teams, and knowing how to proceed after training. The Teams entry is frequent and affects Tony, who adds each person individually. The other entries are occasional and affect attendees, including uncertainty about the right training, a registration error, and information overload after the session. No formal friction clusters are recorded in the map.",
+        "origin": "ai-applied"
+      },
+      "decisionsForDesign": {
+        "value": "The map records decisions about which training best fits a person; whether an attendee can complete registration; whether a session is open-registration or department-requested; which dates and delivery format to schedule; whether to add or remove people from the roster; whether prior white belt or yellow belt training is sufficient for Green Belt or Black Belt; and whether a participant is marked present or absent. These decisions are marked as either judgment-based or clear-cut in the map.",
+        "origin": "ai-applied"
+      },
+      "openQuestions": {
+        "value": "No open questions are recorded. The map also records no moments that matter or dropout points, and it does not provide further detail about how the listed decisions are made or how the friction entries relate beyond their positions in the lifecycle.",
+        "origin": "ai-applied"
+      }
+    },
+    "generatedAt": "2026-08-26T17:35:31.513Z"
+  }
+}

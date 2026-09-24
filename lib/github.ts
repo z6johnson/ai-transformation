@@ -41,7 +41,7 @@ export async function getFile(path: string): Promise<FileRead | null> {
     return { content, sha: data.sha };
   } catch (err: unknown) {
     if (isNotFound(err)) return null;
-    throw err;
+    rethrow(err);
   }
 }
 
@@ -67,16 +67,20 @@ export async function putFile(args: {
   if (existing && args.expectedSha !== undefined && args.expectedSha !== existing.sha) {
     throw new ConcurrencyError(args.path);
   }
-  const res = await octokit().repos.createOrUpdateFileContents({
-    owner,
-    repo: name,
-    path: args.path,
-    branch,
-    message: args.message,
-    content: Buffer.from(args.content, "utf8").toString("base64"),
-    sha: existing?.sha,
-  });
-  return { sha: res.data.content?.sha || "" };
+  try {
+    const res = await octokit().repos.createOrUpdateFileContents({
+      owner,
+      repo: name,
+      path: args.path,
+      branch,
+      message: args.message,
+      content: Buffer.from(args.content, "utf8").toString("base64"),
+      sha: existing?.sha,
+    });
+    return { sha: res.data.content?.sha || "" };
+  } catch (err) {
+    rethrow(err);
+  }
 }
 
 /** Append a line to a JSONL file (read-modify-write; fine at v1 scale). */
@@ -95,7 +99,7 @@ export async function listDir(path: string): Promise<string[]> {
     return res.data.map((e) => e.name);
   } catch (err) {
     if (isNotFound(err)) return [];
-    throw err;
+    rethrow(err);
   }
 }
 
@@ -108,6 +112,23 @@ export class ConcurrencyError extends Error {
 
 function isNotFound(err: unknown): boolean {
   return typeof err === "object" && err !== null && "status" in err && (err as { status: number }).status === 404;
+}
+
+function isAuthError(err: unknown): boolean {
+  return typeof err === "object" && err !== null && "status" in err && (err as { status: number }).status === 401;
+}
+
+/** Re-throw GitHub auth failures with a message that names the fix, not just "Bad credentials". */
+function rethrow(err: unknown): never {
+  if (isAuthError(err)) {
+    throw new Error(
+      "GitHub rejected the configured credentials (401 Bad credentials). The GITHUB_TOKEN is missing, expired, or " +
+        "revoked — issue a new fine-grained PAT (Contents: read/write on this repo) and update it in the deployment's " +
+        "environment variables.",
+      { cause: err },
+    );
+  }
+  throw err;
 }
 
 export function isStorageConfigured(): boolean {

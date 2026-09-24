@@ -2,12 +2,22 @@
 
 import { useState } from "react";
 import { saveArtifact, callAi } from "@/lib/client";
-import type { FrictionEntry } from "@/lib/schemas";
-import { FRICTION_TYPES } from "@/lib/schemas";
+import type { FrictionEntry, SideNames, SideOrBoth } from "@/lib/schemas";
+import { FRICTION_TYPES, sideLabel } from "@/lib/schemas";
+import { clusterSides, crossesSides, countBySide } from "@/lib/sides";
+import { SideChip, SideCounts } from "./SideChip";
 import type { AiMeta } from "@/lib/ai-meta";
 import { BaselineToggle, CoverageNotesPanel, toCoverageNotes, type CoverageNote } from "./CoverageNotes";
 
-type Cluster = { name: string; frIds: string[]; sharedRoot: string; origin: "human" | "ai-draft" | "ai-applied" | "ai-confirmed" };
+type Cluster = {
+  name: string;
+  frIds: string[];
+  sharedRoot: string;
+  sides: SideOrBoth[];
+  origin: "human" | "ai-draft" | "ai-applied" | "ai-confirmed";
+};
+const SIDE_OPTIONS: SideOrBoth[] = ["external", "internal", "both"];
+type Filter = "all" | SideOrBoth | "shared";
 type FrictionData = {
   header: { service: string; scope: string; lead: string };
   entries: FrictionEntry[];
@@ -21,6 +31,7 @@ function emptyEntry(n: number): FrictionEntry {
     where: "",
     type: "Delay",
     whatsWrong: "",
+    side: "external",
     whoFeels: "",
     evidence: "",
     severity: "moderate",
@@ -34,12 +45,14 @@ function emptyEntry(n: number): FrictionEntry {
 export function FrictionEditor({
   engagementId,
   initial,
+  sideNames,
   baseSha,
   status,
   hasSynthesis = false,
 }: {
   engagementId: string;
   initial: FrictionData;
+  sideNames: SideNames;
   baseSha: string | null;
   status: string;
   hasSynthesis?: boolean;
@@ -54,6 +67,16 @@ export function FrictionEditor({
   const [lastMeta, setLastMeta] = useState<AiMeta | null>(null);
   const [useBaseline, setUseBaseline] = useState(hasSynthesis);
   const [coverage, setCoverage] = useState<CoverageNote[]>([]);
+  const [filter, setFilter] = useState<Filter>("all");
+
+  // A cluster's sides always follow its current member entries, so editing an entry's side
+  // moves the cluster with it. Clusters on both sides (one root felt by both) sort first.
+  const liveClusters = clusters
+    .map((c, i) => ({ ...c, sides: clusterSides(c.frIds, entries), index: i }))
+    .sort((a, b) => Number(crossesSides(b.sides)) - Number(crossesSides(a.sides)));
+  const sharedIds = new Set(liveClusters.filter((c) => crossesSides(c.sides)).flatMap((c) => c.frIds));
+  const visible = (e: FrictionEntry) =>
+    filter === "all" ? true : filter === "shared" ? sharedIds.has(e.id) : e.side === filter;
 
   function setEntry(i: number, patch: Partial<FrictionEntry>) {
     setEntries((prev) => prev.map((e, idx) => (idx === i ? { ...e, ...patch } : e)));
@@ -82,6 +105,7 @@ export function FrictionEditor({
       where: d.where || "",
       type: (FRICTION_TYPES.includes(d.type as (typeof FRICTION_TYPES)[number]) ? d.type : "Delay") as FrictionEntry["type"],
       whatsWrong: d.whatsWrong || "",
+      side: (SIDE_OPTIONS.includes(d.side as SideOrBoth) ? d.side : "external") as SideOrBoth,
       whoFeels: d.whoFeels || "",
       evidence: d.evidence || "",
       severity: (["low", "moderate", "high"].includes(d.severity) ? d.severity : "moderate") as FrictionEntry["severity"],
@@ -95,7 +119,12 @@ export function FrictionEditor({
   async function cluster() {
     setBusy("clustering");
     setMessage("");
-    const res = await callAi<{ degraded: boolean; clusters: Array<{ name: string; frIds: string[]; sharedRoot: string }>; aiMeta?: AiMeta; message?: string }>(
+    const res = await callAi<{
+      degraded: boolean;
+      clusters: Array<{ name: string; frIds: string[]; sharedRoot: string; sides: SideOrBoth[] }>;
+      aiMeta?: AiMeta;
+      message?: string;
+    }>(
       "/api/ai/cluster-friction",
       { engagementId },
     );
@@ -116,7 +145,11 @@ export function FrictionEditor({
     const res = await saveArtifact({
       engagementId,
       artifactId: "05",
-      payload: { status: "in-review", aiAssisted, data: { header, entries, clusters, honestAccount: honest } },
+      payload: {
+        status: "in-review",
+        aiAssisted,
+        data: { header, entries, clusters: clusters.map((c) => ({ ...c, sides: clusterSides(c.frIds, entries) })), honestAccount: honest },
+      },
       baseSha: sha,
       aiLog: lastMeta
         ? {
@@ -176,13 +209,29 @@ export function FrictionEditor({
 
       <section className="stack">
         <h2 className="t-heading">Register</h2>
+        <SideCounts label="Entries by who feels it" names={sideNames} counts={countBySide(entries, (e) => e.side)} />
+        <div className="tabbar" role="group" aria-label="Filter entries by side">
+          {(
+            [
+              ["all", `All (${entries.length})`],
+              ["external", sideLabel(sideNames, "external")],
+              ["internal", sideLabel(sideNames, "internal")],
+              ["both", "Felt by both"],
+              ["shared", `In a cluster on both sides (${sharedIds.size})`],
+            ] as const
+          ).map(([k, label]) => (
+            <button key={k} aria-pressed={filter === k} onClick={() => setFilter(k)}>
+              {label}
+            </button>
+          ))}
+        </div>
         {entries.length === 0 ? (
           <p className="t-faint">No friction logged yet.</p>
         ) : (
-          entries.map((e, i) => (
+          entries.map((e, i) => !visible(e) ? null : (
             <fieldset key={e.id} className="card card--accent stack entry-card">
               <legend className="t-system">
-                <span className="t-mono">{e.id}</span>{" "}
+                <span className="t-mono">{e.id}</span> <SideChip side={e.side} names={sideNames} short />{" "}
                 {e.origin === "ai-applied" ? (
                   <span className="ai-mark">AI-applied</span>
                 ) : (
@@ -209,7 +258,17 @@ export function FrictionEditor({
               </label>
               <div className="grid grid--2">
                 <label className="field">
-                  <span className="t-system">Who feels it</span>
+                  <span className="t-system">Which side feels it</span>
+                  <select value={e.side} onChange={(ev) => setEntry(i, { side: ev.target.value as SideOrBoth })}>
+                    {SIDE_OPTIONS.map((sd) => (
+                      <option key={sd} value={sd}>
+                        {sideLabel(sideNames, sd)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="field">
+                  <span className="t-system">Who specifically</span>
                   <input type="text" value={e.whoFeels} onChange={(ev) => setEntry(i, { whoFeels: ev.target.value })} />
                 </label>
                 <label className="field">
@@ -250,11 +309,18 @@ export function FrictionEditor({
             <span className="ai-mark" aria-hidden="true">AI</span>
           </button>
         </div>
-        {clusters.length === 0 ? (
+        <p className="t-faint">
+          Clusters whose entries land on both sides come first. They are one root cause felt by{" "}
+          {sideLabel(sideNames, "external")} and by {sideLabel(sideNames, "internal")}.
+        </p>
+        {liveClusters.length === 0 ? (
           <p className="t-faint">No clusters yet.</p>
         ) : (
-          clusters.map((c, i) => (
-            <div key={i} className="card">
+          liveClusters.map((c) => (
+            <div key={c.index} className={`card${crossesSides(c.sides) ? " card--accent" : ""}`}>
+              {c.sides.map((sd) => (
+                <SideChip key={sd} side={sd} names={sideNames} short />
+              ))}{" "}
               <span className="t-subhead">{c.name}</span>{" "}
               {c.origin === "ai-applied" ? (
                 <span className="ai-mark">AI-applied</span>
@@ -263,7 +329,7 @@ export function FrictionEditor({
               )}
               <p className="t-muted">Shared root: {c.sharedRoot || "—"}</p>
               <p className="t-faint t-system t-mono">{c.frIds.join(", ")}</p>
-              <button className="btn btn--text" onClick={() => setClusters((prev) => prev.filter((_, idx) => idx !== i))}>
+              <button className="btn btn--text" onClick={() => setClusters((prev) => prev.filter((_, idx) => idx !== c.index))}>
                 Remove
               </button>
             </div>

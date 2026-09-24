@@ -9,6 +9,7 @@ import { redactPII } from "@/lib/pii";
 import { CLUSTER_FRICTION } from "@/lib/prompts";
 import { metaFromResult } from "@/lib/ai-meta";
 import { loadArtifact } from "@/lib/store";
+import { clusterSides } from "@/lib/sides";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -30,7 +31,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ degraded: true, clusters: [], message: "Need at least two friction entries to cluster." });
   }
 
-  const digest = entries.map((e) => `${e.id} | ${e.where} | ${e.type} | ${e.whatsWrong}`).join("\n");
+  const digest = entries.map((e) => `${e.id} | ${e.side.toUpperCase()} | ${e.where} | ${e.type} | ${e.whatsWrong}`).join("\n");
   const { text, redactions } = redactPII(digest);
   const inputSummary = `${entries.length} friction entries, ${redactions} PII redaction(s)`;
 
@@ -44,14 +45,18 @@ export async function POST(req: NextRequest) {
   const parsed = parseJsonLoose<{ clusters?: Array<{ name?: string; frIds?: string[]; sharedRoot?: string }> }>(result.content);
   const clusters = (parsed?.clusters || [])
     .filter((c) => c.name)
-    .map((c) => ({ name: c.name as string, frIds: Array.isArray(c.frIds) ? c.frIds : [], sharedRoot: c.sharedRoot || "" }));
+    .map((c) => {
+      const frIds = Array.isArray(c.frIds) ? c.frIds : [];
+      // Sides come from the member entries, not the model, so they can't drift from the register.
+      return { name: c.name as string, frIds, sharedRoot: c.sharedRoot || "", sides: clusterSides(frIds, entries) };
+    });
 
   const meta = metaFromResult({
     result,
     promptId: CLUSTER_FRICTION.id,
     model,
     inputSummary,
-    outputSummary: `${clusters.length} cluster(s)`,
+    outputSummary: `${clusters.length} cluster(s), ${clusters.filter((c) => c.sides.includes("both")).length} on both sides`,
   });
 
   return NextResponse.json({ degraded: false, clusters, aiMeta: meta });

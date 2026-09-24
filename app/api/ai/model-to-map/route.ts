@@ -29,6 +29,7 @@ type Step = {
   system?: string;
   rule?: string;
   whatGoesWrong?: string;
+  lane?: string;
 };
 
 /** One compact line per step for the prompt: id, what, who, trigger, rule, failure. */
@@ -39,7 +40,8 @@ function processDigest(header: { service?: string; scope?: string }, steps: Step
       const id = s.id || `P-${String(i + 1).padStart(2, "0")}`;
       return (
         `${id} | step: ${s.step || "—"} | who: ${s.who || "—"} | trigger: ${s.trigger || "—"} | ` +
-        `system: ${s.system || "—"} | rule: ${s.rule || "—"} | goes wrong: ${s.whatGoesWrong || "—"}`
+        `system: ${s.system || "—"} | rule: ${s.rule || "—"} | goes wrong: ${s.whatGoesWrong || "—"}` +
+        (s.lane ? ` | lane: ${s.lane}` : "")
       );
     })
     .join("\n");

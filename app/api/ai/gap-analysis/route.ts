@@ -10,7 +10,9 @@ import { callModel, callEmbeddings, parseJsonLoose, isAiConfigured, isEmbeddings
 import { redactPII } from "@/lib/pii";
 import { GAP_ANALYSIS, baselineBlock } from "@/lib/prompts";
 import { metaFromResult } from "@/lib/ai-meta";
-import { loadArtifact } from "@/lib/store";
+import { loadArtifact, loadEngagement } from "@/lib/store";
+import { allStages, journeysDigest, journeysLine } from "@/lib/sides";
+import { DEFAULT_SIDE_NAMES } from "@/lib/schemas";
 import { loadIndex } from "@/lib/library-store";
 import { retrieve } from "@/lib/embeddings";
 
@@ -40,7 +42,8 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const [guide, journey, friction] = await Promise.all([
+  const [engagement, guide, journey, friction] = await Promise.all([
+    loadEngagement(engagementId),
     loadArtifact(engagementId, "01"),
     loadArtifact(engagementId, "02"),
     loadArtifact(engagementId, "05"),
@@ -48,8 +51,10 @@ export async function POST(req: NextRequest) {
   const j = journey.data.data;
   const f = friction.data.data;
   const interviews = guide.data.data.interviews;
+  const names = engagement?.sides || DEFAULT_SIDE_NAMES;
+  const stages = allStages(j);
 
-  if (!j.stages.length && !f.entries.length && !interviews.length) {
+  if (!stages.length && !f.entries.length && !interviews.length) {
     return NextResponse.json({
       degraded: true,
       findings: [],
@@ -60,17 +65,15 @@ export async function POST(req: NextRequest) {
   // Compact map summary — the ground truth side of the comparison.
   const mapSummary = [
     `SERVICE: ${j.header.service || "—"} | SCOPE: ${j.header.scope || "—"}`,
-    `STAGES: ${j.stages.map((s) => s.name).filter(Boolean).join(" → ") || "—"}`,
+    `JOURNEYS: ${journeysLine(j, names)}`,
     "STAGE DETAIL:",
-    j.stages
-      .map((s, i) => `  ${i + 1}. ${s.name || "(unnamed)"} — does: ${s.doing.value || "—"}; touchpoints: ${s.touchpoints.value || "—"}`)
-      .join("\n") || "  —",
-    `FRICTION: ${f.entries.map((e) => `${e.id} ${e.where}: ${e.whatsWrong} [${e.severity}/${e.frequency}]`).join("; ") || "—"}`,
+    journeysDigest(j, names),
+    `FRICTION: ${f.entries.map((e) => `${e.id} [${e.side}] ${e.where}: ${e.whatsWrong} [${e.severity}/${e.frequency}]`).join("; ") || "—"}`,
   ].join("\n");
 
   // Retrieval queries from each stage and friction entry.
   const queries: string[] = [];
-  for (const s of j.stages) {
+  for (const s of stages) {
     const q = [s.name, s.doing.value, s.touchpoints.value].filter(Boolean).join(" ");
     if (q.trim()) queries.push(q);
   }
@@ -114,7 +117,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { text: redactedMap, redactions } = redactPII(mapSummary);
-  const inputSummary = `${passages.length} baseline passage(s), ${j.stages.length} stage(s), ${f.entries.length} friction entr(ies), ${redactions} PII redaction(s)`;
+  const inputSummary = `${passages.length} baseline passage(s), ${stages.length} stage(s), ${f.entries.length} friction entr(ies), ${redactions} PII redaction(s)`;
   const model = modelForFeature("draft");
   const result = await callModel({
     messages: GAP_ANALYSIS.build(redactedMap, baselineBlock(passages)),

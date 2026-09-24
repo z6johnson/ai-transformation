@@ -31,12 +31,13 @@ export default async function FrictionPage({ params }: { params: Promise<{ id: s
         <div className="t-system">05 · Friction Register</div>
         <h1 className="t-display">Friction register</h1>
         <p className="t-muted">
-          Each entry is backed by evidence. AI drafts candidate entries and groups them by shared root; you keep, merge,
-          or cut. You write the summary.
+          Each entry is backed by evidence and says which side feels it: the people served, the staff, or both. AI
+          drafts candidate entries and groups them by shared root, surfacing the roots that land on both sides; you
+          keep, merge, or cut. You write the summary.
         </p>
       </header>
       {!isAiConfigured() && <SetupNotice what="ai" />}
-      <FrictionEditor engagementId={id} initial={data.data} baseSha={sha} status={data.status} hasSynthesis={hasSynthesis} />
+      <FrictionEditor engagementId={id} initial={data.data} sideNames={engagement.sides} baseSha={sha} status={data.status} hasSynthesis={hasSynthesis} />
     </div>
   );
 }

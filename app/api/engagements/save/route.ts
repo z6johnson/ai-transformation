@@ -13,7 +13,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { putFile, getJson, ConcurrencyError } from "@/lib/github";
 import { engagementFile } from "@/lib/paths";
-import { Engagement } from "@/lib/schemas";
+import { Engagement, DEFAULT_SIDE_NAMES } from "@/lib/schemas";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
     lead?: string;
     lifecycleOwner?: { name?: string; role?: string };
     stage?: string;
+    sides?: { external?: string; internal?: string };
     baseSha?: string | null;
   };
   try {
@@ -87,6 +88,10 @@ export async function POST(req: NextRequest) {
     lead: body.lead ?? "",
     lifecycleOwner: { name: body.lifecycleOwner?.name ?? "", role: body.lifecycleOwner?.role ?? "" },
     stage: body.stage ?? "mapping",
+    sides: {
+      external: body.sides?.external?.trim() || DEFAULT_SIDE_NAMES.external,
+      internal: body.sides?.internal?.trim() || DEFAULT_SIDE_NAMES.internal,
+    },
     owner,
     createdAt,
   };

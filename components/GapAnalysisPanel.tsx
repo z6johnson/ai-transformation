@@ -108,6 +108,8 @@ export function GapAnalysisPanel({
       where: g.area,
       type: "Rework",
       whatsWrong: g.divergence,
+      // Written procedure against actual practice is staff work first; the lead can change it.
+      side: "internal",
       whoFeels: "",
       evidence: `Documented: ${g.documentedBaseline} — Actual: ${g.actualPractice}`.trim(),
       severity: "moderate",

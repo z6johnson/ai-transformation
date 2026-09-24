@@ -4,11 +4,12 @@ import { useState } from "react";
 import { saveArtifact, callAi } from "@/lib/client";
 import type { AiMeta } from "@/lib/ai-meta";
 import { SortableCards } from "./SortableCards";
+import { sideLabel, type SideNames } from "@/lib/schemas";
 import { BaselineToggle, CoverageNotesPanel, toCoverageNotes, type CoverageNote } from "./CoverageNotes";
 
 type Origin = "human" | "ai-draft" | "ai-applied" | "ai-confirmed";
-type Handoff = { id: string; stage: string; from: string; to: string; whatMoves: string; how: string; whatBreaks: string; origin: Origin };
-type Decision = { id: string; stage: string; decision: string; whoDecides: string; decidesOn: string; basis: string; failurePath: string; kind: "clear-cut" | "judgment"; origin: Origin };
+type Handoff = { id: string; stage: string; from: string; to: string; whatMoves: string; how: string; whatBreaks: string; visibleToExternal: boolean; origin: Origin };
+type Decision = { id: string; stage: string; decision: string; whoDecides: string; decidesOn: string; basis: string; failurePath: string; kind: "clear-cut" | "judgment"; visibleToExternal: boolean; origin: Origin };
 type System = { name: string; usedFor: string; dataHeld: string; owner: string; connectsTo: string; origin: Origin };
 type BlueprintData = {
   header: { service: string; scope: string; lead: string };
@@ -24,12 +25,14 @@ const pad = (n: number) => String(n).padStart(2, "0");
 export function BlueprintEditor({
   engagementId,
   initial,
+  sideNames,
   baseSha,
   status,
   hasSynthesis = false,
 }: {
   engagementId: string;
   initial: BlueprintData;
+  sideNames: SideNames;
   baseSha: string | null;
   status: string;
   hasSynthesis?: boolean;
@@ -55,7 +58,12 @@ export function BlueprintEditor({
     setMessage("");
     const res = await callAi<{
       degraded: boolean;
-      draft: { handoffs?: Array<Record<string, string>>; decisions?: Array<Record<string, string>>; systems?: Array<Record<string, string>>; coverageNotes?: unknown } | null;
+      draft: {
+        handoffs?: Array<Record<string, string> & { visibleToExternal?: boolean }>;
+        decisions?: Array<Record<string, string> & { visibleToExternal?: boolean }>;
+        systems?: Array<Record<string, string>>;
+        coverageNotes?: unknown;
+      } | null;
       aiMeta?: AiMeta;
       message?: string;
     }>("/api/ai/draft", { engagementId, target: "blueprint", useBaseline });
@@ -77,6 +85,7 @@ export function BlueprintEditor({
         whatMoves: h.whatMoves || "",
         how: h.how || "",
         whatBreaks: h.whatBreaks || "",
+        visibleToExternal: h.visibleToExternal === true,
         origin: "ai-applied" as Origin,
       })),
     ]);
@@ -91,6 +100,7 @@ export function BlueprintEditor({
         basis: x.basis || "",
         failurePath: x.failurePath || "",
         kind: (x.kind === "clear-cut" ? "clear-cut" : "judgment") as Decision["kind"],
+        visibleToExternal: x.visibleToExternal === true,
         origin: "ai-applied" as Origin,
       })),
     ]);
@@ -178,11 +188,17 @@ export function BlueprintEditor({
 
       <section className="stack">
         <div className="row row--between">
-          <h2 className="t-heading">Handoffs</h2>
+          <div className="stack">
+            <h2 className="t-heading">Handoffs</h2>
+            <span className="t-faint t-system">
+              {handoffs.filter((h) => h.visibleToExternal).length} of {handoffs.length} seen by {sideLabel(sideNames, "external")} ·{" "}
+              {handoffs.filter((h) => !h.visibleToExternal).length} backstage only
+            </span>
+          </div>
           <button
             className="btn"
             onClick={() =>
-              setHandoffs((p) => [...p, { id: `H-${pad(p.length + 1)}`, stage: "", from: "", to: "", whatMoves: "", how: "", whatBreaks: "", origin: "human" }])
+              setHandoffs((p) => [...p, { id: `H-${pad(p.length + 1)}`, stage: "", from: "", to: "", whatMoves: "", how: "", whatBreaks: "", visibleToExternal: false, origin: "human" }])
             }
           >
             + Handoff
@@ -218,6 +234,11 @@ export function BlueprintEditor({
                   <input type="text" value={h[k]} onChange={(e) => setHandoffs((p) => p.map((x, idx) => (idx === i ? { ...x, [k]: e.target.value, origin: "human" } : x)))} />
                 </label>
               ))}
+              <VisibilityToggle
+                checked={h.visibleToExternal}
+                who={sideLabel(sideNames, "external")}
+                onChange={(v) => setHandoffs((p) => p.map((x, idx) => (idx === i ? { ...x, visibleToExternal: v, origin: "human" } : x)))}
+              />
             </div>
           )}
         />
@@ -225,11 +246,16 @@ export function BlueprintEditor({
 
       <section className="stack">
         <div className="row row--between">
-          <h2 className="t-heading">Decisions</h2>
+          <div className="stack">
+            <h2 className="t-heading">Decisions</h2>
+            <span className="t-faint t-system">
+              {decisions.filter((d) => d.visibleToExternal).length} of {decisions.length} felt directly by {sideLabel(sideNames, "external")}
+            </span>
+          </div>
           <button
             className="btn"
             onClick={() =>
-              setDecisions((p) => [...p, { id: `D-${pad(p.length + 1)}`, stage: "", decision: "", whoDecides: "", decidesOn: "", basis: "", failurePath: "", kind: "judgment", origin: "human" }])
+              setDecisions((p) => [...p, { id: `D-${pad(p.length + 1)}`, stage: "", decision: "", whoDecides: "", decidesOn: "", basis: "", failurePath: "", kind: "judgment", visibleToExternal: false, origin: "human" }])
             }
           >
             + Decision
@@ -272,6 +298,11 @@ export function BlueprintEditor({
                   <option value="judgment">judgment</option>
                 </select>
               </label>
+              <VisibilityToggle
+                checked={d.visibleToExternal}
+                who={sideLabel(sideNames, "external")}
+                onChange={(v) => setDecisions((p) => p.map((x, idx) => (idx === i ? { ...x, visibleToExternal: v, origin: "human" } : x)))}
+              />
             </div>
           )}
         />
@@ -326,5 +357,21 @@ export function BlueprintEditor({
         <span className="t-faint t-system">Status: {status}</span>
       </div>
     </div>
+  );
+}
+
+/**
+ * The line of visibility, per item: does the person served see or feel this directly, or does
+ * it stay backstage with staff? Backstage items still shape their experience, just unseen.
+ */
+function VisibilityToggle({ checked, who, onChange }: { checked: boolean; who: string; onChange: (v: boolean) => void }) {
+  return (
+    <label className="field">
+      <span className="t-system">Line of visibility</span>
+      <span className="row" style={{ gap: "var(--space-1)" }}>
+        <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} />
+        {checked ? `${who} see or feel this directly` : `Backstage (${who} don't see it)`}
+      </span>
+    </label>
   );
 }

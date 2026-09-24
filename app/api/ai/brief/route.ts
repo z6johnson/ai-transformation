@@ -12,7 +12,9 @@ import { callModel, parseJsonLoose, isAiConfigured, modelForFeature } from "@/li
 import { redactPII } from "@/lib/pii";
 import { DRAFT_REPORT } from "@/lib/prompts";
 import { metaFromResult } from "@/lib/ai-meta";
-import { loadArtifact } from "@/lib/store";
+import { loadArtifact, loadEngagement } from "@/lib/store";
+import { allStages, journeysLine, clusterSides } from "@/lib/sides";
+import { DEFAULT_SIDE_NAMES, sideLabel } from "@/lib/schemas";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -30,7 +32,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ degraded: true, draft: null, message: "AI assist is not configured. Write the briefing by hand." });
   }
 
-  const [journey, blueprint, friction, validation] = await Promise.all([
+  const [engagement, journey, blueprint, friction, validation] = await Promise.all([
+    loadEngagement(engagementId),
     loadArtifact(engagementId, "02"),
     loadArtifact(engagementId, "03"),
     loadArtifact(engagementId, "05"),
@@ -42,19 +45,37 @@ export async function POST(req: NextRequest) {
   const f = friction.data.data;
   const v = validation.data.data;
 
-  if (!j.stages.length && !f.entries.length) {
+  const names = engagement?.sides || DEFAULT_SIDE_NAMES;
+
+  if (!allStages(j).length && !f.entries.length) {
     return NextResponse.json({ degraded: true, draft: null, message: "The map is too thin to synthesize yet. Build the journey and friction register first." });
   }
 
   const mapSummary = [
     `SERVICE: ${j.header.service || "—"} | SCOPE: ${j.header.scope || "—"}`,
-    `STAGES: ${j.stages.map((s) => s.name).filter(Boolean).join(" → ") || "—"}`,
-    `MOMENTS THAT MATTER: ${j.momentsThatMatter.map((m) => `${m.moment} (${m.why})`).join("; ") || "—"}`,
-    `DROPOUT POINTS: ${j.dropoutPoints.map((d) => `${d.point} (${d.what})`).join("; ") || "—"}`,
+    `SIDES: EXTERNAL = ${names.external}; INTERNAL = ${names.internal}`,
+    `JOURNEYS: ${journeysLine(j, names)}`,
+    `MOMENTS THAT MATTER: ${j.journeys.flatMap((jr) => jr.momentsThatMatter.map((m) => `[${jr.side}] ${m.moment} (${m.why})`)).join("; ") || "—"}`,
+    `DROPOUT POINTS: ${j.journeys.flatMap((jr) => jr.dropoutPoints.map((d) => `[${jr.side}] ${d.point} (${d.what})`)).join("; ") || "—"}`,
+    `EXTERNAL STAGES KNOWN ONLY FROM STAFF ACCOUNTS: ${
+      j.journeys
+        .filter((jr) => jr.side === "external")
+        .flatMap((jr) => jr.stages)
+        .filter((s) => s.evidence.fromSides.length && !s.evidence.fromSides.includes("external") && s.evidence.level !== "observed")
+        .map((s) => s.name)
+        .join(", ") || "none marked"
+    }`,
     `DECISIONS: ${b.decisions.map((d) => `${d.id} ${d.decision} [${d.kind}]`).join("; ") || "—"}`,
     `SYSTEMS: ${b.systems.map((s) => s.name).filter(Boolean).join(", ") || "—"}`,
-    `FRICTION CLUSTERS: ${f.clusters.map((c) => `${c.name} → ${c.sharedRoot}`).join("; ") || "—"}`,
-    `FRICTION ENTRIES: ${f.entries.map((e) => `${e.id} ${e.whatsWrong} [${e.severity}/${e.frequency}]`).join("; ") || "—"}`,
+    `FRICTION CLUSTERS: ${
+      f.clusters
+        .map((c) => {
+          const sides = c.sides.length ? c.sides : clusterSides(c.frIds, f.entries);
+          return `${c.name} [${sides.join("+") || "—"}] → ${c.sharedRoot}`;
+        })
+        .join("; ") || "—"
+    }`,
+    `FRICTION ENTRIES: ${f.entries.map((e) => `${e.id} [${e.side}: ${sideLabel(names, e.side)}] ${e.whatsWrong} [${e.severity}/${e.frequency}]`).join("; ") || "—"}`,
     `FRICTION SUMMARY (lead's words): ${f.honestAccount || "—"}`,
     `OPEN QUESTIONS: ${v.openQuestions || "—"}`,
   ].join("\n");

@@ -10,6 +10,10 @@
     "role": "Athletics Director"
   },
   "stage": "design",
+  "sides": {
+    "external": "Fans and donors",
+    "internal": "Athletics staff"
+  },
   "owner": "z6johnson@ucsd.edu",
   "createdAt": "2026-06-29T00:00:00Z"
 }

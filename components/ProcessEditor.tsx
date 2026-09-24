@@ -6,6 +6,7 @@ import type { AiMeta } from "@/lib/ai-meta";
 import { graphToBpmnXml, processToBpmnFilename, type BpmnGraph } from "@/lib/bpmn";
 import { downloadTextFile } from "@/lib/download";
 import { SortableCards } from "./SortableCards";
+import { sideLabel, WHEN_LABELS, type SideNames, type When } from "@/lib/schemas";
 import { BaselineToggle, CoverageNotesPanel, toCoverageNotes, type CoverageNote } from "./CoverageNotes";
 
 type Origin = "human" | "ai-draft" | "ai-applied" | "ai-confirmed";
@@ -19,8 +20,12 @@ type Step = {
   handsOnTime: string;
   waitTime: string;
   whatGoesWrong: string;
+  lane: Lane;
+  when: When;
   origin: Origin;
 };
+type Lane = "" | "external" | "frontstage" | "backstage";
+const LANES: Lane[] = ["external", "frontstage", "backstage"];
 type ProcessData = { header: { service: string; scope: string; stages: string }; steps: Step[] };
 
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -28,12 +33,14 @@ const pad = (n: number) => String(n).padStart(2, "0");
 export function ProcessEditor({
   engagementId,
   initial,
+  sideNames,
   baseSha,
   status,
   hasSynthesis = false,
 }: {
   engagementId: string;
   initial: ProcessData;
+  sideNames: SideNames;
   baseSha: string | null;
   status: string;
   hasSynthesis?: boolean;
@@ -46,6 +53,19 @@ export function ProcessEditor({
   const [draftMeta, setDraftMeta] = useState<AiMeta | null>(null);
   const [useBaseline, setUseBaseline] = useState(hasSynthesis);
   const [coverage, setCoverage] = useState<CoverageNote[]>([]);
+  const [laneFilter, setLaneFilter] = useState<Lane | "all">("all");
+  const [whenFilter, setWhenFilter] = useState<When | "all">("all");
+  const filtering = laneFilter !== "all" || whenFilter !== "all";
+  const shown = steps.filter((s) => (laneFilter === "all" || s.lane === laneFilter) && (whenFilter === "all" || s.when === whenFilter));
+
+  const laneLabel = (l: Lane) =>
+    l === "external"
+      ? `Done by ${sideLabel(sideNames, "external")}`
+      : l === "frontstage"
+        ? `${sideLabel(sideNames, "internal")}, in contact (frontstage)`
+        : l === "backstage"
+          ? `${sideLabel(sideNames, "internal")}, out of sight (backstage)`
+          : "Not marked";
 
   const hasAiContent = steps.some((s) => s.origin === "ai-applied");
 
@@ -57,6 +77,7 @@ export function ProcessEditor({
     setBusy("drafting");
     setMessage("");
     const res = await callAi<{ degraded: boolean; draft: { steps?: Array<Record<string, string>>; coverageNotes?: unknown } | null; aiMeta?: AiMeta; message?: string }>(
+      // Steps come back with a lane and a "when" as well as the fields below.
       "/api/ai/draft",
       { engagementId, target: "process", useBaseline },
     );
@@ -78,6 +99,8 @@ export function ProcessEditor({
         rule: s.rule || "",
         handsOnTime: s.handsOnTime || "",
         waitTime: s.waitTime || "",
+        lane: (LANES.includes(s.lane as Lane) ? s.lane : "") as Lane,
+        when: (["year-round", "game-day"].includes(s.when) ? s.when : "") as When,
         whatGoesWrong: s.whatGoesWrong || "",
         origin: "ai-applied" as Origin,
       })),
@@ -159,7 +182,7 @@ export function ProcessEditor({
         <button
           className="btn"
           onClick={() =>
-            setSteps((p) => [...p, { id: `P-${pad(p.length + 1)}`, step: "", trigger: "", who: "", system: "", rule: "", handsOnTime: "", waitTime: "", whatGoesWrong: "", origin: "human" }])
+            setSteps((p) => [...p, { id: `P-${pad(p.length + 1)}`, step: "", trigger: "", who: "", system: "", rule: "", handsOnTime: "", waitTime: "", whatGoesWrong: "", lane: "", when: "", origin: "human" }])
           }
         >
           + Add step by hand
@@ -183,6 +206,44 @@ export function ProcessEditor({
       )}
 
       <h2 className="t-heading">Steps</h2>
+      <div className="stack">
+        <div className="tabbar" role="group" aria-label="Filter steps by lane">
+          <button aria-pressed={laneFilter === "all"} onClick={() => setLaneFilter("all")}>
+            All lanes ({steps.length})
+          </button>
+          {LANES.map((l) => (
+            <button key={l} aria-pressed={laneFilter === l} onClick={() => setLaneFilter(l)}>
+              {laneLabel(l)} ({steps.filter((s) => s.lane === l).length})
+            </button>
+          ))}
+        </div>
+        <div className="tabbar" role="group" aria-label="Filter steps by when">
+          <button aria-pressed={whenFilter === "all"} onClick={() => setWhenFilter("all")}>
+            Any time
+          </button>
+          {(["year-round", "game-day"] as When[]).map((w) => (
+            <button key={w} aria-pressed={whenFilter === w} onClick={() => setWhenFilter(w)}>
+              {WHEN_LABELS[w]} ({steps.filter((s) => s.when === w).length})
+            </button>
+          ))}
+        </div>
+      </div>
+      {filtering ? (
+        <div className="stack">
+          <p className="t-faint">Filtered view, read only. Show all lanes and any time to edit or reorder.</p>
+          {shown.length === 0 && <p className="t-faint">No steps match.</p>}
+          {shown.map((s) => (
+            <div key={s.id} className="card">
+              <span className="t-mono">{s.id}</span> <span className="t-subhead">{s.step || "(unnamed)"}</span>
+              <p className="t-muted">
+                {s.who || "—"} · {laneLabel(s.lane)}
+                {s.when ? ` · ${WHEN_LABELS[s.when]}` : ""}
+              </p>
+              {s.whatGoesWrong && <p>Goes wrong: {s.whatGoesWrong}</p>}
+            </div>
+          ))}
+        </div>
+      ) : (
       <SortableCards
         items={steps}
         getKey={(s) => s.id}
@@ -215,9 +276,31 @@ export function ProcessEditor({
                 <input type="text" value={s[k]} onChange={(e) => setStep(i, k, e.target.value)} />
               </label>
             ))}
+            <label className="field">
+              <span className="t-system">Lane</span>
+              <select value={s.lane} onChange={(e) => setStep(i, "lane", e.target.value)}>
+                <option value="">Not marked</option>
+                {LANES.map((l) => (
+                  <option key={l} value={l}>
+                    {laneLabel(l)}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="field">
+              <span className="t-system">When</span>
+              <select value={s.when} onChange={(e) => setStep(i, "when", e.target.value)}>
+                {(Object.keys(WHEN_LABELS) as When[]).map((w) => (
+                  <option key={w} value={w}>
+                    {WHEN_LABELS[w]}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
         )}
       />
+      )}
 
       {message && <p className="notice">{message}</p>}
       <div className="row">

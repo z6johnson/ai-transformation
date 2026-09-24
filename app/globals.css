@@ -695,3 +695,80 @@ ul.card-grid {
     color: inherit;
   }
 }
+
+/* Side badge: which side of the service an item belongs to (the people served, or the
+   staff who run it). Grayscale only, and always carries its text label, so the mark is
+   never the sole signal (style guide §2). External is filled, internal is outlined,
+   both is a double rule. */
+.side-chip {
+  display: inline-block;
+  font-size: var(--font-size-system);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-system);
+  font-weight: var(--weight-bold);
+  border: var(--border-hairline) solid var(--color-ink);
+  border-radius: var(--radius);
+  padding: 0 var(--space-1);
+  white-space: nowrap;
+}
+.side-chip--external {
+  background: var(--color-ink);
+  color: var(--color-ink-inverse);
+}
+.side-chip--internal {
+  background: var(--color-bg);
+  color: var(--color-ink);
+}
+.side-chip--both {
+  border-style: double;
+  border-width: 3px;
+  background: var(--color-bg-sunken);
+  color: var(--color-ink);
+}
+
+/* Tab bar and filter buttons, matching the template nav. */
+.tabbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+.tabbar button {
+  padding: var(--space-1) var(--space-2);
+  border: var(--border-hairline) solid var(--color-border-hairline);
+  border-radius: var(--radius);
+  font-size: var(--font-size-system);
+  background: var(--color-bg);
+  color: var(--color-ink-muted);
+  cursor: pointer;
+}
+.tabbar button:hover {
+  background: var(--color-bg-sunken);
+  border-color: var(--color-border-strong);
+}
+.tabbar button[aria-pressed="true"],
+.tabbar button[aria-selected="true"] {
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+  background: var(--color-bg-sunken);
+  font-weight: var(--weight-bold);
+}
+
+/* Side-by-side journeys: one column per side, stages lined up by position. */
+.side-by-side {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+@media (max-width: 720px) {
+  .side-by-side {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Count-by-side ledger line, e.g. "External 4 · Internal 9 · Both 2". */
+.side-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+}

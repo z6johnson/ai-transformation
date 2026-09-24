@@ -29,6 +29,20 @@ Use the templates in order. Each one feeds the next, and the last pulls the rest
 
 6. **Validation packet** (`06`). The last step. Pulls the map together, records the review session, summarizes the friction, lists the decisions that carry into Layer 2, and captures the lifecycle owner's sign-off.
 
+## Two sides of every service
+
+Every service has two sides: the people it serves (the external side) and the staff who run it (the internal side). Map both. A service changes well only when the change works for the people using it and for the people doing the work, and the same root cause often shows up on both sides in different forms.
+
+Name the two sides for each engagement in plain words (for example, "Fans and donors" and "Athletics staff") and write them on every artifact. Then:
+
+- File each interview and observation under the side of the person speaking.
+- Give each side its own journey. The staff journey follows their year and their event days, not the fan's.
+- On the blueprint, mark which handoffs and decisions the people served can see or feel.
+- In the process documentation, put each step in a lane: done by the people served, by staff in front of them, or by staff out of sight.
+- In the Friction Register, record which side feels each entry, or both. Clusters that land on both sides are the ones to bring forward first.
+
+Watch the evidence. When staff describe what the people served go through, that is a secondhand account. Use it, and mark any stage of the external journey that rests only on staff accounts, so the map shows where the people served have not yet spoken for themselves.
+
 ## How we use AI here
 
 Two things are true at once, and holding both is the discipline of the layer.
@@ -46,6 +60,7 @@ The Mapping stage is done when:
 - The journey map and service blueprint cover the agreed scope from end to end and line up stage for stage.
 - Every step in the process documentation traces to a stage on the map, and every handoff and decision in the blueprint is accounted for.
 - The Friction Register rests on evidence, not impression, with severity and how often it happens written down.
+- Both sides are mapped: each has interviews, a journey, and friction, and any external stage that rests only on staff accounts is marked.
 - The lifecycle owner and the business owners have reviewed the map in a working session, and the changes from that session are in.
 - The validation packet is signed.
 

@@ -15,7 +15,9 @@
           "relationship": "person it serves / frontline",
           "interviewer": "A. Practice Lead",
           "date": "2026-07-08",
-          "consent": "notes only — told before speaking how AI would be used"
+          "consent": "notes only — told before speaking how AI would be used",
+          "side": "external",
+          "sourceType": "interview"
         },
         "rawNotes": "DEMO interview. \"I came to my first game because a friend had an extra ticket — I wasn't on anybody's list, I just showed up. After that I started getting emails, and some of them were for games I'd already bought tickets to, which made me think nobody was really paying attention. Buying is easy enough, I do it on my phone and the ticket lives in my wallet app. The thing is I usually transfer one of my two tickets to whoever's coming with me, and I don't think they know who actually walked in — I got the 'thanks for coming' email both times, my friend never got anything. I renewed as a season-ticket holder in the spring. Then in May I got a letter asking me to join the Triton Athletic Fund, which came about four days after the renewal invoice, and I remember thinking, you just asked me for money. I did give, a small amount, and the receipt took about six weeks to show up. It's all one thing to me — it's Triton basketball — but it clearly isn't one thing on their end.\"",
         "tags": [
@@ -36,7 +38,9 @@
           "relationship": "runs it day to day",
           "interviewer": "A. Practice Lead",
           "date": "2026-07-09",
-          "consent": "recorded with consent — told before speaking how AI would be used"
+          "consent": "recorded with consent — told before speaking how AI would be used",
+          "side": "internal",
+          "sourceType": "interview"
         },
         "rawNotes": "DEMO interview. \"My job is filling the building. I build the audience lists in the email platform, but the purchase history lives in the ticketing platform, so every campaign starts with me exporting a file and re-uploading it — by the time it's in my hands it's a week old. I segment by hand: last season's buyers, single-game buyers, students, lapsed. Which segment gets which offer and when is my call, and it's mostly instinct and last year's numbers. What I can't see is who actually attended. Scans come back to me as a gate count, not as accounts, so if I'm asking 'did the people I emailed come back', I can't answer that. After the season I run win-back off a spreadsheet, and whether it happens at all depends on whether I have a student worker that month. Nobody tells me when the Fund is about to mail the same people I'm mailing.\"",
         "tags": [
@@ -56,7 +60,9 @@
           "relationship": "runs it day to day / handoff partner",
           "interviewer": "A. Practice Lead",
           "date": "2026-07-13",
-          "consent": "notes only — told before speaking how AI would be used"
+          "consent": "notes only — told before speaking how AI would be used",
+          "side": "internal",
+          "sourceType": "interview"
         },
         "rawNotes": "DEMO interview. \"I own the ticketing platform and the gate. Pricing tiers get set before the season — I put up a recommendation and Andy signs off, and for the marquee games we'll adjust. On game day the manifest goes to the scanners and we scan people in; the platform records the scan against the barcode, and if the ticket was transferred the barcode isn't the buyer anymore. We know how many people came through. We do not know, account by account, who was in the building. The comp list is its own mess — staff, recruits, community groups all come through as comps, and there's a rule that comps don't go into the marketing audience, but the list gets built in a spreadsheet the week of the game. When the Fund asks me for the season-ticket holder file I pull it and email it over, usually once a month, sometimes less.\"",
         "tags": [
@@ -76,7 +82,9 @@
           "relationship": "business owner / handoff partner",
           "interviewer": "A. Practice Lead",
           "date": "2026-07-15",
-          "consent": "recorded with consent — told before speaking how AI would be used"
+          "consent": "recorded with consent — told before speaking how AI would be used",
+          "side": "internal",
+          "sourceType": "interview"
         },
         "rawNotes": "DEMO interview. \"The Fund is annual giving for Athletics, and most of our first-time donors were ticket buyers first — that's the pipeline. I work from the season-ticket holder file, which reaches me as a monthly export, so I'm always soliciting off a picture that's a few weeks old. Deciding who to approach and at what amount is the hardest judgment I make; I look at how long they've held seats, where they sit, whether they've come to anything besides basketball. There's no model behind it and I'd want to be careful about one. Gifts go to central Advancement for processing and receipting, which is where the acknowledgment lag comes from — I've had donors call me about a receipt I can't produce. And on assignment: if a donor is already someone's prospect on the central side, that's their donor. I'll ask, but the ask usually happens after I've already sent the letter.\"",
         "tags": [
@@ -96,7 +104,9 @@
           "relationship": "cross-unit counterpart / handoff partner",
           "interviewer": "A. Practice Lead",
           "date": "2026-07-20",
-          "consent": "notes only — told before speaking how AI would be used"
+          "consent": "notes only — told before speaking how AI would be used",
+          "side": "internal",
+          "sourceType": "interview"
         },
         "rawNotes": "DEMO interview. \"From the central side, every donor sits in one CRM and every prospect has an assigned officer. The rule is that assignment is decided centrally, and a unit shouldn't solicit an assigned prospect without clearance. In practice Athletics moves faster than clearance does, so I find out about an ask when the gift lands. I don't think that's bad faith — the Fund is working from a ticketing file they get once a month, and I'm working from a CRM that has no idea anyone bought a ticket. The two systems have no shared identifier, so matching a season-ticket holder to a donor record is a name-and-address exercise. Where it actually hurts is a donor who gives to both us and Athletics — we've had a case where two officers were cultivating the same household for the same year, which is embarrassing for everyone. Gift processing and receipting runs through us on a batch cycle.\"",
         "tags": [

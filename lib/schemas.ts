@@ -54,6 +54,35 @@ export const STAGE_LABELS: Record<EngagementStage, string> = {
   implementation: "Implementation & transfer",
 };
 
+/**
+ * The two sides of a service. `external` is the people the service serves (fans, employees
+ * under review, applicants); `internal` is the people who run it. Every artifact records side
+ * where it matters so the map can show both experiences and where one root cause hits both.
+ * The engagement names each side in plain words (e.g. "Fans and donors" / "Athletics staff").
+ */
+export const SIDES = ["external", "internal"] as const;
+export const Side = z.enum(SIDES);
+export type Side = z.infer<typeof Side>;
+export const SideOrBoth = z.enum(["external", "internal", "both"]);
+export type SideOrBoth = z.infer<typeof SideOrBoth>;
+
+export const DEFAULT_SIDE_NAMES = { external: "People served", internal: "Staff" };
+export const SideNames = z
+  .object({ external: z.string().default(DEFAULT_SIDE_NAMES.external), internal: z.string().default(DEFAULT_SIDE_NAMES.internal) })
+  .default(DEFAULT_SIDE_NAMES);
+export type SideNames = z.infer<typeof SideNames>;
+
+/** The label for a side (or "both"), falling back to the defaults when a name is blank. */
+export function sideLabel(names: Partial<SideNames> | undefined, side: SideOrBoth): string {
+  const n = { external: names?.external || DEFAULT_SIDE_NAMES.external, internal: names?.internal || DEFAULT_SIDE_NAMES.internal };
+  return side === "both" ? `Both (${n.external}; ${n.internal})` : n[side];
+}
+
+/** When in the service cycle something happens. Blank when the notes don't say. */
+export const When = z.enum(["", "year-round", "game-day"]);
+export type When = z.infer<typeof When>;
+export const WHEN_LABELS: Record<When, string> = { "": "—", "year-round": "Across the season", "game-day": "Event day" };
+
 export const Engagement = z.object({
   id: z.string(),
   name: z.string(),
@@ -64,6 +93,7 @@ export const Engagement = z.object({
   lifecycleOwner: z.object({ name: z.string().default(""), role: z.string().default("") }).default({ name: "", role: "" }),
   stage: EngagementStage.default("mapping"),
   owner: z.string().default(""),
+  sides: SideNames,
   createdAt: z.string().optional(),
 });
 export type Engagement = z.infer<typeof Engagement>;
@@ -95,6 +125,10 @@ export const Interview = z.object({
     interviewer: z.string().default(""),
     date: z.string().default(""),
     consent: z.string().default(""),
+    // Which side the speaker is on. Defaults to external so older interviews parse.
+    side: Side.default("external"),
+    // An observation (e.g. a game-day visit) records what was seen, often on both sides.
+    sourceType: z.enum(["interview", "observation"]).default("interview"),
   }),
   rawNotes: z.string().default(""),
   tags: z.array(InterviewTag).default([]),
@@ -124,24 +158,74 @@ export const JourneyStage = z.object({
   effortWhy: Provenanced,
   frictionRefs: z.array(z.string()).default([]),
   duration: z.string().default(""),
+  when: When.default(""),
+  // The evidence behind the stage: how strong, and which side's accounts it rests on. An
+  // external stage that rests only on internal accounts is secondhand and is flagged as such.
+  evidence: z
+    .object({
+      level: z.enum(["", "observed", "several", "one"]).default(""),
+      fromSides: z.array(Side).default([]),
+    })
+    .default({ level: "", fromSides: [] }),
 });
+export type JourneyStage = z.infer<typeof JourneyStage>;
+
+export const EVIDENCE_LABELS = {
+  "": "Not marked",
+  observed: "Observed this season",
+  several: "Described by several people",
+  one: "Described by one person",
+} as const;
+
+/** One person's journey through the service, from one side. */
+export const Journey = z.object({
+  id: z.string().default("J-1"),
+  side: Side.default("external"),
+  person: z.string().default(""),
+  stages: z.array(JourneyStage).default([]),
+  momentsThatMatter: z.array(z.object({ moment: z.string(), why: z.string() })).default([]),
+  dropoutPoints: z.array(z.object({ point: z.string(), what: z.string() })).default([]),
+});
+export type Journey = z.infer<typeof Journey>;
+
+/**
+ * Older journey maps stored one journey as `stages` at the top level. Wrap that as a single
+ * external journey so stored data keeps loading; the next save writes the new shape.
+ */
+function upgradeJourneyData(raw: unknown): unknown {
+  if (!raw || typeof raw !== "object") return raw;
+  const d = raw as Record<string, unknown>;
+  if (Array.isArray(d.journeys)) return d;
+  const header = (d.header || {}) as Record<string, unknown>;
+  const { stages, momentsThatMatter, dropoutPoints, ...rest } = d;
+  const hasOld = Array.isArray(stages) && stages.length > 0;
+  return {
+    ...rest,
+    journeys: hasOld
+      ? [{ id: "J-1", side: "external", person: header.person || "", stages, momentsThatMatter: momentsThatMatter || [], dropoutPoints: dropoutPoints || [] }]
+      : [],
+  };
+}
 
 export const JourneyMap = Envelope.extend({
-  data: z.object({
-    header: z
-      .object({
-        service: z.string().default(""),
-        scope: z.string().default(""),
-        person: z.string().default(""),
-        others: z.string().default(""),
-        sources: z.array(z.string()).default([]),
-      })
-      .default({}),
-    stages: z.array(JourneyStage).default([]),
-    momentsThatMatter: z.array(z.object({ moment: z.string(), why: z.string() })).default([]),
-    dropoutPoints: z.array(z.object({ point: z.string(), what: z.string() })).default([]),
-  }),
+  data: z.preprocess(
+    upgradeJourneyData,
+    z.object({
+      header: z
+        .object({
+          service: z.string().default(""),
+          scope: z.string().default(""),
+          // Kept for older data; each journey now names its own person.
+          person: z.string().default(""),
+          others: z.string().default(""),
+          sources: z.array(z.string()).default([]),
+        })
+        .default({}),
+      journeys: z.array(Journey).default([]),
+    }),
+  ),
 });
+export type JourneyMapData = z.infer<typeof JourneyMap>["data"];
 
 // ---- 03 Service blueprint -------------------------------------------------
 
@@ -153,6 +237,8 @@ export const Handoff = z.object({
   whatMoves: z.string().default(""),
   how: z.string().default(""),
   whatBreaks: z.string().default(""),
+  // Does the person served see or feel this handoff? False means it is backstage only.
+  visibleToExternal: z.boolean().default(false),
   origin: Origin.default("human"),
 });
 
@@ -165,6 +251,7 @@ export const Decision = z.object({
   basis: z.string().default(""),
   failurePath: z.string().default(""),
   kind: z.enum(["clear-cut", "judgment"]).default("judgment"),
+  visibleToExternal: z.boolean().default(false),
   origin: Origin.default("human"),
 });
 
@@ -218,6 +305,10 @@ export const ProcessDoc = Envelope.extend({
           handsOnTime: z.string().default(""),
           waitTime: z.string().default(""),
           whatGoesWrong: z.string().default(""),
+          // Where the step sits on the blueprint: done by the person served, by staff in
+          // contact with them (frontstage), or by staff out of their sight (backstage).
+          lane: z.enum(["", "external", "frontstage", "backstage"]).default(""),
+          when: When.default(""),
           origin: Origin.default("human"),
         }),
       )
@@ -243,6 +334,8 @@ export const FrictionEntry = z.object({
   where: z.string().default(""),
   type: z.enum(FRICTION_TYPES).default("Delay"),
   whatsWrong: z.string().default(""),
+  // Which side feels it. `whoFeels` stays as the specific group within that side.
+  side: SideOrBoth.default("external"),
   whoFeels: z.string().default(""),
   evidence: z.string().default(""),
   severity: z.enum(["low", "moderate", "high"]).default("moderate"),
@@ -263,6 +356,9 @@ export const FrictionRegister = Envelope.extend({
           name: z.string().default(""),
           frIds: z.array(z.string()).default([]),
           sharedRoot: z.string().default(""),
+          // Sides the cluster's entries sit on. A cluster on both sides is one root cause
+          // felt by the people served and by staff.
+          sides: z.array(SideOrBoth).default([]),
           origin: Origin.default("human"),
         }),
       )
@@ -292,8 +388,18 @@ export const ValidationPacket = Envelope.extend({
         handoffsDecisionsLogged: z.boolean().default(false),
         frictionGrounded: z.boolean().default(false),
         conflictsSettled: z.boolean().default(false),
+        bothSidesCovered: z.boolean().default(false),
+        externalNotOnlySecondhand: z.boolean().default(false),
       })
-      .default({ scopeAligned: false, stepsTrace: false, handoffsDecisionsLogged: false, frictionGrounded: false, conflictsSettled: false }),
+      .default({
+        scopeAligned: false,
+        stepsTrace: false,
+        handoffsDecisionsLogged: false,
+        frictionGrounded: false,
+        conflictsSettled: false,
+        bothSidesCovered: false,
+        externalNotOnlySecondhand: false,
+      }),
     reviewSession: z
       .object({
         date: z.string().default(""),
@@ -336,8 +442,19 @@ export const Level1Report = Envelope.extend({
         frictionPatterns: Provenanced,
         decisionsForDesign: Provenanced,
         openQuestions: Provenanced,
+        externalExperience: Provenanced.default({}),
+        internalExperience: Provenanced.default({}),
+        sharedRoots: Provenanced.default({}),
       })
-      .default({ whereItStands: {}, frictionPatterns: {}, decisionsForDesign: {}, openQuestions: {} }),
+      .default({
+        whereItStands: {},
+        frictionPatterns: {},
+        decisionsForDesign: {},
+        openQuestions: {},
+        externalExperience: {},
+        internalExperience: {},
+        sharedRoots: {},
+      }),
     generatedAt: z.string().default(""),
   }),
 });

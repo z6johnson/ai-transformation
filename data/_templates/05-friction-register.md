@@ -26,9 +26,9 @@ Ground severity and how-often in evidence. "Severe" should mean you can say who 
 
 ## Register
 
-| ID | Where (stage / step / H- / D- ref) | Type | What's wrong | Who feels it | Evidence and source | Severity | How often | At a decision? | Notes |
-|---|---|---|---|---|---|---|---|---|---|
-| FR-01 | [where on the map] | [see types below] | [the problem, concretely] | [who feels it: the person, staff, unit] | [how you know: interview ref, observation, system data] | [low / moderate / high] | [rare / occasional / frequent / constant] | [yes + D- ref / no] | [anything else worth holding] |
+| ID | Where (stage / step / H- / D- ref) | Type | What's wrong | Side | Who feels it | Evidence and source | Severity | How often | At a decision? | Notes |
+|---|---|---|---|---|---|---|---|---|---|---|
+| FR-01 | [where on the map] | [see types below] | [the problem, concretely] | [external / internal / both] | [who specifically: the person, staff, unit] | [how you know: interview ref, observation, system data] | [low / moderate / high] | [rare / occasional / frequent / constant] | [yes + D- ref / no] | [anything else worth holding] |
 
 ### Friction types
 
@@ -55,7 +55,9 @@ Use these to sort each point. A point can be more than one type; list the main o
 
 Once the register has some body, group related friction. Clusters often show that a dozen small complaints share one root, and a root is easier for Layer 2 to act on than a scattered list. AI helps here: it groups related friction across all the interviews at once and flags where several people independently hit the same thing, which is a sign of how often it happens that a single reader would miss. You decide which groupings hold.
 
-- **Cluster: [name]**: friction [FR-IDs], shared root: [what connects them]
+- **Cluster: [name]**: friction [FR-IDs], sides [external / internal / both], shared root: [what connects them]
+
+A cluster whose entries land on both sides is one cause felt by the people served and by staff. List those first.
 
 ## Friction summary
 

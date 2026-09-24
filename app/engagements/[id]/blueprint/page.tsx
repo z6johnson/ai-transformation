@@ -30,11 +30,12 @@ export default async function BlueprintPage({ params }: { params: Promise<{ id: 
         <div className="t-system">03 · Service Blueprint</div>
         <h1 className="t-display">Service blueprint</h1>
         <p className="t-muted">
-          Handoffs and decisions, recorded separately. Layer 2 uses these to find AI opportunities; the clear-cut vs.
-          judgment call on each decision feeds Layer 3 guardrails.
+          Handoffs and decisions, recorded separately, each marked for whether the people served see it or it stays
+          with staff. Layer 2 uses these to find AI opportunities; the clear-cut vs. judgment call on each decision
+          feeds Layer 3 guardrails.
         </p>
       </header>
-      <BlueprintEditor engagementId={id} initial={data.data} baseSha={sha} status={data.status} hasSynthesis={hasSynthesis} />
+      <BlueprintEditor engagementId={id} initial={data.data} sideNames={engagement.sides} baseSha={sha} status={data.status} hasSynthesis={hasSynthesis} />
     </div>
   );
 }

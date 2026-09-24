@@ -15,6 +15,8 @@ Fill out one copy of this guide per interview. Keep the questions; adjust the wo
 | Service / lifecycle | [name] |
 | Scope in effect | [the agreed start and end of the map] |
 | Person | [name, role] |
+| Side | [external: a person the service serves / internal: staff who run it] |
+| Source | [interview / observation] |
 | Their relationship to the service | [owner / runs it day to day / frontline / handoff partner / person it serves] |
 | Interviewer (the lead) | [name] |
 | Date | [date] |

@@ -9,6 +9,8 @@ type Coverage = {
   handoffsDecisionsLogged: boolean;
   frictionGrounded: boolean;
   conflictsSettled: boolean;
+  bothSidesCovered: boolean;
+  externalNotOnlySecondhand: boolean;
 };
 type ValidationData = {
   header: { service: string; scope: string; lifecycleOwner: { name: string; role: string }; businessOwners: string; lead: string };
@@ -25,6 +27,8 @@ const COVERAGE_LABELS: Array<[keyof Coverage, string]> = [
   ["handoffsDecisionsLogged", "Every handoff (H-) and decision (D-) is written down"],
   ["frictionGrounded", "Every friction point has place, type, and evidence"],
   ["conflictsSettled", "Contradictions are flagged or settled"],
+  ["bothSidesCovered", "Both sides are mapped: the people served and the staff each have a journey, interviews, and friction"],
+  ["externalNotOnlySecondhand", "Stages about the people served rest on their own words or an observation, or are marked where they don't"],
 ];
 
 export function ValidationEditor({

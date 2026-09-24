@@ -23,6 +23,8 @@ export function EngagementForm({
   const [ownerName, setOwnerName] = useState(initial.lifecycleOwner?.name ?? "");
   const [ownerRole, setOwnerRole] = useState(initial.lifecycleOwner?.role ?? "");
   const [stage, setStage] = useState<string>(initial.stage ?? "mapping");
+  const [externalName, setExternalName] = useState(initial.sides?.external ?? "");
+  const [internalName, setInternalName] = useState(initial.sides?.internal ?? "");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -42,6 +44,7 @@ export function EngagementForm({
       lead,
       lifecycleOwner: { name: ownerName, role: ownerRole },
       stage,
+      sides: { external: externalName, internal: internalName },
       baseSha,
     });
     if (res.ok) {
@@ -80,6 +83,24 @@ export function EngagementForm({
           <label className="field">
             <span className="t-system">Scope end</span>
             <input type="text" value={scopeEnd} onChange={(e) => setScopeEnd(e.target.value)} placeholder="e.g. Formal review and close" />
+          </label>
+        </div>
+      </section>
+
+      <section className="card stack">
+        <h2 className="t-heading">The two sides of the service</h2>
+        <p className="t-faint">
+          The map records both sides: the people the service serves, and the staff who run it. Name each in plain words.
+          These names label interviews, journeys, friction, and the report.
+        </p>
+        <div className="grid grid--2">
+          <label className="field">
+            <span className="t-system">External: the people it serves</span>
+            <input type="text" value={externalName} onChange={(e) => setExternalName(e.target.value)} placeholder="e.g. Fans and donors" />
+          </label>
+          <label className="field">
+            <span className="t-system">Internal: the staff who run it</span>
+            <input type="text" value={internalName} onChange={(e) => setInternalName(e.target.value)} placeholder="e.g. Athletics staff" />
           </label>
         </div>
       </section>

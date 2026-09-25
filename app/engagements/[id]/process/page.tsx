@@ -29,9 +29,13 @@ export default async function ProcessPage({ params }: { params: Promise<{ id: st
       <header className="stack">
         <div className="t-system">04 · Process Documentation</div>
         <h1 className="t-display">Process documentation</h1>
-        <p className="t-muted">Each step: what starts it, who does it, the rule, how long it takes, and what goes wrong.</p>
+        <p className="t-muted">
+          Each step: what starts it, who does it, the rule, how long it takes, and what goes wrong. Each step sits in a
+          lane (done by the people served, by staff in front of them, or by staff out of sight) and says whether it runs
+          across the season or on an event day.
+        </p>
       </header>
-      <ProcessEditor engagementId={id} initial={data.data} baseSha={sha} status={data.status} hasSynthesis={hasSynthesis} />
+      <ProcessEditor engagementId={id} initial={data.data} sideNames={engagement.sides} baseSha={sha} status={data.status} hasSynthesis={hasSynthesis} />
     </div>
   );
 }

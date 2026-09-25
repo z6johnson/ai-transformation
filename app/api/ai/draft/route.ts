@@ -21,7 +21,9 @@ import { callModel, parseJsonLoose, isAiConfigured, modelForFeature } from "@/li
 import { redactPII } from "@/lib/pii";
 import { DRAFT_JOURNEY, DRAFT_FRICTION, DRAFT_BLUEPRINT, DRAFT_PROCESS, baselineBlock } from "@/lib/prompts";
 import { metaFromResult } from "@/lib/ai-meta";
-import { loadArtifact } from "@/lib/store";
+import { loadArtifact, loadEngagement } from "@/lib/store";
+import { journeysDigest } from "@/lib/sides";
+import { DEFAULT_SIDE_NAMES, sideLabel, type Side } from "@/lib/schemas";
 import { loadSynthesis } from "@/lib/library-store";
 
 export const runtime = "nodejs";
@@ -41,32 +43,28 @@ const PROMPTS = {
   process: DRAFT_PROCESS,
 } as const;
 
-/** A compact, line-per-item view of the confirmed journey for downstream prompts. */
-function journeyDigest(stages: { name: string; doing: { value: string }; touchpoints: { value: string } }[]): string {
-  if (!stages.length) return "(no journey stages confirmed yet)";
-  return stages
-    .map((s, i) => `${i + 1}. ${s.name || "(unnamed)"} — does: ${s.doing.value || "—"}; touchpoints: ${s.touchpoints.value || "—"}`)
-    .join("\n");
-}
-
 /** A compact view of the confirmed blueprint handoffs/decisions/systems for the process prompt. */
 function blueprintDigest(bp: {
-  handoffs: { id: string; from: string; to: string; whatMoves: string }[];
-  decisions: { id: string; decision: string; whoDecides: string; kind: string }[];
+  handoffs: { id: string; from: string; to: string; whatMoves: string; visibleToExternal: boolean }[];
+  decisions: { id: string; decision: string; whoDecides: string; kind: string; visibleToExternal: boolean }[];
   systems: { name: string; usedFor: string }[];
 }): string {
-  const h = bp.handoffs.map((x) => `${x.id} ${x.from}→${x.to}: ${x.whatMoves}`).join("; ") || "(none)";
-  const d = bp.decisions.map((x) => `${x.id} ${x.decision} (${x.whoDecides}, ${x.kind})`).join("; ") || "(none)";
+  const seen = (v: boolean) => (v ? ", external side sees it" : "");
+  const h = bp.handoffs.map((x) => `${x.id} ${x.from}→${x.to}: ${x.whatMoves}${seen(x.visibleToExternal)}`).join("; ") || "(none)";
+  const d = bp.decisions.map((x) => `${x.id} ${x.decision} (${x.whoDecides}, ${x.kind}${seen(x.visibleToExternal)})`).join("; ") || "(none)";
   const s = bp.systems.map((x) => `${x.name}: ${x.usedFor}`).join("; ") || "(none)";
   return `HANDOFFS: ${h}\nDECISIONS: ${d}\nSYSTEMS: ${s}`;
 }
 
 export async function POST(req: NextRequest) {
-  const { engagementId, target, useBaseline } = (await req.json().catch(() => ({}))) as {
+  const { engagementId, target, useBaseline, side: rawSide } = (await req.json().catch(() => ({}))) as {
     engagementId?: string;
     target?: Target;
     useBaseline?: boolean;
+    /** Journey only: whose journey to draft. */
+    side?: Side;
   };
+  const side: Side = rawSide === "internal" ? "internal" : "external";
   if (!engagementId || !target || !TARGETS.includes(target)) {
     return NextResponse.json({ error: `engagementId and target (${TARGETS.join("|")}) are required` }, { status: 400 });
   }
@@ -74,17 +72,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ degraded: true, draft: null, message: "AI assist is not configured. Build by hand." });
   }
 
-  const guide = await loadArtifact(engagementId, "01");
+  const [guide, engagement] = await Promise.all([loadArtifact(engagementId, "01"), loadEngagement(engagementId)]);
+  const sideNames = engagement?.sides || DEFAULT_SIDE_NAMES;
   const interviews = guide.data.data.interviews;
   if (!interviews.length) {
     return NextResponse.json({ degraded: true, draft: null, message: "No interviews to draft from yet." });
   }
 
-  // Build a tagged-notes digest: each interview's notes with its confirmed tags listed.
+  // Build a tagged-notes digest: each interview's notes with its confirmed tags listed, labeled
+  // with the speaker's side (or OBSERVATION) so the model keeps fan and staff accounts apart.
   const taggedNotes = interviews
     .map((iv) => {
       const tags = iv.tags.map((t) => `[${t.tag}] "${t.sourceWords}"`).join("; ");
-      return `--- ${iv.header.role || iv.id} ---\n${iv.rawNotes}\nTAGS: ${tags || "(none)"}`;
+      const label =
+        iv.header.sourceType === "observation"
+          ? "OBSERVATION"
+          : `${iv.header.side.toUpperCase()}: ${sideLabel(sideNames, iv.header.side)}`;
+      return `--- [${label}] ${iv.header.role || iv.id} ---\n${iv.rawNotes}\nTAGS: ${tags || "(none)"}`;
     })
     .join("\n\n");
 
@@ -99,7 +103,7 @@ export async function POST(req: NextRequest) {
   ]);
 
   let context = taggedNotes;
-  if (journey) context += `\n\n=== CONFIRMED JOURNEY STAGES ===\n${journeyDigest(journey.data.data.stages)}`;
+  if (journey) context += `\n\n=== CONFIRMED JOURNEYS ===\n${journeysDigest(journey.data.data, sideNames)}`;
   if (blueprint) context += `\n\n=== CONFIRMED BLUEPRINT ===\n${blueprintDigest(blueprint.data.data)}`;
 
   // Tier 3 — documented baseline, appended LAST and clearly labeled. Reference only; it can
@@ -112,14 +116,19 @@ export async function POST(req: NextRequest) {
   }
 
   const { text, redactions } = redactPII(context);
+  const external = interviews.filter((iv) => iv.header.side === "external").length;
   const inputSummary =
-    `${interviews.length} interview(s), ${text.length} chars, ${redactions} PII redaction(s)` +
+    `${interviews.length} interview(s) (${external} external, ${interviews.length - external} internal), ` +
+    `${text.length} chars, ${redactions} PII redaction(s)` +
+    (target === "journey" ? `, ${side} journey` : "") +
     (withBaseline ? `, +${baselineSections.length} baseline section(s)` : "");
 
   const prompt = PROMPTS[target];
   const promptId = withBaseline ? `${prompt.id}+baseline` : prompt.id;
   const model = modelForFeature("draft");
-  const result = await callModel({ messages: prompt.build(text, withBaseline), jsonObject: true, model });
+  const messages =
+    target === "journey" ? DRAFT_JOURNEY.build(text, withBaseline, side, sideLabel(sideNames, side)) : prompt.build(text, withBaseline);
+  const result = await callModel({ messages, jsonObject: true, model });
 
   if (!result.ok) {
     const meta = metaFromResult({ result, promptId, model, inputSummary, outputSummary: "no output" });
@@ -134,7 +143,7 @@ export async function POST(req: NextRequest) {
     promptId,
     model,
     inputSummary,
-    outputSummary: `${target} draft, ${count} item(s)${withBaseline ? `, ${coverage} coverage note(s)` : ""}`,
+    outputSummary: `${target === "journey" ? `${side} journey` : target} draft, ${count} item(s)${withBaseline ? `, ${coverage} coverage note(s)` : ""}`,
   });
 
   return NextResponse.json({ degraded: false, draft, aiMeta: meta });

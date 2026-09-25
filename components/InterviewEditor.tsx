@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { saveArtifact, callAi } from "@/lib/client";
-import type { Interview, InterviewTag } from "@/lib/schemas";
-import { TAGS } from "@/lib/schemas";
+import type { Interview, InterviewTag, Side, SideNames } from "@/lib/schemas";
+import { TAGS, SIDES, sideLabel } from "@/lib/schemas";
+import { SideChip, SideCounts } from "./SideChip";
 import type { AiMeta } from "@/lib/ai-meta";
 import {
   ACCEPTED_TRANSCRIPT_ACCEPT,
@@ -18,10 +19,10 @@ type GuideData = { interviews: Interview[] };
 const ACTOR = "you"; // The save route stamps the real actor server-side from PRACTICE_ACTOR.
 const AUTO_APPLY_MIN = 0.5; // At/above this confidence, AI applies the tag; below, it flags for review.
 
-function newInterview(n: number): Interview {
+function newInterview(n: number, side: Side = "external"): Interview {
   return {
     id: `INT-${String(n).padStart(2, "0")}`,
-    header: { person: "", role: "", relationship: "", interviewer: "", date: "", consent: "" },
+    header: { person: "", role: "", relationship: "", interviewer: "", date: "", consent: "", side, sourceType: "interview" },
     rawNotes: "",
     tags: [],
   };
@@ -33,18 +34,20 @@ function isEmptyInterview(iv: Interview): boolean {
     !iv.rawNotes.trim() &&
     iv.tags.length === 0 &&
     !iv.source &&
-    Object.values(iv.header).every((v) => !v.trim())
+    (["person", "role", "relationship", "interviewer", "date", "consent"] as const).every((k) => !iv.header[k].trim())
   );
 }
 
 export function InterviewEditor({
   engagementId,
   initial,
+  sideNames,
   baseSha,
   status,
 }: {
   engagementId: string;
   initial: GuideData;
+  sideNames: SideNames;
   baseSha: string | null;
   status: string;
 }) {
@@ -58,6 +61,8 @@ export function InterviewEditor({
   const [message, setMessage] = useState("");
   const [live, setLive] = useState("");
   const [pasteText, setPasteText] = useState("");
+  // Side that newly imported transcripts are filed under; the lead can change each one after.
+  const [importSide, setImportSide] = useState<Side>("external");
   // Ids of freshly imported interviews still awaiting their automatic tagging pass.
   const [pending, setPending] = useState<Set<string>>(new Set());
 
@@ -74,7 +79,7 @@ export function InterviewEditor({
     const now = new Date().toISOString();
     const base = interviews.length === 1 && isEmptyInterview(interviews[0]) ? [] : interviews;
     const created = ready.map((it, i) => ({
-      ...newInterview(base.length + i + 1),
+      ...newInterview(base.length + i + 1, importSide),
       rawNotes: cleanTranscript(it.text, it.filename),
       source: { filename: it.filename, uploadedAt: now, uploadedBy: ACTOR },
     }));
@@ -281,6 +286,15 @@ export function InterviewEditor({
             automatically — confident tags are applied for you to review, low-confidence ones are flagged.
           </p>
         </div>
+        <fieldset className="row row--wrap">
+          <span className="t-system">File imports under</span>
+          {SIDES.map((sd) => (
+            <label key={sd} className="row" style={{ gap: "var(--space-1)" }}>
+              <input type="radio" name="import-side" checked={importSide === sd} onChange={() => setImportSide(sd)} />
+              {sideLabel(sideNames, sd)}
+            </label>
+          ))}
+        </fieldset>
         <div className="row">
           <label className="btn">
             Upload transcript file(s)
@@ -314,26 +328,70 @@ export function InterviewEditor({
         </div>
       </section>
 
-      {/* Interview selector */}
-      <div className="row" role="group" aria-label="Interviews">
-        {interviews.map((iv, i) => (
+      {/* Balance across the two sides. The map needs both, in the people's own words. */}
+      <SideCounts
+        label="Interviews by side"
+        names={sideNames}
+        showBoth={false}
+        counts={{
+          external: interviews.filter((iv) => iv.header.side === "external").length,
+          internal: interviews.filter((iv) => iv.header.side === "internal").length,
+          both: 0,
+        }}
+      />
+
+      {/* Interview selector, grouped by side */}
+      {SIDES.map((sd) => (
+        <div key={sd} className="row row--wrap" role="group" aria-label={`${sideLabel(sideNames, sd)} interviews`}>
+          <SideChip side={sd} names={sideNames} />
+          {interviews.map((iv, i) =>
+            iv.header.side !== sd ? null : (
+              <button key={iv.id} className={`btn${i === sel ? " btn--primary" : ""}`} onClick={() => setSel(i)} aria-pressed={i === sel}>
+                {iv.header.sourceType === "observation" ? "Observation: " : ""}
+                {iv.header.role || iv.id}
+              </button>
+            ),
+          )}
           <button
-            key={iv.id}
-            className={`btn${i === sel ? " btn--primary" : ""}`}
-            onClick={() => setSel(i)}
-            aria-pressed={i === sel}
+            className="btn btn--text"
+            onClick={() => {
+              setInterviews((p) => [...p, newInterview(p.length + 1, sd)]);
+              setSel(interviews.length);
+            }}
           >
-            {iv.header.role || iv.id}
+            + Add {sideLabel(sideNames, sd)} interview
           </button>
-        ))}
-        <button className="btn btn--text" onClick={() => { setInterviews((p) => [...p, newInterview(p.length + 1)]); setSel(interviews.length); }}>
-          + Add interview
-        </button>
-      </div>
+        </div>
+      ))}
 
       {/* Header fields */}
       <fieldset className="card grid grid--2">
         <legend className="t-system">Interview header</legend>
+        <label className="field">
+          <span className="t-system">Side</span>
+          <select
+            value={current.header.side}
+            onChange={(e) => update((iv) => ({ ...iv, header: { ...iv.header, side: e.target.value as Side } }))}
+          >
+            {SIDES.map((sd) => (
+              <option key={sd} value={sd}>
+                {sd === "external" ? "External" : "Internal"}: {sideLabel(sideNames, sd)}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="field">
+          <span className="t-system">Source</span>
+          <select
+            value={current.header.sourceType}
+            onChange={(e) =>
+              update((iv) => ({ ...iv, header: { ...iv.header, sourceType: e.target.value as Interview["header"]["sourceType"] } }))
+            }
+          >
+            <option value="interview">Interview</option>
+            <option value="observation">Observation (e.g. an event-day visit)</option>
+          </select>
+        </label>
         {(
           [
             ["person", "Person"],

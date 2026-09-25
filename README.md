@@ -81,6 +81,18 @@ npm run typecheck
 npm run build
 ```
 
+## Two sides of a service
+
+Every engagement names two sides: the people the service serves (external) and the staff who run
+it (internal). Interviews are filed by side (and as interview or observation), the journey map
+holds one journey per side with an evidence mark on each stage, blueprint handoffs and decisions
+say whether the people served can see them, process steps sit in a lane (external, frontstage,
+backstage) and say whether they run across the season or on an event day, and friction entries
+say which side feels them or both. Friction clusters that land on both sides sort first, and the
+validation packet and Level 1 report count everything by side and flag external stages that rest
+only on staff accounts. Older journey maps with a single `stages` list load as one external
+journey; the next save writes the new shape.
+
 ## Data layout
 
 ```

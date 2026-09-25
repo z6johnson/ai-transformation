@@ -38,6 +38,7 @@ export async function saveEngagement(args: {
   lead?: string;
   lifecycleOwner?: { name?: string; role?: string };
   stage?: string;
+  sides?: { external?: string; internal?: string };
   baseSha?: string | null;
 }): Promise<SaveEngagementResult> {
   try {

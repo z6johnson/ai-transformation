@@ -10,10 +10,16 @@ type Synthesis = {
   frictionPatterns: Provenanced;
   decisionsForDesign: Provenanced;
   openQuestions: Provenanced;
+  externalExperience: Provenanced;
+  internalExperience: Provenanced;
+  sharedRoots: Provenanced;
 };
 
 const FIELDS: Array<[keyof Synthesis, string]> = [
   ["whereItStands", "Where the service stands"],
+  ["externalExperience", "What the service is like for the people it serves"],
+  ["internalExperience", "What running it is like for staff"],
+  ["sharedRoots", "Roots that land on both sides"],
   ["frictionPatterns", "Patterns across the friction"],
   ["decisionsForDesign", "Decisions the design phase will weigh"],
   ["openQuestions", "Open questions and known gaps"],
@@ -54,12 +60,9 @@ export function ReportEditor({
       return;
     }
     const d = res.draft;
-    setSynthesis({
-      whereItStands: p(d.whereItStands || "", "ai-applied"),
-      frictionPatterns: p(d.frictionPatterns || "", "ai-applied"),
-      decisionsForDesign: p(d.decisionsForDesign || "", "ai-applied"),
-      openQuestions: p(d.openQuestions || "", "ai-applied"),
-    });
+    setSynthesis(
+      Object.fromEntries(FIELDS.map(([k]) => [k, p(typeof d[k] === "string" ? d[k] : "", "ai-applied")])) as Synthesis,
+    );
     setMessage("AI applied a synthesis from the confirmed map. Edit any section to replace it; your text takes over.");
   }
 

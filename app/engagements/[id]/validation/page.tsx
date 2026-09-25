@@ -4,6 +4,7 @@ import { loadEngagement, loadArtifact, readAiLog } from "@/lib/store";
 import { SetupNotice } from "@/components/SetupNotice";
 import { TemplateNav } from "@/components/TemplateNav";
 import { ValidationEditor } from "@/components/ValidationEditor";
+import { SideCoverage } from "@/components/SideCoverage";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +13,12 @@ export default async function ValidationPage({ params }: { params: Promise<{ id:
   if (!isStorageConfigured()) return <SetupNotice what="storage" />;
   const engagement = await loadEngagement(id);
   if (!engagement) notFound();
-  const { data, sha } = await loadArtifact(id, "06");
+  const [{ data, sha }, guide, journey, friction] = await Promise.all([
+    loadArtifact(id, "06"),
+    loadArtifact(id, "01"),
+    loadArtifact(id, "02"),
+    loadArtifact(id, "05"),
+  ]);
   const aiLog = await readAiLog(id);
 
   return (
@@ -33,6 +39,20 @@ export default async function ValidationPage({ params }: { params: Promise<{ id:
           Mapping stage.
         </p>
       </header>
+
+      <section className="stack">
+        <h2 className="t-heading">Both sides of the service</h2>
+        <p className="t-faint">
+          Read from the interviews, journeys, and friction register. Use it for the two coverage checks about sides below.
+        </p>
+        <SideCoverage
+          names={engagement.sides}
+          interviews={guide.data.data.interviews}
+          journey={journey.data.data}
+          entries={friction.data.data.entries}
+          clusters={friction.data.data.clusters}
+        />
+      </section>
 
       <section className="card stack">
         <h2 className="t-heading">How AI was used</h2>

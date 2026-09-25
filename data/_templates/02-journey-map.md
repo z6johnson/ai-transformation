@@ -14,10 +14,13 @@ Build it mostly from interviews and from watching the work happen. Map the real 
 |---|---|
 | Service / lifecycle | [name] |
 | Scope | [where this map starts and ends] |
-| The person | [whose journey this is: the person the service is for] |
+| Side | [external: the people the service serves / internal: the staff who run it] |
+| The person | [whose journey this is, named by role] |
 | Others involved | [anyone else moving through it alongside them] |
 | Sources | [interviews and observations this map draws on] |
 | Lead | [name] · [date] |
+
+Make one journey map per side, at least. The external journey follows a person the service serves. The internal journey follows the staff who run it, across their year and on event days. Put them side by side once both exist.
 
 ## Stages
 
@@ -38,6 +41,8 @@ One block per stage. The example shows the level of detail; replace it.
 | Points of contact | [where and how they reach the service: forms, portals, emails, meetings, calls, in person] |
 | What they are thinking and feeling | [the experience, in their words where you have them] |
 | What they wait for | [any waiting, and what they are waiting on] |
+| When | [across the season / on an event day] |
+| Evidence | [observed / described by several people / described by one] and which side it came from. Mark an external stage that rests only on staff accounts. |
 | Effort | [how hard this stage is: low / moderate / high, with a word on why] |
 | Friction here | [reference IDs from the Friction Register, template 05] |
 | Typical duration | [how long this stage takes, and the range] |

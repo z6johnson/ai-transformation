@@ -3,6 +3,9 @@ import { isStorageConfigured } from "@/lib/github";
 import { loadEngagement, loadArtifact } from "@/lib/store";
 import { SetupNotice } from "@/components/SetupNotice";
 import { ReportEditor } from "@/components/ReportEditor";
+import { SideChip } from "@/components/SideChip";
+import { SideCoverage } from "@/components/SideCoverage";
+import { clusterSides, crossesSides } from "@/lib/sides";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +13,9 @@ const SEVERITY_ORDER = { high: 0, moderate: 1, low: 2 } as const;
 
 const SYNTHESIS_LABELS: Array<[string, string]> = [
   ["whereItStands", "Where the service stands"],
+  ["externalExperience", "What the service is like for the people it serves"],
+  ["internalExperience", "What running it is like for staff"],
+  ["sharedRoots", "Roots that land on both sides"],
   ["frictionPatterns", "Patterns across the friction"],
   ["decisionsForDesign", "Decisions the design phase will weigh"],
   ["openQuestions", "Open questions and known gaps"],
@@ -21,7 +27,8 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
   const engagement = await loadEngagement(id);
   if (!engagement) notFound();
 
-  const [journey, blueprint, friction, validation, report] = await Promise.all([
+  const [guide, journey, blueprint, friction, validation, report] = await Promise.all([
+    loadArtifact(id, "01"),
     loadArtifact(id, "02"),
     loadArtifact(id, "03"),
     loadArtifact(id, "05"),
@@ -42,6 +49,13 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
   };
   const entriesBySeverity = [...f.entries].sort((a, b2) => SEVERITY_ORDER[a.severity] - SEVERITY_ORDER[b2.severity]);
 
+  // Both sides at a glance: how much of the map rests on each side's evidence.
+  const names = engagement.sides;
+  const interviews = guide.data.data.interviews;
+  const clusters = f.clusters.map((c) => ({ ...c, sides: clusterSides(c.frIds, f.entries) }));
+  const sharedClusters = clusters.filter((c) => crossesSides(c.sides));
+
+
   return (
     <div className="stack-lg">
       <nav className="breadcrumb" aria-label="Breadcrumb">
@@ -56,8 +70,8 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
         <div className="t-system">07 · Level 1 Report — design briefing</div>
         <h1 className="t-display">{header.service || engagement.name}</h1>
         <p className="t-muted">
-          The lead-in briefing for the Design phase. It pulls the confirmed map together — what the service does, where it
-          has friction, and the decisions Design will weigh. Layer 1 names no fixes; that is Design&rsquo;s job.
+          The lead-in briefing for the Design phase. It pulls the confirmed map together — what the service does for the
+          people it serves and for the staff who run it, where each side has friction, and the decisions Design will weigh. Layer 1 names no fixes; that is Design&rsquo;s job.
         </p>
         <p className="t-system t-faint">
           Scope: {header.scope || "—"} · Lead: {header.lead || "—"}
@@ -82,19 +96,33 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
 
       {/* Assembled roll-up (printable, read-only) straight from the confirmed artifacts. */}
       <section className="stack">
-        <h2 className="t-heading">The journey at a glance</h2>
-        <div className="card stack">
-          <p className="t-system">Stages</p>
-          <p className="t-muted">{j.stages.map((s) => s.name).filter(Boolean).join("  →  ") || "—"}</p>
-          <p className="t-system">Moments that matter</p>
-          <ul>
-            {j.momentsThatMatter.length ? j.momentsThatMatter.map((m, i) => <li key={i}>{m.moment} — <span className="t-faint">{m.why}</span></li>) : <li className="t-faint">—</li>}
-          </ul>
-          <p className="t-system">Dropout points</p>
-          <ul>
-            {j.dropoutPoints.length ? j.dropoutPoints.map((d, i) => <li key={i}>{d.point} — <span className="t-faint">{d.what}</span></li>) : <li className="t-faint">—</li>}
-          </ul>
-        </div>
+        <h2 className="t-heading">Both sides at a glance</h2>
+        <SideCoverage names={names} interviews={interviews} journey={j} entries={f.entries} clusters={f.clusters} />
+      </section>
+
+      <section className="stack">
+        <h2 className="t-heading">The journeys at a glance</h2>
+        {j.journeys.length === 0 && <p className="t-faint">No journeys yet.</p>}
+        {j.journeys.map((jr) => (
+          <div key={jr.id} className="card stack">
+            <p className="t-system">
+              <SideChip side={jr.side} names={names} /> {jr.id} {jr.person}
+            </p>
+            <p className="t-muted">{jr.stages.map((s) => s.name).filter(Boolean).join("  →  ") || "—"}</p>
+            {jr.momentsThatMatter.length > 0 && (
+              <>
+                <p className="t-system">Moments that matter</p>
+                <ul>{jr.momentsThatMatter.map((m, i) => <li key={i}>{m.moment} — <span className="t-faint">{m.why}</span></li>)}</ul>
+              </>
+            )}
+            {jr.dropoutPoints.length > 0 && (
+              <>
+                <p className="t-system">Dropout points</p>
+                <ul>{jr.dropoutPoints.map((d, i) => <li key={i}>{d.point} — <span className="t-faint">{d.what}</span></li>)}</ul>
+              </>
+            )}
+          </div>
+        ))}
       </section>
 
       <section className="stack">
@@ -144,10 +172,25 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
             <p className="t-muted">{f.honestAccount}</p>
           </div>
         )}
-        {f.clusters.length > 0 && (
+        {sharedClusters.length > 0 && (
+          <div className="card card--accent stack">
+            <p className="t-system">Roots that land on both sides</p>
+            <ul>{sharedClusters.map((c, i) => <li key={i}><strong>{c.name}</strong> — <span className="t-faint">{c.sharedRoot}</span> ({c.frIds.join(", ")})</li>)}</ul>
+          </div>
+        )}
+        {clusters.length > sharedClusters.length && (
           <div className="card stack">
-            <p className="t-system">Clusters</p>
-            <ul>{f.clusters.map((c, i) => <li key={i}><strong>{c.name}</strong> — <span className="t-faint">{c.sharedRoot}</span> ({c.frIds.join(", ")})</li>)}</ul>
+            <p className="t-system">Clusters on one side</p>
+            <ul>
+              {clusters
+                .filter((c) => !crossesSides(c.sides))
+                .map((c, i) => (
+                  <li key={i}>
+                    {c.sides.map((sd) => <SideChip key={sd} side={sd} names={names} short />)} <strong>{c.name}</strong> —{" "}
+                    <span className="t-faint">{c.sharedRoot}</span> ({c.frIds.join(", ")})
+                  </li>
+                ))}
+            </ul>
           </div>
         )}
         <div className="card stack">
@@ -156,7 +199,7 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
             <ul>
               {entriesBySeverity.map((e) => (
                 <li key={e.id}>
-                  <strong>{e.id}</strong> {e.whatsWrong || "—"} <span className="t-faint">[{e.type} · {e.severity}/{e.frequency} · {e.where}]</span>
+                  <SideChip side={e.side} names={names} short /> <strong>{e.id}</strong> {e.whatsWrong || "—"} <span className="t-faint">[{e.type} · {e.severity}/{e.frequency} · {e.where}]</span>
                 </li>
               ))}
             </ul>

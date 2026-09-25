@@ -31,12 +31,13 @@ export default async function JourneyPage({ params }: { params: Promise<{ id: st
         <div className="t-system">02 · Journey Map</div>
         <h1 className="t-display">Journey map</h1>
         <p className="t-muted">
-          What the person does at each stage, and how it feels. AI can draft from the tagged interviews; you review and
-          edit each stage.
+          What each person does at each stage, and how it feels, for both sides of the service: the people it serves
+          and the staff who run it. Each side gets its own journey. AI can draft either one from the tagged interviews;
+          you review and edit each stage.
         </p>
       </header>
       {!isAiConfigured() && <SetupNotice what="ai" />}
-      <JourneyEditor engagementId={id} initial={data.data} baseSha={sha} status={data.status} hasSynthesis={hasSynthesis} />
+      <JourneyEditor engagementId={id} initial={data.data} sideNames={engagement.sides} baseSha={sha} status={data.status} hasSynthesis={hasSynthesis} />
     </div>
   );
 }

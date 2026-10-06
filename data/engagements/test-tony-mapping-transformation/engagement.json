@@ -1,0 +1,19 @@
+{
+  "id": "test-tony-mapping-transformation",
+  "name": "TEST - Tony mapping Transformation",
+  "service": "The transformation practice itself",
+  "scopeStart": "Identify area and create engagement in tool",
+  "scopeEnd": "Provide reports to owners",
+  "lead": "Antonio Nava",
+  "lifecycleOwner": {
+    "name": "Zach Johnson",
+    "role": "AI Strategy Director"
+  },
+  "stage": "mapping",
+  "owner": "z6johnson@ucsd.edu",
+  "sides": {
+    "external": "Sponsor unit",
+    "internal": "Operational Strategic Initiatives"
+  },
+  "createdAt": "2026-10-06T16:24:21.455Z"
+}

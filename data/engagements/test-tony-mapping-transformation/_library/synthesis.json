@@ -1,0 +1,78 @@
+{
+  "engagementId": "test-tony-mapping-transformation",
+  "status": "in-review",
+  "updatedAt": "2026-10-06T20:38:24.720Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": true,
+  "data": {
+    "sections": [
+      {
+        "id": "SEC-01",
+        "heading": "Practice purpose and structure",
+        "body": "The AI Transformation Practice should provide an end-to-end, campus-level method for redesigning institutional service lifecycles. It is housed in OSI and delivered by OSI consultants. The method combines service design, AI opportunity analysis, and AI governance so that service work is mapped before AI opportunities are selected and AI decision points operate within university standards.",
+        "baselineRefs": [
+          "DOC-01#0",
+          "DOC-01#1"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-10-06T20:37:58.873Z"
+      },
+      {
+        "id": "SEC-02",
+        "heading": "Three-layer method",
+        "body": "Every engagement should apply three layers. Layer 1 documents the end-to-end lifecycle, including stages, touchpoints, handoffs, decision points, and pain signals, using journey mapping, service blueprinting, stakeholder interviews, and process documentation. Layer 2 identifies where AI can augment, automate, or reimagine specific lifecycle moments, tags each opportunity by its value, and records an impact hypothesis in the campus measurement framework. Layer 3 maps each AI decision point to published standards covering human judgment, data handling, architecture, and other guardrails.",
+        "baselineRefs": [
+          "DOC-01#1",
+          "DOC-01#2",
+          "DOC-01#3"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-10-06T20:38:02.019Z"
+      },
+      {
+        "id": "SEC-03",
+        "heading": "Guardrails and human judgment",
+        "body": "Governance should operate through published AI guidelines and guardrails rather than a per-use-case review gate. The guardrails should be grounded in the UC Responsible AI Principles, embedded in policies and procedures, and, for technical work, enforced through ITS protocols and agent instruction files. Data should be federated by default, raw institutional data should not be placed in models, and architecture should align with ITS. The standing rule is that AI drafts, flags, and synthesizes while humans decide. Gaps not covered by the published guardrails should be documented and included in the next quarterly refresh.",
+        "baselineRefs": [
+          "DOC-01#2",
+          "DOC-01#3",
+          "DOC-01#8"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-10-06T20:38:06.125Z"
+      },
+      {
+        "id": "SEC-06",
+        "heading": "Measurement framework",
+        "body": "The practice should build a university-wide definition of AI return on investment and an executive metrics layer with the executives who will use them. Engagement impact hypotheses should use this framework. Measures should include direct efficiency and cost measures where applicable, as well as experience, risk, and institutional-capability measures. The framework should contain destination measures for promised impacts, baseline KPIs, and dashboard results, alongside adaptive-capacity measures covering the institution’s ability to evolve, absorb and extend transformed lifecycles, identify and close guardrail gaps, operate without the consulting team, and create new options. Both types of measures should be re-baselined quarterly. The existing four-dimension framework—operational capacity, institutional readiness, risk reduction, and system-level influence—is the starting scaffold for the executive layer.",
+        "baselineRefs": [
+          "DOC-01#5",
+          "DOC-01#6",
+          "DOC-01#7"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-10-06T20:38:13.884Z"
+      },
+      {
+        "id": "SEC-08",
+        "heading": "Ongoing ownership and success criteria",
+        "body": "A transformed lifecycle should keep its map current, its impact commitments measured, and its conformance to guardrails maintained as the lifecycle and standards evolve. In the first year, the practice should look for delivery against the pilot blueprint, increasing independence of the consulting team, conformance of AI decision points with documented data stewardship, and executive adoption of the measurement framework in budget conversations. After an engagement, the unit should own its lifecycle while OSI remains a long-term partner in its evolution; dependence on the consulting team should diminish while the partnership continues.",
+        "baselineRefs": [
+          "DOC-01#3",
+          "DOC-01#10",
+          "DOC-01#11"
+        ],
+        "origin": "ai-confirmed",
+        "confirmedBy": "you",
+        "confirmedAt": "2026-10-06T20:38:15.647Z"
+      }
+    ],
+    "summary": "The documented baseline describes the AI Transformation Practice as a campus-level capability housed in OSI and delivered by its consultants. It should redesign complete institutional service lifecycles through three connected layers: lifecycle mapping, AI opportunity analysis, and governance within published standards. Units should request engagements through a common intake, then proceed through selection, mapping, design, and implementation and transfer. Unit leaders own service outcomes and sign transformation blueprints; OSI leads delivery; ITS and Data Insights & Analytics provide technical and data architecture; the AI Engagement function maintains guardrails; and executives use the measurement framework and set strategic direction. The practice should measure both promised engagement impacts and the institution’s adaptive capacity, with guardrails and measures refreshed quarterly.",
+    "generatedAt": "2026-10-06T20:38:23.900Z",
+    "retrievalMode": "embeddings"
+  }
+}

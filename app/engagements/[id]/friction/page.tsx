@@ -1,11 +1,12 @@
 import { notFound } from "next/navigation";
 import { isStorageConfigured } from "@/lib/github";
 import { loadEngagement, loadArtifact } from "@/lib/store";
-import { loadSynthesis } from "@/lib/library-store";
+import { loadGapAnalysis, loadIndex, loadSynthesis } from "@/lib/library-store";
 import { isAiConfigured } from "@/lib/tritonai";
 import { SetupNotice } from "@/components/SetupNotice";
 import { TemplateNav } from "@/components/TemplateNav";
 import { FrictionEditor } from "@/components/FrictionEditor";
+import { GapAnalysisPanel } from "@/components/GapAnalysisPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +15,12 @@ export default async function FrictionPage({ params }: { params: Promise<{ id: s
   if (!isStorageConfigured()) return <SetupNotice what="storage" />;
   const engagement = await loadEngagement(id);
   if (!engagement) notFound();
-  const [{ data, sha }, synthesis] = await Promise.all([loadArtifact(id, "05"), loadSynthesis(id)]);
+  const [{ data, sha }, synthesis, libraryIndex, gap] = await Promise.all([
+    loadArtifact(id, "05"),
+    loadSynthesis(id),
+    loadIndex(id),
+    loadGapAnalysis(id),
+  ]);
   const hasSynthesis = synthesis.data.data.sections.length > 0;
 
   return (
@@ -38,6 +44,15 @@ export default async function FrictionPage({ params }: { params: Promise<{ id: s
       </header>
       {!isAiConfigured() && <SetupNotice what="ai" />}
       <FrictionEditor engagementId={id} initial={data.data} sideNames={engagement.sides} baseSha={sha} status={data.status} hasSynthesis={hasSynthesis} />
+      <GapAnalysisPanel
+        engagementId={id}
+        indexed={libraryIndex.data.chunkCount > 0}
+        retrievalMode={gap.data.data.retrievalMode}
+        initialFindings={gap.data.data.findings}
+        gapBaseSha={gap.sha}
+        friction={data.data}
+        frictionSha={sha}
+      />
     </div>
   );
 }

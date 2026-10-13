@@ -9,12 +9,14 @@ import type { AiMeta } from "@/lib/ai-meta";
 import {
   ACCEPTED_TRANSCRIPT_ACCEPT,
   cleanTranscript,
+  extractInterviewHeader,
   isAcceptedTranscript,
   readTextFile,
 } from "@/lib/transcript";
 
 type Suggestion = { id: string; tag: string; sourceWords: string; span?: { start: number; end: number }; confidence?: number };
 type GuideData = { interviews: Interview[] };
+type TagDraft = Pick<InterviewTag, "tag" | "sourceWords">;
 
 const ACTOR = "you"; // The save route stamps the real actor server-side from PRACTICE_ACTOR.
 const AUTO_APPLY_MIN = 0.5; // At/above this confidence, AI applies the tag; below, it flags for review.
@@ -61,12 +63,15 @@ export function InterviewEditor({
   const [message, setMessage] = useState("");
   const [live, setLive] = useState("");
   const [pasteText, setPasteText] = useState("");
+  const [editingTag, setEditingTag] = useState<{ id: string; draft: TagDraft } | null>(null);
   // Side that newly imported transcripts are filed under; the lead can change each one after.
   const [importSide, setImportSide] = useState<Side>("external");
   // Ids of freshly imported interviews still awaiting their automatic tagging pass.
   const [pending, setPending] = useState<Set<string>>(new Set());
 
   const current = interviews[sel];
+
+  useEffect(() => setEditingTag(null), [sel]);
 
   function update(mut: (iv: Interview) => Interview) {
     setInterviews((prev) => prev.map((iv, i) => (i === sel ? mut(iv) : iv)));
@@ -78,16 +83,28 @@ export function InterviewEditor({
     if (!ready.length) return;
     const now = new Date().toISOString();
     const base = interviews.length === 1 && isEmptyInterview(interviews[0]) ? [] : interviews;
-    const created = ready.map((it, i) => ({
-      ...newInterview(base.length + i + 1, importSide),
-      rawNotes: cleanTranscript(it.text, it.filename),
-      source: { filename: it.filename, uploadedAt: now, uploadedBy: ACTOR },
-    }));
+    const created = ready.map((it, i) => {
+      const rawNotes = cleanTranscript(it.text, it.filename);
+      const seeded = newInterview(base.length + i + 1, importSide);
+      return {
+        ...seeded,
+        header: { ...seeded.header, ...extractInterviewHeader(rawNotes, it.filename) },
+        rawNotes,
+        source: { filename: it.filename, uploadedAt: now, uploadedBy: ACTOR },
+      };
+    });
     setInterviews([...base, ...created]);
     setSel(base.length);
     setPending(new Set(created.map((c) => c.id)));
     setSuggestions([]);
-    setLive(`Imported ${created.length} interview${created.length === 1 ? "" : "s"}. Suggesting tags…`);
+    const autofilled = created.some((iv) =>
+      (["person", "role", "relationship", "interviewer", "date", "consent"] as const).some((key) => iv.header[key]),
+    );
+    setLive(
+      `Imported ${created.length} interview${created.length === 1 ? "" : "s"}.` +
+        (autofilled ? " Header fields were auto-filled where found; review them." : "") +
+        " Suggesting tags…",
+    );
   }
 
   async function handleFiles(fileList: FileList | null) {
@@ -239,6 +256,38 @@ export function InterviewEditor({
     }
   }
 
+  function beginTagEdit(tag: InterviewTag) {
+    setEditingTag({ id: tag.id, draft: { tag: tag.tag, sourceWords: tag.sourceWords } });
+  }
+
+  function saveTagEdit() {
+    if (!editingTag) return;
+    const words = editingTag.draft.sourceWords.trim();
+    if (!words) {
+      setEditingTag((prev) => (prev ? { ...prev, draft: { ...prev.draft, sourceWords: "" } } : prev));
+      return;
+    }
+    const idx = current.rawNotes.toLowerCase().indexOf(words.toLowerCase());
+    update((iv) => ({
+      ...iv,
+      tags: iv.tags.map((tag) =>
+        tag.id === editingTag.id
+          ? {
+              ...tag,
+              tag: editingTag.draft.tag,
+              sourceWords: words,
+              span: idx >= 0 ? { start: idx, end: idx + words.length } : undefined,
+              origin: "human",
+              confirmedBy: ACTOR,
+              confirmedAt: new Date().toISOString(),
+            }
+          : tag,
+      ),
+    }));
+    setEditingTag(null);
+    setLive("Tag updated.");
+  }
+
   async function save() {
     setBusy("saving");
     setMessage("");
@@ -283,7 +332,8 @@ export function InterviewEditor({
           <span className="t-system">Import a transcript</span>
           <p className="t-faint t-system">
             Upload .txt, .md, or .vtt files, or paste raw text. Each becomes a new interview and AI tagging runs
-            automatically — confident tags are applied for you to review, low-confidence ones are flagged.
+            automatically — header fields are prefilled where the transcript makes them clear, confident tags are applied
+            for you to review, and low-confidence ones are flagged.
           </p>
         </div>
         <fieldset className="row row--wrap">
@@ -470,9 +520,46 @@ export function InterviewEditor({
               {current.tags.map((t) => (
                 <tr key={t.id}>
                   <td>
-                    <span className="tag-chip">{t.tag}</span>
+                    {editingTag?.id === t.id ? (
+                      <label>
+                        <span className="visually-hidden">Edit tag</span>
+                        <select
+                          value={editingTag.draft.tag}
+                          onChange={(e) =>
+                            setEditingTag((prev) =>
+                              prev ? { ...prev, draft: { ...prev.draft, tag: e.target.value as InterviewTag["tag"] } } : prev,
+                            )
+                          }
+                        >
+                          {TAGS.map((tag) => (
+                            <option key={tag} value={tag}>
+                              {tag}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    ) : (
+                      <span className="tag-chip">{t.tag}</span>
+                    )}
                   </td>
-                  <td>&ldquo;{t.sourceWords}&rdquo;</td>
+                  <td>
+                    {editingTag?.id === t.id ? (
+                      <label>
+                        <span className="visually-hidden">Edit source words</span>
+                        <input
+                          type="text"
+                          value={editingTag.draft.sourceWords}
+                          onChange={(e) =>
+                            setEditingTag((prev) =>
+                              prev ? { ...prev, draft: { ...prev.draft, sourceWords: e.target.value } } : prev,
+                            )
+                          }
+                        />
+                      </label>
+                    ) : (
+                      <>&ldquo;{t.sourceWords}&rdquo;</>
+                    )}
+                  </td>
                   <td>
                     {t.origin === "human" ? (
                       <span className="t-system">By hand</span>
@@ -483,9 +570,25 @@ export function InterviewEditor({
                     )}
                   </td>
                   <td>
-                    <button className="btn btn--text" onClick={() => removeTag(t.id)}>
-                      Remove
-                    </button>
+                    {editingTag?.id === t.id ? (
+                      <span className="row">
+                        <button className="btn btn--text" onClick={saveTagEdit} disabled={!editingTag.draft.sourceWords.trim()}>
+                          Save
+                        </button>
+                        <button className="btn btn--text" onClick={() => setEditingTag(null)}>
+                          Cancel
+                        </button>
+                      </span>
+                    ) : (
+                      <span className="row">
+                        <button className="btn btn--text" onClick={() => beginTagEdit(t)}>
+                          Edit
+                        </button>
+                        <button className="btn btn--text" onClick={() => removeTag(t.id)}>
+                          Remove
+                        </button>
+                      </span>
+                    )}
                   </td>
                 </tr>
               ))}

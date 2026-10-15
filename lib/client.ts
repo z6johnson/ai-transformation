@@ -118,7 +118,11 @@ export function saveSynthesis(args: { engagementId: string; payload: unknown; ba
 export type ParsedUpload = {
   filename: string;
   text: string;
+  hash: string;
+  duplicateOf: { id: string; filename: string; path: string } | null;
+  originalStored: boolean;
   source: {
+    path: string;
     format: string;
     bytes: number;
     parser: string;
@@ -129,10 +133,76 @@ export type ParsedUpload = {
   error?: string;
 };
 
+export type DocumentTextResult = { text: string } | { error: string };
+
 /** Upload a document file for server-side parsing (PDF/DOCX/txt/md). */
-export async function parseDocumentFile(file: File): Promise<ParsedUpload> {
+export async function parseDocumentFile(file: File, engagementId: string, docId: string): Promise<ParsedUpload> {
   const form = new FormData();
   form.append("file", file);
-  const res = await fetch("/api/library/parse", { method: "POST", body: form });
-  return (await res.json()) as ParsedUpload;
+  form.append("engagementId", engagementId);
+  form.append("docId", docId);
+  form.append("path", file.webkitRelativePath || file.name);
+  try {
+    const res = await fetch("/api/library/parse", { method: "POST", body: form });
+    const json = (await res.json().catch(() => null)) as Partial<ParsedUpload> | null;
+    const source = json?.source ?? {
+      path: file.webkitRelativePath || file.name,
+      format: "",
+      bytes: file.size,
+      parser: "",
+      parseWarnings: [],
+      piiRedactions: 0,
+    };
+    if (!res.ok) {
+      return {
+        filename: file.name,
+        text: "",
+        hash: "",
+        duplicateOf: null,
+        originalStored: false,
+        source,
+        error: json?.error || "Could not parse the document.",
+      };
+    }
+    return {
+      filename: json?.filename || file.name,
+      text: json?.text || "",
+      hash: json?.hash || "",
+      duplicateOf: json?.duplicateOf || null,
+      originalStored: json?.originalStored || false,
+      source,
+    };
+  } catch (err) {
+    return {
+      filename: file.name,
+      text: "",
+      hash: "",
+      duplicateOf: null,
+      originalStored: false,
+      source: {
+        path: file.webkitRelativePath || file.name,
+        format: "",
+        bytes: file.size,
+        parser: "",
+        parseWarnings: [],
+        piiRedactions: 0,
+      },
+      error: err instanceof Error ? err.message : "Network error",
+    };
+  }
+}
+
+/** Fetch one stored document's text on demand, so the library list stays lightweight. */
+export async function fetchDocumentText(engagementId: string, docId: string): Promise<DocumentTextResult> {
+  const params = new URLSearchParams({ engagementId, docId });
+  try {
+    const res = await fetch(`/api/library/document?${params.toString()}`);
+    const json = (await res.json().catch(() => null)) as { text?: string; error?: string } | null;
+    if (!res.ok || typeof json?.text !== "string") {
+      return { error: json?.error || "Could not load the document text." };
+    }
+    return { text: json.text };
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "Network error" };
+  }
 }

@@ -166,6 +166,10 @@ main {
 .card--accent {
   border-left: var(--border-strong) solid var(--color-ink);
 }
+.card--drag {
+  border-color: var(--color-ink);
+  box-shadow: 0 0 0 1px var(--color-ink) inset;
+}
 .stack > * + * {
   margin-top: var(--space-3);
 }

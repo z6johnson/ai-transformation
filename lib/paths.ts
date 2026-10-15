@@ -24,6 +24,11 @@ export const FRAMEWORK_ROOT = "data/framework";
 // The documents file is human-browsable; the index is machine-generated (kept separate
 // so browsing never loads vectors); gap-analysis holds the human-confirmed findings.
 export const libraryDir = (id: string) => `${engagementDir(id)}/_library`;
+// Content-free manifest of the reference library: doc ids, kinds, hashes, audit entries.
+// The documents' actual content lives encrypted in the Vercel Blob document store.
+export const libraryManifestFile = (id: string) => `${libraryDir(id)}/manifest.json`;
+// Legacy files (pre-document-store) — kept as path constants for the one-time lazy
+// migration in lib/library-store.ts, which moves their content to Blob and deletes them.
 export const libraryDocsFile = (id: string) => `${libraryDir(id)}/documents.json`;
 export const libraryIndexFile = (id: string) => `${libraryDir(id)}/index.json`;
 export const gapAnalysisFile = (id: string) => `${libraryDir(id)}/gap-analysis.json`;

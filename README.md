@@ -17,9 +17,12 @@ and `responsible-ai-seed-principles.md`.
 ## Architecture
 
 - **Next.js 15 (App Router) + TypeScript**, deployable on Vercel's free tier. No database.
-- **Storage is the repo itself** via the GitHub Contents API (Octokit). Engagement artifacts
-  live as JSON under `data/engagements/<id>/`. Saving commits to the repo; git history is the
-  audit trail. This is what keeps the app correct on Vercel's read-only serverless filesystem.
+-- **Storage is split by data class.** Engagement artifacts live as JSON under
+  `data/engagements/<id>/` and save through the GitHub Contents API, so git history remains
+  the audit trail. Reference Library document content — originals, extracted text, indexes,
+  and analyses — is encrypted with AES-256-GCM and stored in Vercel Blob; GitHub keeps only a
+  content-free manifest. This keeps the app correct on Vercel's read-only filesystem without
+  putting baseline document content in the repository.
 - **AI calls go through one server-side chokepoint** (`lib/tritonai.ts`) with timeout, retry,
   fallback, PII redaction, and decision logging. The API key never reaches the client.
 
@@ -43,6 +46,8 @@ For **Vercel**, set them as Project environment variables (see Deploy); do not s
 | `GITHUB_TOKEN` | **Yes** | Fine-grained PAT scoped to this repo, Contents: read/write. |
 | `GITHUB_REPO` | No | e.g. `z6johnson/ai-transformation`. |
 | `GITHUB_BRANCH` | No | Branch that holds engagement data and receives saves (default `data`). Create it from a branch containing `data/engagements/...` so the seed is visible. |
+| `BLOB_READ_WRITE_TOKEN` | **Yes** | Vercel Blob read/write token for the Reference Library document store. |
+| `LIBRARY_ENCRYPTION_KEY` | **Yes** | AES-256-GCM key material for document-store objects. Generate with `openssl rand -hex 32` and back it up; losing it makes encrypted content unrecoverable. |
 | `PRACTICE_ACTOR` | No | Identity stamped on saved artifacts and the AI decision log. |
 
 ### Choosing models
@@ -102,6 +107,7 @@ data/
     engagement.json                engagement metadata
     01..06 + measures.json         artifact payloads (created as you save)
     _ai-log.jsonl                  append-only AI decision log
+    _library/manifest.json         content-free Reference Library metadata and audit
   framework/
     roi-definition.json            ROI definition shown on the dashboard
     impact-dimensions.json         the four-dimension scaffold
@@ -116,12 +122,35 @@ dashboard show more than one state:
   at the `mapping` stage; artifacts 01–05 confirmed, validation packet in review with one
   decision still contested, so nothing is signed off.
 
+## Reference Library ingestion
+
+The Reference Library supports multi-file browser uploads, drag-and-drop, and pasted text.
+It intentionally does not call Microsoft Graph or read a Teams folder directly; sync the
+Teams shared folder through OneDrive (or download it), then select the files or the folder in
+the Reference Library. Browser security exposes only each file's relative path, which the app
+stores as content-free metadata.
+
+1. Choose the protection level for the import. Only P1–P3 are accepted; P4 material must
+   never enter the app. P3 imports require an explicit confirmation.
+2. Select or drop the files. The app parses PDF, DOCX, TXT, and Markdown files up to 2 MB
+   each, five at a time, and skips exact duplicates by extracted-text hash.
+3. Review documents on demand. The list renders from the content-free manifest; opening a
+   document loads its text from the encrypted store for review or editing.
+4. Save the library. Extracted text and original files are encrypted into Vercel Blob, while
+   GitHub receives only filenames, metadata, hashes, and audit entries. Build the index after
+   saving to make the baseline searchable.
+
+Legacy libraries migrate lazily on first read: text and derived analyses move to the encrypted
+store, a manifest is committed, and the legacy content files are removed from the data branch.
+Content already present in prior git history is not rewritten; removing it would require a
+separate history-rewrite project.
+
 ## Deploy (Vercel)
 
 Import the repo, then add the env vars above as **Vercel environment variables** — not a
-committed `.env.local`. Mark `TRITONAI_API_KEY` and `GITHUB_TOKEN` as **Sensitive** so they're
-encrypted and write-only in the dashboard. AI/storage routes run on the Node runtime (already
-configured).
+committed `.env.local`. Mark `TRITONAI_API_KEY`, `GITHUB_TOKEN`, `BLOB_READ_WRITE_TOKEN`, and
+`LIBRARY_ENCRYPTION_KEY` as **Sensitive** so they're encrypted and write-only in the dashboard.
+AI/storage routes run on the Node runtime (already configured).
 
 Via the dashboard: Project → Settings → Environment Variables, add each for Production +
 Preview (and Development if you use `vercel dev`).
@@ -133,6 +162,8 @@ vercel env add TRITONAI_API_KEY production   # paste the secret when prompted; r
 vercel env add GITHUB_TOKEN production
 vercel env add GITHUB_REPO production
 vercel env add GITHUB_BRANCH production
+vercel env add BLOB_READ_WRITE_TOKEN production
+vercel env add LIBRARY_ENCRYPTION_KEY production
 vercel env add PRACTICE_ACTOR production
 # TRITONAI_BASE_URL / TRITONAI_MODEL / AI_TIMEOUT_MS only if overriding defaults
 vercel deploy --prod

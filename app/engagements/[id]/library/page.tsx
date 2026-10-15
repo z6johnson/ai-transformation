@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { isStorageConfigured } from "@/lib/github";
 import { loadEngagement } from "@/lib/store";
-import { loadLibrary, loadIndex, loadSynthesis } from "@/lib/library-store";
+import { loadManifest, loadIndex, loadSynthesis } from "@/lib/library-store";
+import { isDocStoreConfigured } from "@/lib/docstore";
 import { isAiConfigured } from "@/lib/tritonai";
 import { SetupNotice } from "@/components/SetupNotice";
 import { LibraryEditor } from "@/components/LibraryEditor";
@@ -12,11 +13,12 @@ export const dynamic = "force-dynamic";
 export default async function LibraryPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   if (!isStorageConfigured()) return <SetupNotice what="storage" />;
+  if (!isDocStoreConfigured()) return <SetupNotice what="docstore" />;
   const engagement = await loadEngagement(id);
   if (!engagement) notFound();
 
-  const [library, index, synthesis] = await Promise.all([
-    loadLibrary(id),
+  const manifest = await loadManifest(id);
+  const [index, synthesis] = await Promise.all([
     loadIndex(id),
     loadSynthesis(id),
   ]);
@@ -49,8 +51,8 @@ export default async function LibraryPage({ params }: { params: Promise<{ id: st
 
       <LibraryEditor
         engagementId={id}
-        initial={library.data.data.documents}
-        baseSha={library.sha}
+        initial={manifest.data.data.documents}
+        baseSha={manifest.sha}
         indexMode={indexMode}
         indexChunks={index.data.chunkCount}
       />

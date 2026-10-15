@@ -49,6 +49,80 @@ export const ReferenceLibrary = Envelope.omit({ artifactId: true }).extend({
 });
 export type ReferenceLibrary = z.infer<typeof ReferenceLibrary>;
 
+/** UC IS-3 protection level recorded per imported document. P4 never enters this app. */
+export const PROTECTION_LEVELS = ["P1", "P2", "P3"] as const;
+export const ProtectionLevel = z.enum(PROTECTION_LEVELS);
+export type ProtectionLevel = z.infer<typeof ProtectionLevel>;
+
+/**
+ * Manifest entry for one reference document. Deliberately CONTENT-FREE: GitHub holds
+ * this, while the document's original file and extracted text live encrypted in the
+ * Vercel Blob document store (lib/docstore.ts). `hash` is the sha-256 of the text —
+ * it drives dedupe and lets the save route write only texts that actually changed.
+ */
+export const ManifestDocument = z.object({
+  id: z.string().regex(/^[A-Za-z0-9-]{1,64}$/, "invalid document id"),
+  filename: z.string().default(""),
+  kind: DocKind.default("other"),
+  hash: z.string().default(""),
+  bytes: z.number().default(0), // original file size (0 for pasted text)
+  textBytes: z.number().default(0),
+  format: DocFormat.default("paste"),
+  pages: z.number().optional(),
+  parseWarnings: z.array(z.string()).default([]),
+  piiRedactions: z.number().default(0), // count only — text is stored unredacted
+  originalStored: z.boolean().default(false), // original.bin exists in the store
+  source: z
+    .object({
+      type: z.enum(["upload", "paste"]).default("upload"),
+      path: z.string().default(""),
+      uploadedBy: z.string().default(""),
+      parsedAt: z.string().default(""),
+    })
+    .default({ type: "upload", path: "", uploadedBy: "", parsedAt: "" }),
+  protectionLevel: ProtectionLevel.default("P2"),
+  textUpdatedAt: z.string().default(""),
+});
+export type ManifestDocument = z.infer<typeof ManifestDocument>;
+
+/** A document as it travels in the save payload — manifest entry plus (optionally) its text. */
+export const LibrarySaveDocument = ManifestDocument.extend({ text: z.string().optional() });
+export type LibrarySaveDocument = z.infer<typeof LibrarySaveDocument>;
+
+/** Audit metadata for one derived library analysis. Content lives in the document store. */
+export const AnalysisAudit = z.object({
+  updatedAt: z.string().default(""),
+  updatedBy: z.string().default(""),
+  mode: z.string().default(""), // embeddings | lexical | none
+  count: z.number().default(0), // chunks / sections / findings
+});
+export type AnalysisAudit = z.infer<typeof AnalysisAudit>;
+
+const emptyAudit = (): AnalysisAudit => ({ updatedAt: "", updatedBy: "", mode: "", count: 0 });
+const emptyAnalyses = () => ({ index: emptyAudit(), synthesis: emptyAudit(), gap: emptyAudit() });
+
+/**
+ * The content-free library manifest committed to GitHub. Git history remains the audit
+ * trail (who added/removed/edited what, and when) while document content stays out of
+ * the repo entirely. Each analysis audit's `updatedAt` doubles as the optimistic-
+ * concurrency token the UI round-trips on save (the manifest's git sha guards documents).
+ */
+export const LibraryManifest = Envelope.omit({ artifactId: true }).extend({
+  data: z
+    .object({
+      documents: z.array(ManifestDocument).default([]),
+      analyses: z
+        .object({
+          index: AnalysisAudit.default(emptyAudit()),
+          synthesis: AnalysisAudit.default(emptyAudit()),
+          gap: AnalysisAudit.default(emptyAudit()),
+        })
+        .default(emptyAnalyses()),
+    })
+    .default({ documents: [], analyses: emptyAnalyses() }),
+});
+export type LibraryManifest = z.infer<typeof LibraryManifest>;
+
 /**
  * One retrieval chunk. `vector` is empty when the index is lexical-only (no embeddings
  * model provisioned, or the embeddings call failed and we fell back to term-overlap).

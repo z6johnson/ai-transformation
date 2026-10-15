@@ -1,12 +1,13 @@
 /**
  * Save the human-confirmed gap-analysis findings. Nothing AI-originated reaches this route
- * without the human confirming it in the UI (same trust boundary as artifacts/save). Writes
- * gap-analysis.json with a SHA round-trip.
+ * without the human confirming it in the UI (same trust boundary as artifacts/save).
+ * Content goes to the encrypted document store; the manifest's audit entry (with a fresh
+ * `updatedAt` token) commits to GitHub.
  */
 import { NextRequest, NextResponse } from "next/server";
-import { putFile, ConcurrencyError } from "@/lib/github";
-import { gapAnalysisFile } from "@/lib/paths";
+import { ConcurrencyError } from "@/lib/github";
 import { GapAnalysis } from "@/lib/library-schemas";
+import { saveGapAnalysis } from "@/lib/library-store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -22,13 +23,12 @@ export async function POST(req: NextRequest) {
   const { engagementId, payload, baseSha } = body;
   if (!engagementId) return NextResponse.json({ error: "engagementId is required" }, { status: 400 });
 
-  const actor = process.env.PRACTICE_ACTOR || "unknown";
   const envelope = {
     ...(payload as object),
     engagementId,
     aiAssisted: true,
     updatedAt: new Date().toISOString(),
-    updatedBy: actor,
+    updatedBy: process.env.PRACTICE_ACTOR || "unknown",
   };
 
   const parsed = GapAnalysis.safeParse(envelope);
@@ -37,12 +37,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { sha } = await putFile({
-      path: gapAnalysisFile(engagementId),
-      content: JSON.stringify(parsed.data, null, 2) + "\n",
-      message: `chore(${engagementId}): save gap analysis (${parsed.data.data.findings.length} finding(s))`,
-      expectedSha: baseSha,
-    });
+    const sha = await saveGapAnalysis(engagementId, parsed.data, baseSha ?? null);
     return NextResponse.json({ ok: true, sha });
   } catch (err) {
     if (err instanceof ConcurrencyError) {

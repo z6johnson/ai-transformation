@@ -83,6 +83,19 @@ export async function putFile(args: {
   }
 }
 
+/** Delete a file from the data branch. No-op if it is already absent. */
+export async function deleteFile(path: string, message: string): Promise<void> {
+  const { owner, repo: name, branch } = repo();
+  const existing = await getFile(path);
+  if (!existing) return;
+  try {
+    await octokit().repos.deleteFile({ owner, repo: name, path, branch, message, sha: existing.sha });
+  } catch (err) {
+    if (isNotFound(err)) return; // deleted concurrently — nothing to do
+    rethrow(err);
+  }
+}
+
 /** Append a line to a JSONL file (read-modify-write; fine at v1 scale). */
 export async function appendLine(path: string, line: string, message: string): Promise<void> {
   const existing = await getFile(path);

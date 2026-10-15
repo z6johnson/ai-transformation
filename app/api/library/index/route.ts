@@ -1,16 +1,15 @@
 /**
- * Build the retrieval index for an engagement's reference library. Chunks every document,
- * then embeds the chunks via TritonAI when an embeddings model is configured. If embeddings
- * are unconfigured OR any batch fails, it writes a LEXICAL-only index (empty vectors) so
- * retrieval still works — embeddings never block retrieval. PII is redacted on the chunk
- * text before it is embedded or stored in the index (the index feeds the model).
+ * Build the retrieval index for an engagement's reference library. Text comes from the
+ * encrypted document store (never GitHub); chunks are embedded via TritonAI when an
+ * embeddings model is configured, with a lexical fallback that always works. The index
+ * itself is written back to the document store (it contains document text), and the
+ * manifest's audit entry records the build. PII is redacted on the chunk text before it
+ * is embedded or stored (the index feeds the model).
  *
  * Explicit step (not auto-run on save): the editor prompts a rebuild when documents change.
  */
 import { NextRequest, NextResponse } from "next/server";
-import { putFile } from "@/lib/github";
-import { libraryIndexFile } from "@/lib/paths";
-import { loadLibrary, loadIndex } from "@/lib/library-store";
+import { loadManifest, loadTextsFor, saveIndex } from "@/lib/library-store";
 import { chunkText } from "@/lib/embeddings";
 import { callEmbeddings, isEmbeddingsConfigured, embeddingModel } from "@/lib/tritonai";
 import { redactPII } from "@/lib/pii";
@@ -29,19 +28,22 @@ export const maxDuration = 60;
 // chunks can reach ~38K and fail the batch — which drops the whole library to lexical retrieval.
 // 32 leaves headroom for the worst case at the same total token cost.
 const BATCH = 32;
-const round = (v: number) => Math.round(v * 1e6) / 1e6; // bound index.json size
+const round = (v: number) => Math.round(v * 1e6) / 1e6; // bound index size
 
 export async function POST(req: NextRequest) {
   const { engagementId } = (await req.json().catch(() => ({}))) as { engagementId?: string };
   if (!engagementId) return NextResponse.json({ error: "engagementId is required" }, { status: 400 });
 
-  const { data: library } = await loadLibrary(engagementId);
-  const docs = library.data.documents;
+  const { data: manifest } = await loadManifest(engagementId);
+  const docs = manifest.data.documents;
+  const texts = await loadTextsFor(engagementId, docs.map((d) => d.id));
 
   // Chunk every doc; redact on the chunk text (this text is sent to the model at retrieval).
   const chunks: LibraryChunk[] = [];
   for (const doc of docs) {
-    const { text } = redactPII(doc.text);
+    const raw = texts.get(doc.id);
+    if (!raw) continue;
+    const { text } = redactPII(raw);
     for (const c of chunkText(text)) {
       chunks.push({ chunkId: `${doc.id}#${c.ord}`, docId: doc.id, ord: c.ord, text: c.text, vector: [] });
     }
@@ -85,13 +87,10 @@ export async function POST(req: NextRequest) {
     chunks,
   });
 
-  const existing = await loadIndex(engagementId);
-  await putFile({
-    path: libraryIndexFile(engagementId),
-    content: JSON.stringify(index, null, 2) + "\n",
-    message: `chore(${engagementId}): build library index (${mode}, ${chunks.length} chunk(s))`,
-    expectedSha: existing.sha,
-  });
+  // The index is a derived artifact: the editor does not round-trip a concurrency token
+  // for it, so pass the manifest's current token — the manifest commit still guards races.
+  const currentToken = manifest.data.analyses.index.updatedAt || null;
+  await saveIndex(engagementId, index, currentToken);
 
   await appendAiDecision({
     ts: new Date().toISOString(),

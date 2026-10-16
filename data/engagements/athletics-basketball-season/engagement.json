@@ -1,0 +1,19 @@
+{
+  "id": "athletics-basketball-season",
+  "name": "Athletics - Basketball Season",
+  "service": "The path one fan travels across a single men's and women's basketball season, from first contact through renewal, lapse, or a first gift to the Triton Athletic Fund. Spans marketing, ticketing, game-day operations, the Triton Athletic Fund, and central Advancement. Mapped against the season just completed; the 2026–27 season is UC San Diego's first in the West Coast Conference.",
+  "scopeStart": "Prepare Marketing Plan",
+  "scopeEnd": "Receive donation",
+  "lead": "Antonio Nava",
+  "lifecycleOwner": {
+    "name": "Andy Fee",
+    "role": "Director of Athletics"
+  },
+  "stage": "mapping",
+  "owner": "z6johnson@ucsd.edu",
+  "sides": {
+    "external": "Fans and donors",
+    "internal": "Athletics Staff and Advancement Staff"
+  },
+  "createdAt": "2026-10-16T19:50:02.086Z"
+}

@@ -13,6 +13,8 @@
  *   GET  /?url=…        (head)   GET /?prefix=… (list)
  *   POST /delete        with { urls }
  * Content bytes are then fetched from the blob's URL — ciphertext in transit and at rest.
+ * Blob stores are configured as public or private; the store's access mode is detected
+ * on the first write, and private stores also require the token on content downloads.
  *
  * Data handling (UC BFB IS-3): BLOB_READ_WRITE_TOKEN and LIBRARY_ENCRYPTION_KEY are P4
  * secrets — env-only, never logged. Nothing here logs object paths, names, or content.
@@ -80,6 +82,17 @@ export function isDocStoreNotFound(err: unknown): boolean {
   return err instanceof DocStoreNotFoundError;
 }
 
+/** Carries the API's error detail so callers can react without leaking it in messages. */
+class DocStoreApiError extends Error {
+  constructor(
+    readonly status: number,
+    readonly code: string,
+    readonly detail: string,
+  ) {
+    super(`Document store request failed (HTTP ${status}${code ? ` ${code}` : ""}).`);
+  }
+}
+
 function validatePathname(pathname: string): void {
   if (pathname.length > 900 || /[^a-zA-Z0-9._/-]/.test(pathname) || pathname.includes("..")) {
     throw new Error("Invalid document-store path.");
@@ -107,16 +120,29 @@ async function api(path: string, init: RequestInit): Promise<Response> {
   const res = await fetch(`${API_URL}${path}`, { ...init, headers, signal: AbortSignal.timeout(TIMEOUT_MS) });
   if (!res.ok) {
     let code = "";
+    let detail = "";
     try {
-      const json = (await res.json()) as { error?: { code?: string } };
+      const json = (await res.json()) as { error?: { code?: string; message?: string } };
       code = json.error?.code || "";
+      detail = json.error?.message || "";
     } catch {
       // Non-JSON error body — the status below is all we can safely report.
     }
     if (res.status === 404 || code === "not_found") throw new DocStoreNotFoundError();
-    throw new Error(`Document store request failed (HTTP ${res.status}${code ? ` ${code}` : ""}).`);
+    throw new DocStoreApiError(res.status, code, detail);
   }
   return res;
+}
+
+type BlobAccess = "public" | "private";
+
+// Every object's access header must match the store's configured access mode; the API
+// defaults to public and rejects a mismatch with 400 bad_request. Resolve the mode on
+// the first write and remember it, so both public and private stores work unchanged.
+let resolvedAccess: BlobAccess | null = null;
+
+function isAccessModeMismatch(err: DocStoreApiError): boolean {
+  return err.status === 400 && / (public|private) access on a (public|private) store/.test(err.detail);
 }
 
 /** Write (or replace) one encrypted object at a fixed pathname. */
@@ -124,18 +150,33 @@ export async function putObject(pathname: string, data: Buffer): Promise<void> {
   validatePathname(pathname);
   const params = new URLSearchParams({ pathname });
   const encrypted = encrypt(data);
-  const response = await api(`/?${params.toString()}`, {
-    method: "PUT",
-    body: new Uint8Array(encrypted),
-    headers: {
-      "x-vercel-blob-access": "public",
-      "x-add-random-suffix": "0",
-      "x-allow-overwrite": "1",
-      "x-content-type": "application/octet-stream",
-    },
-  });
-  const result = (await response.json().catch(() => null)) as { url?: string } | null;
-  if (result?.url) urlCache.set(pathname, result.url);
+
+  const attempt = async (access: BlobAccess): Promise<void> => {
+    const response = await api(`/?${params.toString()}`, {
+      method: "PUT",
+      body: new Uint8Array(encrypted),
+      headers: {
+        "x-vercel-blob-access": access,
+        "x-add-random-suffix": "0",
+        "x-allow-overwrite": "1",
+        "x-content-type": "application/octet-stream",
+      },
+    });
+    const result = (await response.json().catch(() => null)) as { url?: string } | null;
+    if (result?.url) urlCache.set(pathname, result.url);
+    resolvedAccess = access;
+  };
+
+  const first = resolvedAccess ?? "private";
+  try {
+    await attempt(first);
+  } catch (err) {
+    if (err instanceof DocStoreApiError && isAccessModeMismatch(err)) {
+      await attempt(first === "private" ? "public" : "private");
+    } else {
+      throw err;
+    }
+  }
 }
 
 export async function putJson(pathname: string, value: unknown): Promise<void> {
@@ -167,7 +208,15 @@ export async function getObject(pathname: string): Promise<Buffer | null> {
     urlCache.set(pathname, resolved);
     url = resolved;
   }
-  const res = await fetch(url, { cache: "no-store", signal: AbortSignal.timeout(TIMEOUT_MS) });
+  let res = await fetch(url, { cache: "no-store", signal: AbortSignal.timeout(TIMEOUT_MS) });
+  // Private stores reject anonymous downloads with 401/403; retry once with the token.
+  if (res.status === 401 || res.status === 403) {
+    res = await fetch(url, {
+      cache: "no-store",
+      headers: { authorization: `Bearer ${token()}` },
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+    });
+  }
   if (!res.ok && res.status === 404) return null;
   if (!res.ok) throw new Error(`Could not read a document-store object (HTTP ${res.status}).`);
   return decrypt(Buffer.from(await res.arrayBuffer()));

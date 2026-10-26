@@ -121,27 +121,101 @@ function labeledHeaderValues(text: string): TranscriptHeaderHints {
   return hints;
 }
 
-const BRACKET_SPEAKER_RE = /^\[([^\]]+)\]/gm;
-const PLAIN_SPEAKER_RE = /^([A-Z][A-Za-z .'-]{0,49}):\s+/gm;
+const BRACKET_SPEAKER_RE = /^\[([^\]]+)\][^\n]*(?:\n|$)/gm;
+const PLAIN_SPEAKER_RE = /^([A-Z][A-Za-z .'-]{0,49}):[^\n]*(?:\n|$)/gm;
 
-function speakerLabels(text: string): Array<{ name: string; role: string }> {
-  const speakers: Array<{ name: string; role: string }> = [];
-  const add = (label: string) => {
+type Speaker = { name: string; role: string; utterances: string[] };
+
+function speakerLabels(text: string): Speaker[] {
+  const speakers: Speaker[] = [];
+  const add = (label: string, utterance: string) => {
     const [name, role = ""] = label.split(/\s+[-–—]\s*/);
     const cleanName = normalizeValue(name);
-    if (!cleanName || speakers.some((s) => s.name === cleanName)) return;
-    speakers.push({ name: cleanName, role: normalizeValue(role) });
+    const cleanUtterance = normalizeValue(utterance);
+    if (!cleanName) return;
+    const existing = speakers.find((s) => s.name === cleanName);
+    if (existing) {
+      if (cleanUtterance) existing.utterances.push(cleanUtterance);
+      return;
+    }
+    speakers.push({ name: cleanName, role: normalizeValue(role), utterances: cleanUtterance ? [cleanUtterance] : [] });
   };
-  for (const match of text.matchAll(BRACKET_SPEAKER_RE)) add(match[1]);
-  if (!speakers.length) {
-    for (const match of text.matchAll(PLAIN_SPEAKER_RE)) add(match[1]);
+
+  let matches = [...text.matchAll(BRACKET_SPEAKER_RE)];
+  if (!matches.length) {
+    matches = [...text.matchAll(PLAIN_SPEAKER_RE)];
   }
+  matches.forEach((match, i) => {
+    const start = (match.index ?? 0) + match[0].length;
+    const end = matches[i + 1]?.index ?? text.length;
+    add(match[1], text.slice(start, end));
+  });
   return speakers.slice(0, 5);
 }
 
+function isInterviewPrompt(utterance: string): boolean {
+  return /\b(?:let me know|tell me|walk me through|introduce yourself|your name|your role|what(?:'s| is) your role)\b/i.test(
+    utterance,
+  );
+}
+
+function isSelfIntroduction(utterance: string): boolean {
+  return /\b(?:my name is|i(?:'| a)m|i work as|my role is)\b/i.test(utterance);
+}
+
+function chooseInterviewSpeakers(speakers: Speaker[]): {
+  interviewee?: Speaker;
+  interviewer?: Speaker;
+} {
+  if (!speakers.length) return {};
+
+  const explicitInterviewer = speakers.find((s) => /interviewer|lead|facilitator/i.test(s.name));
+  if (explicitInterviewer) {
+    return {
+      interviewee: speakers.find((s) => s !== explicitInterviewer),
+      interviewer: explicitInterviewer,
+    };
+  }
+
+  let interviewee = speakers[0];
+  let interviewer = speakers[1];
+
+  // Meeting tools order speakers by who talks first, not by interview role. An opening
+  // prompt ("let me know your name...") is a strong signal that the first voice is the
+  // interviewer, even though earlier code treated that speaker as the interviewee.
+  if (speakers[1] && isInterviewPrompt(speakers[0].utterances[0] || "")) {
+    interviewee = speakers[1];
+    interviewer = speakers[0];
+  } else if (
+    speakers[1] &&
+    isSelfIntroduction(speakers[1].utterances[0] || "") &&
+    !isSelfIntroduction(speakers[0].utterances[0] || "")
+  ) {
+    interviewee = speakers[1];
+    interviewer = speakers[0];
+  }
+
+  return { interviewee, interviewer };
+}
+
+function relationshipFromIntroduction(text: string): string {
+  if (/\bI(?:'| a)m\s+(?:the\s+)?(?:service\s+)?owner\b/i.test(text)) return "owner";
+  if (/\bI\s+(?:run|manage)\b[^.!?]{0,120}\bday(?:\s*to\s*|-)?day\b/i.test(text)) return "runs it day to day";
+  if (/\b(?:I(?:'| a)m\s+(?:a\s+)?|my role is\s+(?:a\s+)?|i work as\s+(?:a\s+)?)front(?:\s*|-)?line\b/i.test(text)) {
+    return "frontline";
+  }
+  if (/\bI(?:'| a)m\s+(?:a\s+)?handoff\s+partner\b/i.test(text)) return "handoff partner";
+  if (/\bI\s+(?:use|receive)\s+(?:this|the)\s+service\b/i.test(text)) return "person it serves";
+  return "";
+}
+
 function roleFromIntroduction(text: string): string {
-  const intro = text.match(/\b(?:I am|I'm)\s+((?:the|a|an|one of the)\s+[^.!?\n]{3,140})/i);
-  const statedRole = text.match(/\b(?:my role is|i work as)\s+([^.!?\n]{3,140})/i);
+  // Stop before a second first-person clause ("... Director, and I run this service")
+  // so a relationship statement does not become part of the job title.
+  const intro = text.match(/\bI(?:'m| am)\s+((?:the|a|an|one of the)\s+[^.!?\n]{2,139}?)(?:\s*,?\s+and\s+I\s+|[.!?]|\n|$)/i);
+  const statedRole = text.match(
+    /\b(?:my role is|i work as)\s+([^.!?\n]{2,139}?)(?:\s*,?\s+and\s+I\s+|[.!?]|\n|$)/i,
+  );
   return normalizeValue(intro?.[1] || statedRole?.[1] || "");
 }
 
@@ -176,11 +250,12 @@ function consentFromText(text: string): string {
 export function extractInterviewHeader(text: string, filename: string): TranscriptHeaderHints {
   const hints = labeledHeaderValues(text);
   const speakers = speakerLabels(text);
-  const interviewee = speakers[0];
-  const interviewerSpeaker = speakers.find((s) => /interviewer|lead|facilitator/i.test(s.name)) || speakers[1];
+  const { interviewee, interviewer: interviewerSpeaker } = chooseInterviewSpeakers(speakers);
+  const introductionText = interviewee?.utterances.join("\n") || text;
 
-  hints.person ||= interviewee?.name || nameFromIntroduction(text) || personFromFilename(filename);
-  hints.role ||= roleFromIntroduction(text) || interviewee?.role || "";
+  hints.person ||= interviewee?.name || nameFromIntroduction(introductionText) || personFromFilename(filename);
+  hints.role ||= roleFromIntroduction(introductionText) || interviewee?.role || "";
+  hints.relationship ||= relationshipFromIntroduction(introductionText);
   hints.interviewer ||= interviewerSpeaker?.name || "";
   hints.date ||= dateFromFilename(filename);
   hints.consent ||= consentFromText(text);

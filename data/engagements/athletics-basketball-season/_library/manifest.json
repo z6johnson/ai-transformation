@@ -1,0 +1,73 @@
+{
+  "engagementId": "athletics-basketball-season",
+  "status": "in-review",
+  "updatedAt": "2026-10-26T16:45:52.139Z",
+  "updatedBy": "z6johnson@ucsd.edu",
+  "aiAssisted": false,
+  "data": {
+    "documents": [
+      {
+        "id": "DOC-01",
+        "filename": "SECURITY-UCSD-Advancement-Confidentiality-Agreement.pdf",
+        "kind": "policy",
+        "hash": "6cf8d9b2ab34bec3ad27237ed31806c3e3f97d6f9ce0cb3c3d3b9b4bdcfb4b1c",
+        "bytes": 165783,
+        "textBytes": 6779,
+        "format": "pdf",
+        "pages": 3,
+        "parseWarnings": [],
+        "piiRedactions": 0,
+        "originalStored": true,
+        "source": {
+          "type": "upload",
+          "path": "SECURITY-UCSD-Advancement-Confidentiality-Agreement.pdf",
+          "uploadedBy": "you",
+          "parsedAt": "2026-10-26T16:45:11.763Z"
+        },
+        "protectionLevel": "P2",
+        "textUpdatedAt": "2026-10-26T16:45:52.039Z"
+      },
+      {
+        "id": "DOC-02",
+        "filename": "VC Ops_Gift Approvals_Nov 2025_FINAL.pdf",
+        "kind": "policy",
+        "hash": "c0e8687526fa2c1b3325b07b78152d6332ac43c4ebcdffc55afb2eb668ef64e6",
+        "bytes": 234939,
+        "textBytes": 3869,
+        "format": "pdf",
+        "pages": 2,
+        "parseWarnings": [],
+        "piiRedactions": 1,
+        "originalStored": true,
+        "source": {
+          "type": "upload",
+          "path": "VC Ops_Gift Approvals_Nov 2025_FINAL.pdf",
+          "uploadedBy": "you",
+          "parsedAt": "2026-10-26T16:45:42.642Z"
+        },
+        "protectionLevel": "P2",
+        "textUpdatedAt": "2026-10-26T16:45:52.040Z"
+      }
+    ],
+    "analyses": {
+      "index": {
+        "updatedAt": "",
+        "updatedBy": "",
+        "mode": "",
+        "count": 0
+      },
+      "synthesis": {
+        "updatedAt": "",
+        "updatedBy": "",
+        "mode": "",
+        "count": 0
+      },
+      "gap": {
+        "updatedAt": "",
+        "updatedBy": "",
+        "mode": "",
+        "count": 0
+      }
+    }
+  }
+}

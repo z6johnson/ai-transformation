@@ -2,7 +2,7 @@
  * Suggest interview tags from raw notes.
  *
  * Data path: notes arrive from the client → PII is redacted server-side (lib/pii) →
-  * sent to TritonAI (default api-gemma-4-31b, on-prem) → suggestions returned to the
+  * sent to TritonAI (default nrp/gemma-4-31b, on-prem) → suggestions returned to the
  * client. NOTHING is persisted here: the human confirms each suggestion first, and the
  * save route writes the confirmed tags plus the AI log record. AI suggests; the human
  * decides.
@@ -16,6 +16,10 @@ import { TAGS } from "@/lib/schemas";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+// Keep this in sync with the other AI routes. callModel's retry budget is sized for 55
+// seconds; without this declaration a hosted function can be killed at the platform
+// default while the model is still answering.
+export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
   const { notes } = (await req.json().catch(() => ({}))) as { notes?: string };
@@ -37,11 +41,23 @@ export async function POST(req: NextRequest) {
 
   if (!result.ok) {
     const meta = metaFromResult({ result, promptId: SUGGEST_TAGS.id, model, inputSummary, outputSummary: "no output" });
+    const why =
+      result.reason === "timeout"
+        ? "timed out"
+        : result.reason === "rate"
+          ? "hit a rate limit"
+          : result.reason === "malformed"
+            ? "returned a malformed response"
+            : result.reason === "unconfigured"
+              ? "is not configured"
+              : result.status
+                ? `returned HTTP ${result.status}`
+                : "failed";
     return NextResponse.json({
       degraded: true,
       suggestions: [],
       aiMeta: meta,
-      message: "AI assist is unavailable right now. Add tags by hand.",
+      message: `AI assist is unavailable right now (${why}${result.detail ? `: ${result.detail}` : ""}). Add tags by hand.`,
     });
   }
 

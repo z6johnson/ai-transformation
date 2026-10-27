@@ -32,12 +32,18 @@ export type ModelResult =
   | { ok: true; content: string; modelVersion: string; latencyMs: number }
   | ModelFailure;
 
+const DEFAULT_TRITONAI_BASE_URL = "https://tritonai-api.ucsd.edu/v1";
+
 export function isAiConfigured(): boolean {
-  return Boolean(process.env.TRITONAI_API_KEY && process.env.TRITONAI_BASE_URL);
+  return Boolean(process.env.TRITONAI_API_KEY);
 }
 
 export function defaultModel(): string {
-  return process.env.TRITONAI_MODEL || "api-gemma-4-31b";
+  return process.env.TRITONAI_MODEL || "nrp/gemma-4-31b";
+}
+
+function baseUrl(): string {
+  return (process.env.TRITONAI_BASE_URL || DEFAULT_TRITONAI_BASE_URL).replace(/\/$/, "");
 }
 
 /**
@@ -167,7 +173,7 @@ export async function callModel(args: {
   const started = Date.now();
   if (!isAiConfigured()) return { ok: false, reason: "unconfigured", latencyMs: 0 };
 
-  const base = process.env.TRITONAI_BASE_URL!.replace(/\/$/, "");
+  const base = baseUrl();
   const model = args.model || defaultModel();
   const timeoutMs = args.timeoutMs ?? defaultTimeoutMs();
   const maxAttempts = 3; // 1 try + 2 retries
@@ -296,7 +302,7 @@ export async function callEmbeddings(args: { input: string[]; model?: string }):
   if (!isAiConfigured() || !model) return { ok: false, reason: "unconfigured", latencyMs: 0 };
   if (!args.input.length) return { ok: true, vectors: [], modelVersion: model, latencyMs: 0 };
 
-  const base = process.env.TRITONAI_BASE_URL!.replace(/\/$/, "");
+  const base = baseUrl();
   // Deliberately NOT the chat timeout. Embedding a batch is a fast, mechanical call, and the
   // index route runs many batches back to back — inheriting the long generation timeout would
   // let one stalled batch eat the whole function. A slow batch here costs only embeddings,

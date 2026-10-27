@@ -6,7 +6,7 @@ export function SetupNotice({ what }: { what: "storage" | "docstore" | "ai" }) {
         <strong>AI assist is not configured.</strong>
         <p>
           Set <code>TRITONAI_API_KEY</code> (and optionally <code>TRITONAI_MODEL</code>, default{" "}
-          <code>api-gemma-4-31b</code>) to enable tagging and drafting. The by-hand path works without it.{" "}
+          <code>nrp/gemma-4-31b</code>) to enable tagging and drafting. The by-hand path works without it.{" "}
           <code>TRITONAI_MODEL_EMBED</code> is optional — without it, Reference Library retrieval falls back to keyword
           matching.
         </p>

@@ -2,7 +2,7 @@
  * Suggest interview tags from raw notes.
  *
  * Data path: notes arrive from the client → PII is redacted server-side (lib/pii) →
-  * sent to TritonAI (default nrp/gemma-4-31b, on-prem) → suggestions returned to the
+  * sent to TritonAI (default api-glm-5.3-flash, campus-hosted) → suggestions returned to the
  * client. NOTHING is persisted here: the human confirms each suggestion first, and the
  * save route writes the confirmed tags plus the AI log record. AI suggests; the human
  * decides.

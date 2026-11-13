@@ -39,7 +39,7 @@ export function isAiConfigured(): boolean {
 }
 
 export function defaultModel(): string {
-  return process.env.TRITONAI_MODEL || "nrp/gemma-4-31b";
+  return process.env.TRITONAI_MODEL || "api-glm-5.3-flash";
 }
 
 function baseUrl(): string {
@@ -160,6 +160,76 @@ function isTemperatureRejection(status: number | undefined, detail: string): boo
   return status === 400 && /temperature/i.test(detail);
 }
 
+/**
+ * Does this 4xx say the request failed *because of the model* — the name is wrong, or the key
+ * is not entitled to it? That is a configuration fault with a known repair: call a model the
+ * key can actually reach, and say so, instead of leaving every AI feature dead behind one
+ * stale environment variable.
+ */
+function isModelRejection(status: number | undefined, detail: string): boolean {
+  if (status !== 400 && status !== 403 && status !== 404 && status !== 422) return false;
+  return /model/i.test(detail) && /(not available|not found|invalid|does not exist|no such|unknown)/i.test(detail);
+}
+
+/**
+ * What this key may call, straight from the hub. Cached per warm instance because the answer
+ * changes when entitlements change, not between two requests; null means the lookup itself
+ * failed, which is not evidence that any model is missing.
+ */
+type ModelInfo = { id: string; mode?: string };
+let modelCatalog: { models: ModelInfo[]; at: number } | null = null;
+const MODEL_CATALOG_TTL_MS = 10 * 60 * 1000;
+const MODEL_CATALOG_TIMEOUT_MS = 5000;
+
+async function modelCatalogFor(base: string, force = false): Promise<ModelInfo[] | null> {
+  if (!force && modelCatalog && Date.now() - modelCatalog.at < MODEL_CATALOG_TTL_MS) {
+    return modelCatalog.models;
+  }
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), MODEL_CATALOG_TIMEOUT_MS);
+  try {
+    const res = await fetch(`${base}/models`, {
+      headers: { Authorization: `Bearer ${process.env.TRITONAI_API_KEY}` },
+      signal: controller.signal,
+    });
+    if (!res.ok) return null;
+    const json = (await res.json()) as { data?: Array<{ id?: unknown; mode?: unknown }> };
+    const models = (json.data || [])
+      .filter((m): m is { id: string; mode?: string } => typeof m.id === "string")
+      .map((m) => ({ id: m.id, mode: typeof m.mode === "string" ? m.mode : undefined }));
+    if (!models.length) return null;
+    modelCatalog = { models, at: Date.now() };
+    return models;
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/** Model IDs this key may call. null when the hub could not be asked. */
+export async function availableModelIds(): Promise<string[] | null> {
+  if (!isAiConfigured()) return null;
+  const models = await modelCatalogFor(baseUrl());
+  return models ? models.map((m) => m.id) : null;
+}
+
+/**
+ * The model to use instead of one this key cannot call. Ordered by intent: the configured
+ * default (the operator's own choice, so respect it once we know it works), then the
+ * documented default, then the on-prem fallback, then the first chat-capable model the key
+ * can reach. Models that cannot answer a chat request are skipped — substituting an embedding
+ * model would fail on the identical code path.
+ */
+async function substituteModel(base: string, requested: string): Promise<string | null> {
+  const models = await modelCatalogFor(base, true);
+  if (!models) return null;
+  const usable = models.filter((m) => m.mode === undefined || m.mode === "chat").map((m) => m.id);
+  if (usable.includes(requested)) return null;
+  const preferred = [defaultModel(), "api-glm-5.3-flash", "nrp/gemma-4-31b"];
+  return preferred.find((id) => id !== requested && usable.includes(id)) ?? usable.find((id) => id !== requested) ?? null;
+}
+
 export async function callModel(args: {
   messages: Msg[];
   jsonObject?: boolean;
@@ -174,7 +244,7 @@ export async function callModel(args: {
   if (!isAiConfigured()) return { ok: false, reason: "unconfigured", latencyMs: 0 };
 
   const base = baseUrl();
-  const model = args.model || defaultModel();
+  let model = args.model || defaultModel();
   const timeoutMs = args.timeoutMs ?? defaultTimeoutMs();
   const maxAttempts = 3; // 1 try + 2 retries
   // Bound total wall clock, not just each attempt: a caller running under a platform
@@ -239,6 +309,20 @@ export async function callModel(args: {
           TEMPERATURE_UNSUPPORTED.add(model);
           console.warn(`[tritonai] ${model} rejects temperature; retrying without it`);
           if (attempt < maxAttempts && budgetMs - (Date.now() - started) > 0) continue;
+        }
+        // The same reasoning for a model the key cannot call: the repair is known, so spend an
+        // attempt on it rather than returning a failure the user can only report. The
+        // substitution is logged, and `modelVersion` on a later success records what actually
+        // answered — the decision log never claims the configured model ran.
+        if (isModelRejection(res.status, lastDetail)) {
+          const substitute = await substituteModel(base, model);
+          if (substitute && attempt < maxAttempts && budgetMs - (Date.now() - started) > 0) {
+            console.warn(`[tritonai] ${model} is not available to this key (HTTP ${res.status}); retrying with ${substitute}`);
+            model = substitute;
+            lastStatus = undefined;
+            lastDetail = undefined;
+            continue;
+          }
         }
         return fail();
       }

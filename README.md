@@ -3,7 +3,7 @@
 A free, serverless beta for UC San Diego's AI Transformation Practice (OSI). Two surfaces:
 
 1. **AI-assisted Layer 1 mapping** — work the six lifecycle-mapping templates with help from
-   the TritonAI Developer API (on-prem `nrp/gemma-4-31b` by default): tag interview notes,
+   the TritonAI Developer API (campus-hosted `api-glm-5.3-flash` by default): tag interview notes,
    draft journey maps and friction entries, cluster friction. AI acts as a trusted assistant:
    it applies confident output by default (marked `AI-applied`), flags only the low-confidence
    cases for a human call, and every item stays editable and removable. AI involvement is always
@@ -37,7 +37,7 @@ For **Vercel**, set them as Project environment variables (see Deploy); do not s
 |---|---|---|
 | `TRITONAI_API_KEY` | **Yes** | Key from https://tritonai-api.ucsd.edu/ . Server-side only; never reaches the client. |
 | `TRITONAI_BASE_URL` | No | Defaults to `https://tritonai-api.ucsd.edu/v1`. |
-| `TRITONAI_MODEL` | No | Defaults to `nrp/gemma-4-31b`. The fallback for the tier vars below. |
+| `TRITONAI_MODEL` | No | Defaults to `api-glm-5.3-flash`. The fallback for the tier vars below. |
 | `TRITONAI_MODEL_FAST` | No | Tagging. Falls back to `TRITONAI_MODEL`. |
 | `TRITONAI_MODEL_REASONING` | No | Drafting (journey/blueprint/process/friction), friction clustering, the briefing, and model-to-map. Falls back to `TRITONAI_MODEL`. |
 | `TRITONAI_MODEL_SYNTHESIS` | No | Baseline library synthesis only. Falls back to `TRITONAI_MODEL_REASONING`. Leave unset unless the library outgrows that model's context window. |
@@ -56,10 +56,10 @@ Pick each tier by what the workload can use, not by what is best overall. Models
 [TritonAI model hub](https://tritonai-api.ucsd.edu/ui/model_hub_table/); `api-*` models are
 campus-hosted and roughly an order of magnitude cheaper than the cloud models.
 
-- **Fast (tagging)** — `nrp/gemma-4-31b`. Tagging classifies verbatim spans into a fixed
+- **Fast (tagging)** — `api-glm-5.3-flash`. Tagging classifies verbatim spans into a fixed
   seven-value enum, runs while a human waits, and every suggestion is confirmed by that human.
-  A frontier model returns the same enum more slowly. Non-reasoning matters here: no thinking
-  tokens on the app's only interactive model call.
+  A frontier model returns the same enum more slowly. It is campus-hosted and fast, so the
+  interactive path stays cheap and never leaves UCSD infrastructure.
 - **Reasoning (drafting, clustering, briefing, model-to-map)** — `claude-sonnet-5`. This is the
   tier the app **auto-applies** (marked `AI-applied`) instead of having a human approve each
   item, so it is the one place where capability converts directly into trust. Sonnet over Opus:
